@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------ CUSTOM SCROLL BAR ----------------- */
+/* Apply custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px; /* Scrollbar width */
+  height: 7px; /* Scrollbar height */
+}
+
+/* Scrollbar track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background: #70707050; /* Thumb color */
+  border-radius: 0px; /* Thumb border-radius */
+}
+
+/* Scrollbar thumb states */
+::-webkit-scrollbar-thumb:hover {
+  background: #55555570; /* Hover thumb color */
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #44444470; /* Active thumb color */
+}
+/* ------------------------------------------------------ */
+
+.gradient {
+  width: 440px;
+  height: 440px;
+  position: absolute;
+  z-index: -1;
+  border-radius: 21rem;
+  background: linear-gradient(180deg, #f22fb0 0%, rgba(239, 81, 109, 0) 100%),
+    radial-gradient(
+      94.51% 124.88% at 94.32% 94.43%,
+      /* 0% 180% at 924.32% 94.43%, */ #f22fb0 0%,
+      #f58a2570 32.29%,
+      #7061a3 104.06%,
+      rgba(43, 90, 211, 0) 100%
+    ),
+    linear-gradient(313.04deg, #f58a25 0.93%, #7061a310 125.68%);
+  background-blend-mode: normal, normal, normal, normal, normal, normal;
+  filter: blur(60px);
+}
+
+.dotted {
+  --dot-bg: #ffffff;
+  --dot-color: #000000;
+  --dot-size: 1px;
+  --dot-space: 22px;
+  z-index: 0;
+  background:
+    linear-gradient(
+        90deg,
+        var(--dot-bg) calc(var(--dot-space) - var(--dot-size)),
+        transparent 1%
+      )
+      center / var(--dot-space) var(--dot-space),
+    linear-gradient(
+        var(--dot-bg) calc(var(--dot-space) - var(--dot-size)),
+        transparent 1%
+      )
+      center / var(--dot-space) var(--dot-space),
+    var(--dot-color);
+}
