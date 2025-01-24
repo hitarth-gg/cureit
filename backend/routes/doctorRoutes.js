@@ -1,13 +1,13 @@
 // routes/doctorRoutes.js
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Doctor = require('../models/doctor');
-const Slot = require('../models/slot');
+const Doctor = require("../models/doctor");
+const Slot = require("../models/slot");
 
 // Fetch all doctors
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const doctors = await Doctor.find().populate('availableSlots');
+    const doctors = await Doctor.find().populate("availableSlots");
     res.json(doctors);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 });
 
 // Add a new doctor
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   const { userId, specialization, experience } = req.body;
 
   try {
@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
 });
 
 // Add slots for a doctor
-router.post('/:doctorId/slots', async (req, res) => {
+router.post("/:doctorId/slots", async (req, res) => {
   const { doctorId } = req.params;
   const { date, time } = req.body;
 
@@ -41,14 +41,18 @@ router.post('/:doctorId/slots', async (req, res) => {
       doctorId,
       date,
       time,
-      status: 'available',
+      status: "available",
     });
 
     // Update doctor's available slots
-    await Doctor.findByIdAndUpdate(doctorId, { $push: { availableSlots: slot._id } });
+    await Doctor.findByIdAndUpdate(doctorId, {
+      $push: { availableSlots: slot._id },
+    });
 
     res.status(201).json(slot);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
+
+module.exports = router;
