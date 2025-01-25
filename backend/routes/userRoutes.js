@@ -1,11 +1,11 @@
 // routes/userRoutes.js
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-// const supabase = require('../supabaseClient');
-const User = require('../models/user');
+const User = require("../models/user");
+const supabase = require("../config/supabaseClient");
 
 // Register a new user
-router.post('/register', async (req, res) => {
+router.post("/register", async (req, res) => {
   const { email, password, name, role } = req.body;
 
   try {
@@ -23,12 +23,14 @@ router.post('/register', async (req, res) => {
       role,
     });
 
-    res.status(201).json({ message: 'User registered successfully', user: newUser });
+    res
+      .status(201)
+      .json({ message: "User registered successfully", user: newUser });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
-router.post('/login', async (req, res) => {
+router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -39,19 +41,19 @@ router.post('/login', async (req, res) => {
 
     if (error) throw error;
 
-    res.json({ message: 'Login successful', token: data.session.access_token });
+    res.json({ message: "Login successful", token: data.session.access_token });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
-router.get('/:userId', async (req, res) => {
+router.get("/:userId", async (req, res) => {
   const { userId } = req.params;
 
   try {
     const user = await User.findOne({ userId });
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     res.json(user);

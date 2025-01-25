@@ -1,21 +1,21 @@
 // routes/appointmentRoutes.js
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Appointment = require('../models/appointment');
-const Slot = require('../models/slot');
-router.post('/book', async (req, res) => {
+const Appointment = require("../models/appointment");
+const Slot = require("../models/slot");
+router.post("/book", async (req, res) => {
   const { patientId, slotId } = req.body;
 
   try {
     // Check if the slot is available
     const slot = await Slot.findOneAndUpdate(
-      { _id: slotId, status: 'available' },
-      { status: 'booked' },
+      { _id: slotId, status: "available" },
+      { status: "booked" },
       { new: true }
     );
 
     if (!slot) {
-      return res.status(400).json({ message: 'Slot is no longer available.' });
+      return res.status(400).json({ message: "Slot is no longer available." });
     }
 
     // Create the appointment
@@ -23,35 +23,39 @@ router.post('/book', async (req, res) => {
       patientId,
       doctorId: slot.doctorId,
       timeSlot: slot._id,
-      status: 'booked',
+      status: "booked",
     });
 
-    res.status(201).json({ message: 'Appointment booked successfully', appointment });
+    res
+      .status(201)
+      .json({ message: "Appointment booked successfully", appointment });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
 // Cancel an appointment
-router.post('/cancel', async (req, res) => {
+router.post("/cancel", async (req, res) => {
   const { appointmentId } = req.body;
 
   try {
     const appointment = await Appointment.findByIdAndUpdate(
       appointmentId,
-      { status: 'cancelled' },
+      { status: "cancelled" },
       { new: true }
     );
 
     if (!appointment) {
-      return res.status(404).json({ message: 'Appointment not found.' });
+      return res.status(404).json({ message: "Appointment not found." });
     }
 
     // Release the slot
-    await Slot.findByIdAndUpdate(appointment.timeSlot, { status: 'available' });
+    await Slot.findByIdAndUpdate(appointment.timeSlot, { status: "available" });
 
-    res.json({ message: 'Appointment cancelled successfully', appointment });
+    res.json({ message: "Appointment cancelled successfully", appointment });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
+
+module.exports = router;
