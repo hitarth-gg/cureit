@@ -1,0 +1,42 @@
+import { Theme } from "@radix-ui/themes";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import AppLayout from "./ui/AppLayout";
+import ErrorPage from "./pages/ErrorPage";
+import Home from "./pages/Home";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const router = createBrowserRouter([
+  {
+    element: <AppLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+        errorElement: <ErrorPage />,
+      },
+    ],
+  },
+]);
+
+function App() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        staleTime: 0,
+      },
+    },
+  });
+  return (
+    <QueryClientProvider client={queryClient}>
+      <div data-lenis-prevent="true">
+        <ReactQueryDevtools initialIsOpen={false} />
+      </div>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
+}
+
+export default App;
