@@ -63,6 +63,7 @@ function Header() {
           style={{
             fontWeight: "500",
           }}
+          onClick={() => navigate("/login")}
         >
           Login
         </Button>

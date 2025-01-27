@@ -1,21 +1,22 @@
 import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { Box, Button, Container, TextField } from "@radix-ui/themes";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function SignUpForm() {
+function SignUpPage() {
   const [signupData, setSignupData] = useState({
     name: "",
     email: "",
     password: "",
-    confirmPassword: "",
     phoneNumber: "",
     aadhaarNumber: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   return (
-    <div className="flex h-screen items-center justify-center">
-      <div className="relative flex aspect-square w-11/12 flex-col gap-y-4 rounded-md border-2 bg-white p-8 font-inter text-sm font-medium text-[#5d5d5d] shadow-2xl shadow-indigo-300 sm:w-8/12 md:w-6/12 lg:w-4/12">
+    <div className="dotted flex h-screen items-center justify-center">
+      <div className="relative my-6 flex w-11/12 flex-col gap-y-4 rounded-md border-2 bg-white p-8 font-inter text-sm font-medium text-[#5d5d5d] shadow-2xl shadow-indigo-300 sm:w-8/12 md:w-6/12 lg:w-4/12">
         <div className="absolute left-3 top-3 -z-10 h-full w-full animate-fade-up rounded-md bg-gradient-to-r from-violet-300 to-indigo-400"></div>
         <div className="mb-2 flex select-none text-center font-noto text-base font-semibold md:text-lg">
           Your first appointment is just a sign-up away.
@@ -96,9 +97,15 @@ function SignUpForm() {
         <Button color="iris" size="3">
           SignUp
         </Button>
+        <p
+          className="w-fit cursor-pointer select-none border-b border-white text-indigo-700 transition-all duration-200 hover:border-b hover:border-indigo-700"
+          onClick={() => navigate("/login")}
+        >
+          Already have an account? Log In
+        </p>
       </div>
     </div>
   );
 }
 
-export default SignUpForm;
+export default SignUpPage;

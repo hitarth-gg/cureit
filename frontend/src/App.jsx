@@ -5,7 +5,8 @@ import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import SignUpForm from "./components/SignUpForm";
+import SignUpPage from "./pages/SignUpPage";
+import LoginPage from "./pages/LoginPage";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +20,12 @@ const router = createBrowserRouter([
       },
       {
         path: "/signup",
-        element: <SignUpForm />,
+        element: <SignUpPage />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/login",
+        element: <LoginPage />,
         errorElement: <ErrorPage />,
       },
     ],
