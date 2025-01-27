@@ -28,12 +28,13 @@ function Header() {
   return (
     <div
       // border-b-[1px]
-      className={
-        `sticky top-0 z-50 flex h-11 w-full justify-between border-b-[#55555550] bg-[#ffffff50] px-3 backdrop-blur-md transition-all duration-200` +
-        (scrollPosition > 0 ? " bg-transparent" : " bg-transparent")
-      }
+      className={`sticky top-0 z-50 flex h-11 w-full justify-between border-b-[#55555550] bg-[#ffffff50] px-3 backdrop-blur-md transition-all duration-500`}
+      style={{
+        // boxShadow bottom outline
+        boxShadow: scrollPosition > 0 ? "0px 0px 2px 0px #00000050" : "none",
+      }}
     >
-      <div className="my-auto w-16" onClick={() => navigate("/")}>
+      <div className="my-auto w-16 cursor-pointer" onClick={() => navigate("/")}>
         <CureitLogo fillColor={theme === "dark" ? "#ffffff" : "#000000"} />
       </div>
 
@@ -62,6 +63,7 @@ function Header() {
           style={{
             fontWeight: "500",
           }}
+          onClick={() => navigate("/login")}
         >
           Login
         </Button>

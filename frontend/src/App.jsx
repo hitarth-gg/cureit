@@ -5,6 +5,8 @@ import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import SignUpPage from "./pages/SignUpPage";
+import LoginPage from "./pages/LoginPage";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +16,16 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/signup",
+        element: <SignUpPage />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/login",
+        element: <LoginPage />,
         errorElement: <ErrorPage />,
       },
     ],
@@ -32,7 +44,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <div data-lenis-prevent="true">
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </div>
       <RouterProvider router={router} />
     </QueryClientProvider>
