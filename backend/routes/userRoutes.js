@@ -1,64 +1,33 @@
 // routes/userRoutes.js
 const express = require("express");
 const router = express.Router();
-const User = require("../models/user");
 const supabase = require("../config/supabaseClient");
-
-// Register a new user
 router.post("/register", async (req, res) => {
-  const { email, password, name, role } = req.body;
-
-  try {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-
-    if (error) throw error;
-    // Save user data to MongoDB
-    const newUser = await User.create({
-      userId: data.user.id,
-      name,
-      email,
-      role,
-    });
-
-    res
-      .status(201)
-      .json({ message: "User registered successfully", user: newUser });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+  console.log("Hit /register route");
+  const { email, mobile, password, name, role } = req.body;
+  if (!email || !mobile || !password || !name || !role) {
+    console.log("Missing fields in request body"); 
+    return res.status(400).json({ error: "All fields are required" });
   }
-});
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-
+  console.log("Request body:", req.body);
   try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) throw error;
-
-    res.json({ message: "Login successful", token: data.session.access_token });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-router.get("/:userId", async (req, res) => {
-  const { userId } = req.params;
-
-  try {
-    const user = await User.findOne({ userId });
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    const { data, error } = await supabase.from("users").insert([
+      {
+        email: email,
+        full_name: name,
+        role: role,
+        phone_number: mobile,
+      },
+    ]).select("*").single();
+    if (error) {
+      console.error("Error inserting user into Supabase:", error);
+      return res.status(400).json({ error: error.message });
     }
-
-    res.json(user);
+    console.log("Inserted user:", data); 
+    res.status(201).json({ message: "User registered successfully", user: data });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Unexpected error:", err); 
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 module.exports = router;

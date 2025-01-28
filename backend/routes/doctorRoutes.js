@@ -1,9 +1,7 @@
 // routes/doctorRoutes.js
 const express = require("express");
 const router = express.Router();
-const Doctor = require("../models/doctor");
-const Slot = require("../models/slot");
-
+const supabase = require("../config/supabaseClient");
 // Fetch all doctors
 router.get("/", async (req, res) => {
   try {
@@ -16,43 +14,23 @@ router.get("/", async (req, res) => {
 
 // Add a new doctor
 router.post("/", async (req, res) => {
-  const { userId, specialization, experience } = req.body;
+  const { userId, specialization, experience, hospital, available_from , available_to } = req.body;
+  const {data , error } = await supabase.from('doctors').insert([
+    {
+      user_id: userId,
+      specialization: specialization,
+      experience_years: experience,
+      hospital_name: hospital,
+      available_from: available_from,
+      available_to: available_to
+    }
+  ]).select('*').single();
 
-  try {
-    const doctor = await Doctor.create({
-      userId,
-      specialization,
-      experience,
-    });
-
-    res.status(201).json(doctor);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+  if (error) {
+    return res.status(400).json({ error: error.message });
   }
-});
-
-// Add slots for a doctor
-router.post("/:doctorId/slots", async (req, res) => {
-  const { doctorId } = req.params;
-  const { date, time } = req.body;
-
-  try {
-    const slot = await Slot.create({
-      doctorId,
-      date,
-      time,
-      status: "available",
-    });
-
-    // Update doctor's available slots
-    await Doctor.findByIdAndUpdate(doctorId, {
-      $push: { availableSlots: slot._id },
-    });
-
-    res.status(201).json(slot);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
+  res.status(201).json(data[0]);
+  console.log("Doctor added successfully");
 });
 
 module.exports = router;
