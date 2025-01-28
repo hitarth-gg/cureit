@@ -7,7 +7,7 @@ export default function Features() {
       <div className="mb-5 mt- pl-5 text-left text-2xl md:text-3xl font-semibold text-[#131b20]">
         Optimizing Hospital Queue Management with AI
       </div>
-      <div className="max-w-xl text-sm md:text-base pl-5 text-left">
+      <div className=" text-sm md:text-base pl-5 text-left">
         Four Simplified Steps to Optimize Hospital Queue Management
       </div>
       {/* <div className="features flex w-full flex-col items-center justify-center border-2 text-left sm:mx-5 sm:max-h-fit sm:flex-col md:mx-10 md:flex-row md:space-x-10 lg:mx-20 lg:space-x-10 xl:space-x-20"> */}

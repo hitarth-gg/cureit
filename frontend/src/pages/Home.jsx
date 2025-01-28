@@ -39,7 +39,9 @@ function Home() {
             >
               Sign Up
             </Button>
-            <Button color="iris" size="3" variant="" className="my-4">
+            <Button color="iris" size="3" variant="" className="my-4"
+              onClick={() => navigate("/bookappointment")}
+            >
               Book Appointment
             </Button>
           </div>
