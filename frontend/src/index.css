@@ -95,3 +95,15 @@
       center / var(--dot-space) var(--dot-space),
     var(--dot-color);
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  color: rgba(0, 0, 0, 0);
+  opacity: 1;
+  display: block;
+  background: url(https://img.icons8.com/?size=48&id=WpQIVxfhhzqt&format.png)
+    no-repeat;
+  background-size: contain;
+  width: 20px;
+  height: 20px;
+  border-width: thin;
+}

@@ -5,7 +5,7 @@ import {
   EyeOpenIcon,
 } from "@radix-ui/react-icons";
 import { Button } from "@radix-ui/themes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BookingProcessGuide from "../components/BookingProcessGuide";
 import BookingFormPersonalDetails from "../components/BookingFormPersonalDetails";
@@ -25,9 +25,10 @@ function BookAppointment() {
     age: "23",
     gender: "Male",
     selectedDoctor: null,
+    selectedDate: null,
   });
   const navigate = useNavigate();
-  const [formState, setFormState] = useState(0);
+  const [formState, setFormState] = useState(0); // 0: Guide, 1: Personal Details, 2: Select Doctor, 3: Review Data
 
   function handleNext() {
     setFormState((prev) => prev + 1);
@@ -40,14 +41,29 @@ function BookAppointment() {
     isLoading: isLoadingDoctorType,
     data: dataDoctorType,
     error: errorDoctorType,
-  } = useGetDoctorType(formState === 2 ? formData.healthIssue : null);
+  } = useGetDoctorType(formState === 2 ? formData.healthIssue : null); // Fetch doctor type based on health issue using ML model
   const {
     isLoading: isLoadingSlots,
     data: dataSlots,
     error: errorSlots,
-  } = useGetDoctorSlots(dataDoctorType?.doctorType || null);
+  } = useGetDoctorSlots(dataDoctorType?.doctorType || null); // Fetch doctor slots based on selected doctor type
 
   console.log(isLoadingDoctorType, isLoadingSlots);
+
+  const [doctorSlots, setDoctorSlots] = useState([]);
+
+  // Filter doctor slots based on selected date
+  useEffect(() => {
+    if (dataSlots && !formData.selectedDate) {
+      setDoctorSlots(dataSlots);
+    } else {
+      setDoctorSlots(
+        dataSlots?.filter(
+          (slot) => slot.available_date === formData.selectedDate,
+        ),
+      );
+    }
+  }, [dataSlots, formData.selectedDate]);
 
   const canProceed = () => {
     if (formState === 0) return true;
@@ -62,7 +78,7 @@ function BookAppointment() {
       return true;
     }
     if (formState === 2) {
-      if (!formData.selectedDoctor) return false;
+      if (!formData.selectedDoctor || !formData.selectedDate) return false;
       return true;
     }
     if (formState === 3) return true;
@@ -108,7 +124,7 @@ function BookAppointment() {
           )}
           {formState === 2 && (
             <BookingFormSelectSlots
-              doctors={dataSlots}
+              doctors={doctorSlots}
               formData={formData}
               setFormData={setFormData}
             />

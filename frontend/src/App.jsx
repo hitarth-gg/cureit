@@ -8,6 +8,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import BookAppointment from "./pages/BookAppointment";
+import AccountVerification from "./pages/AccountVerification";
+import AccountVerified from "./pages/AccountVerified";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,16 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <LoginPage />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/verification",
+        element: <AccountVerification />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/verified",
+        element: <AccountVerified />,
         errorElement: <ErrorPage />,
       },
       {
