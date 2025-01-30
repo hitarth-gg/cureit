@@ -10,6 +10,7 @@ import LoginPage from "./pages/LoginPage";
 import BookAppointment from "./pages/BookAppointment";
 import AccountVerification from "./pages/AccountVerification";
 import AccountVerified from "./pages/AccountVerified";
+import Dashboard from "./pages/Dashboard";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,11 @@ const router = createBrowserRouter([
       {
         path: "/bookappointment",
         element: <BookAppointment />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/dashboard",
+        element: <Dashboard />,
         errorElement: <ErrorPage />,
       },
     ],
