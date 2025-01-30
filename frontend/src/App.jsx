@@ -10,6 +10,7 @@ import LoginPage from "./pages/LoginPage";
 import BookAppointment from "./pages/BookAppointment";
 import AccountVerification from "./pages/AccountVerification";
 import AccountVerified from "./pages/AccountVerified";
+import UserDashboard from "./pages/UserDashboard.jsx";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,8 @@ const router = createBrowserRouter([
       {
         path: "/bookappointment",
         element: <BookAppointment />,
+        path: "/user/dashboard",
+        element: <UserDashboard />,
         errorElement: <ErrorPage />,
       },
     ],
