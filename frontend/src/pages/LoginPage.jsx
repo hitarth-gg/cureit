@@ -2,6 +2,8 @@ import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { Button, TextField } from "@radix-ui/themes";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../utils/supabaseClient";
+import { AuthApiError } from "@supabase/supabase-js";
 
 function LoginPage() {
   const [loginData, setLoginData] = useState({
@@ -9,8 +11,44 @@ function LoginPage() {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
+  const handleSignIn = async () => {
+    console.log("Attempting log-in...");
+    const { email, password } = loginData;
+
+    try {
+      const { error, data } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        console.log("error: ", error);
+        throw error; // Throw error to be caught in the catch block
+      }
+
+      setErrorMessage("");
+      setSuccessMessage("Sign-in successful! Welcome back.");
+      console.log("Success:", data);
+
+      // Navigate only after state update
+      navigate("/user/dashboard");
+    } catch (err) {
+      // console.error("Authentication error:", err.message);
+      console.error("Caught Error:", err); // Debugging output
+
+      if (err instanceof AuthApiError) {
+        console.log("AuthApiError Detected");
+        setErrorMessage("Invalid email or password. Please try again.");
+      } else {
+        console.log("Unknown Error Type");
+        setErrorMessage("Something went wrong. Please try again later.");
+      }
+      setSuccessMessage("");
+    }
+  };
 
   return (
     <div className="dotted flex h-screen items-center justify-center">
@@ -60,9 +98,12 @@ function LoginPage() {
             </TextField.Slot>
           </TextField.Root>
         </div>
-        <Button color="iris" size="3">
+        <Button color="iris" size="3" onClick={handleSignIn}>
           Login
         </Button>
+
+        <div>{errorMessage}</div>
+        <div>{successMessage}</div>
         <p
           className="w-fit cursor-pointer select-none border-b border-white text-indigo-700 transition-all duration-200 hover:border-b hover:border-indigo-700"
           onClick={() => navigate("/signup")}

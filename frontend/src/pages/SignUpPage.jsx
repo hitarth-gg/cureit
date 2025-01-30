@@ -1,18 +1,144 @@
 import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { Box, Button, Container, TextField } from "@radix-ui/themes";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
+import { supabase } from "../utils/supabaseClient";
 function SignUpPage() {
   const [signupData, setSignupData] = useState({
+    id: "",
     name: "",
     email: "",
     password: "",
     phoneNumber: "",
     aadhaarNumber: "",
+    createdAt: "",
+    emailVerified: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const handleSignUp = async () => {
+    const { email, password, name, phoneNumber } = signupData; // Supabase requires only email and password for authentication
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { display_name: name, phone: phoneNumber }, // Store display_name in metadata
+      },
+    });
+
+    if (error) {
+      console.log(error);
+      setErrorMessage(error.message);
+      setSuccessMessage("");
+    } else {
+      const userId = data?.user?.id; // Get the user ID from auth response
+      console.log("User ID:", userId);
+      signupData.id = userId;
+      console.log(data?.user);
+      console.log(data?.user?.user_metadata?.email_confirmed_at);
+
+      // console.log(id);
+
+      if (userId) {
+        const sendUserInfoToBackend = async (userData) => {
+          console.log(userData);
+          try {
+            const apiUrl = `${API_BASE_URL}/api/users/addUserIfNotExist`;
+            console.log(apiUrl);
+            const response = await fetch(apiUrl, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(userData),
+            });
+            if (response.ok) {
+              const result = await response.json();
+              console.log("User info successfully sent to backend:", result);
+              setErrorMessage("");
+              setSuccessMessage(
+                "Sign-up successful! Please check your email to verify your account.",
+              );
+              navigate("/verification", { state: { email } });
+            } else {
+              console.error("Failed to send user info:", response.statusText);
+              setErrorMessage("Email already exists");
+            }
+          } catch (error) {
+            console.error("Error sending data to backend:", error);
+            setErrorMessage(error);
+          }
+        };
+        console.log("Sending user data:", signupData);
+        sendUserInfoToBackend(signupData);
+      }
+    }
+  };
+
+  const [validation, setValidation] = useState({
+    email: null,
+    aadhaarNumber: null,
+    phoneNumber: null,
+    password: null,
+  });
+
+  const validateField = (name, value) => {
+    let isValid = false;
+
+    if (name === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      isValid = emailRegex.test(value);
+    } else if (name === "phoneNumber") {
+      const phoneRegex = /^[6-9]\d{9}$/;
+      isValid = phoneRegex.test(value);
+    } else if (name === "aadhaarNumber") {
+      const aadhaarRegex = /^\d{12}$/;
+      isValid = aadhaarRegex.test(value);
+    } else if (name === "password") {
+      const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      isValid = passwordRegex.test(value);
+    } else if (name === "name") {
+      // isValid = true;
+      return;
+    }
+    setValidation((prev) => ({ ...prev, [name]: isValid }));
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    console.log(name, " ", value);
+    validateField(name, value);
+  };
+
+  const [typingTimeout, setTypingTimeout] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setSignupData((prev) => ({ ...prev, [name]: value }));
+
+    // Clear previous timer
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+
+    // Set a new timer for 2 seconds for validation
+    const newTimeout = setTimeout(() => {
+      validateField(name, value);
+    }, 500);
+
+    setTypingTimeout(newTimeout);
+  };
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  useEffect(() => {
+    setIsFormValid(Object.values(validation).every(Boolean));
+    console.log(validation);
+  }, [validation]);
 
   return (
     <div className="dotted flex h-screen items-center justify-center">
@@ -25,9 +151,8 @@ function SignUpPage() {
           <span className="">Your Name</span>
           <TextField.Root
             placeholder="Name"
-            onChange={(e) =>
-              setSignupData({ ...signupData, name: e.target.value })
-            }
+            onChange={handleChange}
+            name="name"
             value={signupData.name}
           ></TextField.Root>
         </div>
@@ -36,44 +161,67 @@ function SignUpPage() {
           <span className="">Email</span>
           <TextField.Root
             placeholder="Email"
-            onChange={(e) =>
-              setSignupData({ ...signupData, email: e.target.value })
-            }
+            onChange={handleChange}
+            name="email"
             value={signupData.email}
+            onBlur={handleBlur}
           ></TextField.Root>
         </div>
+        {/* <div> */}
+        {validation.email === false && (
+          <p className="mt-2 text-red-500">Invalid email format</p>
+        )}
+        {/* {validation.email === true && (
+            <p className="mt-2 text-green-500">Valid email format</p>
+          )} */}
+        {/* </div> */}
 
         <div className="flex flex-col gap-y-1">
           <span className="">Aadhaar No.</span>
           <TextField.Root
             placeholder="Aadhaar Number"
-            onChange={(e) =>
-              setSignupData({ ...signupData, aadhaarNumber: e.target.value })
-            }
+            onChange={handleChange}
+            name="aadhaarNumber"
             value={signupData.aadhaarNumber}
+            onBlur={handleBlur}
           ></TextField.Root>
         </div>
+        {/* <div> */}
+        {validation.aadhaarNumber === false && (
+          <p className="mt-2 text-red-500">Invalid aadhaar format</p>
+        )}
+        {/* {validation.aadhaar === true && (
+            <p className="mt-2 text-green-500">Valid aadhaar format</p>
+          )} */}
+        {/* </div> */}
 
         <div className="flex flex-col gap-y-1">
           <span className="">Phone No.</span>
           <TextField.Root
             placeholder="Phone Number"
-            onChange={(e) =>
-              setSignupData({ ...signupData, phoneNumber: e.target.value })
-            }
+            onChange={handleChange}
+            onBlur={handleBlur}
+            name="phoneNumber"
             value={signupData.phoneNumber}
           ></TextField.Root>
         </div>
+        {/* <div> */}
+        {validation.phoneNumber === false && (
+          <p className="mt-2 text-red-500">Invalid Phone Number Format</p>
+        )}
+        {/* {validation.phone === true && (
+            <p className="mt-2 text-green-500">Valid Phone Number Format</p>
+          )} */}
+        {/* </div> */}
 
         <div className="flex flex-col gap-y-1">
           <span className="">Password</span>
           <TextField.Root
             type={showPassword ? "text" : "password"}
             placeholder="Password"
-            onChange={(e) =>
-              setSignupData({ ...signupData, password: e.target.value })
-            }
+            onChange={handleChange}
             value={signupData.password}
+            name="password"
           >
             <TextField.Slot className="relative">
               <Button
@@ -94,15 +242,23 @@ function SignUpPage() {
             </TextField.Slot>
           </TextField.Root>
         </div>
+        {validation.password === false && (
+          <p className="text-red-500">
+            Password must be at least 8 characters long, include an uppercase
+            letter, a lowercase letter, a number, and a special character.
+          </p>
+        )}
         <Button
           color="iris"
           size="3"
-          onClick={() =>
-            navigate("/verification", { state: { email: signupData.email } })
-          }
+          name="button"
+          onClick={handleSignUp}
+          disabled={!isFormValid}
         >
           SignUp
         </Button>
+        <div>{errorMessage}</div>
+        <div>{successMessage}</div>
         <p
           className="w-fit cursor-pointer select-none border-b border-white text-indigo-700 transition-all duration-200 hover:border-b hover:border-indigo-700"
           onClick={() => navigate("/login")}

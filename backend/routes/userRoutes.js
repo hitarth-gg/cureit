@@ -1,33 +1,340 @@
-// routes/userRoutes.js
 const express = require("express");
 const router = express.Router();
 const supabase = require("../config/supabaseClient");
-router.post("/register", async (req, res) => {
-  console.log("Hit /register route");
-  const { email, mobile, password, name, role } = req.body;
-  if (!email || !mobile || !password || !name || !role) {
-    console.log("Missing fields in request body"); 
-    return res.status(400).json({ error: "All fields are required" });
-  }
-  console.log("Request body:", req.body);
+// router.post("/register", async (req, res) => {
+//   console.log("Hit /register route");
+//   const { email, mobile, password, name, role } = req.body;
+//   if (!email || !mobile || !password || !name || !role) {
+//     console.log("Missing fields in request body");
+//     return res.status(400).json({ error: "All fields are required" });
+//   }
+//   console.log("Request body:", req.body);
+//   try {
+//     const { data, error } = await supabase.from("users").insert([
+//       {
+//         email: email,
+//         full_name: name,
+//         role: role,
+//         phone_number: mobile,
+//       },
+//     ]).select("*").single();
+//     if (error) {
+//       console.error("Error inserting user into Supabase:", error);
+//       return res.status(400).json({ error: error.message });
+//     }
+//     console.log("Inserted user:", data);
+//     res.status(201).json({ message: "User registered successfully", user: data });
+//   } catch (err) {
+//     console.error("Unexpected error:", err);
+//     res.status(500).json({ error: "Internal server error" });
+// const User = require("../models/user");
+
+// const { createClient } = require("@supabase/supabase-js");
+// const supabase = createClient(
+//   process.env.SUPABASE_URL,
+//   process.env.SUPABASE_KEY
+// );
+
+router.get("/allusers", async (req, res) => {
+  const { data, error } = await supabase.from("user").select("*");
+
+  if (error) return res.status(400).json({ error: error.message });
+
+  res.status(200).json(data);
+});
+
+router.post("/check-email", async (req, res) => {
+  const { email } = req.body;
+  console.log(email);
+
   try {
-    const { data, error } = await supabase.from("users").insert([
-      {
-        email: email,
-        full_name: name,
-        role: role,
-        phone_number: mobile,
-      },
-    ]).select("*").single();
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("email")
+      .eq("email", email)
+      .maybeSingle();
+
     if (error) {
-      console.error("Error inserting user into Supabase:", error);
-      return res.status(400).json({ error: error.message });
+      console.error(error);
+
+      return res.status(400).json({ error: "Error checking email" });
     }
-    console.log("Inserted user:", data); 
-    res.status(201).json({ message: "User registered successfully", user: data });
+
+    if (data) {
+      return res.status(200).json({ exists: true });
+    }
+
+    return res.status(200).json({ exists: false });
   } catch (err) {
-    console.error("Unexpected error:", err); 
-    res.status(500).json({ error: "Internal server error" });
+    console.error(err);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+router.post("/check-verified", async (req, res) => {
+  const { email } = req.body;
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("email_verified") // Fetch the text field
+    .eq("email", email)
+    .maybeSingle(); // Ensures single or null result
+
+  if (error) {
+    return res.status(400).json({ error: "Error checking email verification" });
+  }
+
+  if (!data) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  // Ensure text values are correctly converted to boolean
+  const isVerified = data.email_verified === "true";
+
+  return res.status(200).json({ verified: isVerified });
+});
+
+router.post("/check-phone", async (req, res) => {
+  const { phone } = req.body;
+  console.log(phone);
+
+  try {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("phone")
+      .eq("phone", phone)
+      .maybeSingle();
+
+    if (error) {
+      console.error(error);
+
+      return res.status(400).json({ error: "Error checking email" });
+    }
+
+    if (data) {
+      return res.status(200).json({ exists: true });
+    }
+
+    return res.status(200).json({ exists: false });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.put("/update-auth-email-pass", async (req, res) => {
+  const { old_email, new_email, new_password } = req.body;
+  console.log(old_email, " ", new_email);
+
+  try {
+    // Fetch the user ID from auth.users based on the phone number
+    const { data: users, error: fetchError } =
+      await supabase.auth.admin.listUsers();
+
+    if (fetchError) {
+      console.error(fetchError);
+      return res.status(400).json({ error: "Error fetching user list" });
+    }
+    //FINDING OL EMAIL's D USER ID
+    const user = users.users.find((u) => u.email === old_email);
+    console.log(user);
+
+    if (!user) {
+      return res.status(404).json({ error: "User with this email not found" });
+    }
+    // Use Supabase Admin API to update the email in auth.user table
+    const { data, error: updateError } =
+      await supabase.auth.admin.updateUserById(user.id, {
+        email: new_email,
+        password: new_password,
+        // email_confirm: false,
+        // user_metadata: { force_email_confirmation: true },
+      });
+
+    if (updateError) {
+      // console.log(updateError);
+      console.error(updateError);
+      return res.status(400).json({ error: "Error updating email" });
+    }
+    // return res
+    //   .status(200)
+    //   .json({ message: "Email updated successfully", data });
+
+    //profile table changed too
+    const { error: profileError } = await supabase
+      .from("profiles")
+      .update({
+        email: new_email,
+        // password: new_password, // Make sure the password is hashed before storing it
+      })
+      .eq("id", user.id); // Match by user id
+
+    if (profileError) {
+      console.error(profileError);
+      return res.status(400).json({ error: "Error updating profile" });
+    }
+
+    // //update user by id
+    // const { data: updateData, error: updateErrorr } =
+    //   await supabaseAdmin.auth.admin.updateUserById(user.id, {
+    //     email_confirm: false,
+    //     user_metadata: { ...userData.user.user_metadata, force_reverify: true },
+    //   });
+    // if (updateErrorr) throw updateErrorr;
+
+    //send email
+    // const { data1, error } = await supabase.auth.resend({
+    //   type: "signup", // This is for email verification
+    //   email: new_email,
+    //   // options: {
+    //   //   emailRedirectTo: '' // Optional redirect URL
+    //   // }
+    // });
+
+    // if (error) {
+    //   return res
+    //     .status(400)
+    //     .json({ error: "Error sending verification email" });
+    // } else {
+    //   console.log(data1);
+    // }
+
+    return res
+      .status(200)
+      .json({ message: "Email and password updated successfully", data });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/user", async (req, res) => {
+  const { data, error } = await supabase.from("user").select("*");
+
+  if (error) return res.status(400).json({ error: error.message });
+
+  res.status(200).json(data);
+});
+
+router.put("/update-user-details", async (req, res) => {
+  try {
+    // Extract fields from the request body
+    const { id, age, gender, phoneNumber, phone_verified, name } = req.body;
+
+    // Validate that 'id' is provided
+    if (!id) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    // Construct the dynamic update query
+    let updateFields = {};
+    if (age !== undefined) updateFields.age = age;
+    if (gender !== undefined) updateFields.gender = gender;
+    if (phoneNumber !== undefined) updateFields.phoneNumber = phoneNumber;
+    if (phone_verified !== undefined)
+      updateFields.phone_verified = phone_verified;
+    if (name !== undefined) updateFields.name = name;
+
+    // Check if there are fields to update
+    if (Object.keys(updateFields).length === 0) {
+      return res.status(400).json({ message: "No valid fields to update" });
+    }
+
+    // Execute update query
+    const { data, error } = await supabase
+      .from("profiles")
+      .update(updateFields)
+      .eq("id", id);
+
+    if (error) {
+      return res.status(500).json({ message: "Database update failed", error });
+    }
+
+    res.json({ message: "User details updated successfully", data });
+  } catch (error) {
+    console.error("Update Error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/addUserIfNotExist", async (req, res) => {
+  console.log("in backendP");
+  console.log(req.body);
+  const {
+    id,
+    email,
+    name,
+    phoneNumber,
+    password,
+    aadharNumber,
+    emailVerified,
+    createdAt,
+  } = req.body;
+  const { data, error } = await supabase.from("profiles").insert([
+    {
+      id,
+      email,
+      name,
+      phone_number: phoneNumber,
+      // password, // ⚠ Consider hashing before storing
+      aadhar_number: aadharNumber,
+      email_verified: emailVerified,
+      created_at: createdAt || new Date().toISOString(),
+    },
+  ]);
+  console.log(data, " ", error);
+
+  if (error) {
+    console.error("Insert error:", error);
+    return res.status(400).json({ error: error.message });
+  }
+
+  res.status(201).json({ message: "Profile created successfully", data });
+});
+
+router.post("/resend-verification", async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: "Email is required" });
+  }
+
+  try {
+    // Get all users (requires Service Role Key)
+    const { data: users, error: userError } =
+      await supabase.auth.admin.listUsers();
+
+    if (userError) {
+      return res.status(400).json({ error: "Error retrieving users" });
+    }
+
+    // Find the user by email manually
+    const user = users.users.find((u) => u.email === email);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Resend email confirmation
+    // const { data, error } = await supabase.auth.admin.resendEmail(email);
+    const { data, error } = await supabase.auth.resend({
+      type: "signup",
+      email: email,
+    });
+
+    if (error) {
+      console.error("Error resending email:", error);
+    } else {
+      console.log("Confirmation email resent:", data);
+    }
+
+    if (error) {
+      throw error;
+    }
+
+    res.json({ message: "Verification email resent successfully", data });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;
