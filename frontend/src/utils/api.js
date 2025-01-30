@@ -24,7 +24,7 @@ export async function getAddressFromCoords(lat, lng) {
 }
 
 export async function getDoctorSlots(doctorType) {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   // let data = await fetch(
   //   "https://zenshin-supabase-api.onrender.com/mappings?anilist_id=21",
   // );
@@ -39,6 +39,7 @@ export async function getDoctorSlots(doctorType) {
       name: "Dr. Emily Carter",
       hospital: "CityCare General Hospital",
       specialization: "Dentist",
+      available_date: "28-09-2021",
       available_time: "10:00 AM - 2:00 PM",
       uid: "1",
     },
@@ -46,6 +47,7 @@ export async function getDoctorSlots(doctorType) {
       name: "Dr. James Rodriguez",
       hospital: "Sunrise Medical Center",
       specialization: "Dentist",
+      available_date: "28-09-2021",
       available_time: "9:00 AM - 1:00 PM",
       uid: "2",
     },
@@ -53,6 +55,7 @@ export async function getDoctorSlots(doctorType) {
       name: "Dr. Sophia Lee",
       hospital: "Harmony Children's Hospital",
       specialization: "Dentist",
+      available_date: "28-09-2021",
       available_time: "11:00 AM - 3:00 PM",
       uid: "3",
     },
@@ -60,6 +63,7 @@ export async function getDoctorSlots(doctorType) {
       name: "Dr. Arjun Mehta",
       hospital: "Lotus Specialty Clinic",
       specialization: "Dentist",
+      available_date: "01-02-2025",
       available_time: "1:00 PM - 5:00 PM",
       uid: "4",
     },
@@ -67,6 +71,7 @@ export async function getDoctorSlots(doctorType) {
       name: "Dr. Olivia Brown",
       hospital: "Green Valley Healthcare",
       specialization: "Dentist",
+      available_date: "01-02-2025",
       available_time: "2:00 PM - 6:00 PM",
       uid: "5",
     },
@@ -75,7 +80,7 @@ export async function getDoctorSlots(doctorType) {
   else return null;
 }
 export async function getDoctorType(data) {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   return { doctorType: "Dentist" };
 }

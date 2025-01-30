@@ -94,7 +94,13 @@ function SignUpPage() {
             </TextField.Slot>
           </TextField.Root>
         </div>
-        <Button color="iris" size="3">
+        <Button
+          color="iris"
+          size="3"
+          onClick={() =>
+            navigate("/verification", { state: { email: signupData.email } })
+          }
+        >
           SignUp
         </Button>
         <p

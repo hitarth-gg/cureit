@@ -1,6 +1,4 @@
 import { Badge, Code, DataList, Flex } from "@radix-ui/themes";
-import { Link } from "react-router-dom";
-import DoctorSlotCard from "./DoctorSlotCard";
 
 function BookingFormReviewData({ data }) {
   const formData = data;
@@ -97,6 +95,12 @@ function BookingFormReviewData({ data }) {
                 <DataList.Label minWidth="88px">Available Time</DataList.Label>
                 <DataList.Value>
                   <Code variant="ghost">{selectedDoctor?.available_time}</Code>
+                </DataList.Value>
+              </DataList.Item>
+              <DataList.Item>
+                <DataList.Label minWidth="88px">Available Date</DataList.Label>
+                <DataList.Value>
+                  <Code variant="ghost">{selectedDoctor?.available_date}</Code>
                 </DataList.Value>
               </DataList.Item>
             </DataList.Root>

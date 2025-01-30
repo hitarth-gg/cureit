@@ -37,6 +37,12 @@ function DoctorSlotCard({ data, formData, setFormData }) {
             <Code variant="ghost">{data?.available_time}</Code>
           </DataList.Value>
         </DataList.Item>
+        <DataList.Item>
+          <DataList.Label minWidth="88px">Available Date</DataList.Label>
+          <DataList.Value>
+            <Code variant="ghost">{data?.available_date}</Code>
+          </DataList.Value>
+        </DataList.Item>
       </DataList.Root>
       <div className="ml-4 flex items-center justify-center">
         <Checkbox
