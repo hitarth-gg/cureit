@@ -22,15 +22,36 @@ function AccountVerification() {
     return () => clearInterval(interval); // Cleanup interval
   }, [timer, isTimerActive]);
 
-  const handleResend = () => {
-    // Trigger email resend logic here
-    console.log("Resend email triggered!");
+  // const handleResend = () => {
+  //   // Trigger email resend logic here
+  //   console.log("Resend email triggered!");
 
-    // Start timer
-    setTimer(90);
-    setIsTimerActive(true);
+  //   // Start timer
+  //   setTimer(90);
+  //   setIsTimerActive(true);
+  // };
+
+  // const email = location.state.email || "undefined email";
+  const [message, setMessage] = useState("");
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const handleResend = async () => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/users/resend-verification`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        },
+      );
+      setTimer(90);
+      setIsTimerActive(true);
+      const data = await response.json();
+      setMessage(data.message || "Failed to resend email");
+    } catch (error) {
+      setMessage("Error sending email");
+    }
   };
-
   return (
     <div className="flex h-[94svh] w-full items-center justify-center bg-[#f7f8fa] font-noto font-medium">
       <div className="m-4 flex flex-col items-center justify-center gap-y-4 rounded-lg bg-white p-8 drop-shadow-lg">
