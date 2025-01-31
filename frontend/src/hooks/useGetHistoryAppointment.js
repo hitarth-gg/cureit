@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { getDoctorSlots } from "../utils/api";
+import { getPatientAppointmentHistory } from "../utils/api";
 
-export default function useGetDoctorSlots(doctorType) {
+export default function useGetHistoryAppointment(patientId) {
   const { isLoading, data, error, status, refetch, isFetching } = useQuery({
-    queryKey: ["doctor_slots", doctorType],
+    queryKey: ["patient_appointment_history", patientId],
     queryFn: () => {
-      if (doctorType) return getDoctorSlots(doctorType);
+      if (patientId) return getPatientAppointmentHistory(patientId);
       return null;
     },
     staleTime: 1000 * 1, // 1 second

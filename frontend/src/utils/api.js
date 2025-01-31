@@ -25,15 +25,6 @@ export async function getAddressFromCoords(lat, lng) {
 
 export async function getDoctorSlots(doctorType) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  // let data = await fetch(
-  //   "https://zenshin-supabase-api.onrender.com/mappings?anilist_id=21",
-  // );
-  // data = await data.json();
-  // console.log(doctorType);
-  // console.log(data);
-
-  // return { doctor: "Ramesh Bajpai" };
-
   const testData = [
     {
       name: "Dr. Emily Carter",
@@ -83,4 +74,79 @@ export async function getDoctorType(data) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   return { doctorType: "Dentist" };
+}
+
+export async function getPatientAppointments(patientId) {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  const today = new Date().toLocaleDateString("en-IN").replace(/\//g, "-"); // today's date in dd-mm-yyyy format
+  const testData = [
+    {
+      doctor: "Dr. Emily Carter",
+      hospital: "CityCare General Hospital",
+      specialization: "Dentist",
+      appointment_date: "28-09-2025",
+      appointment_time: "10:00 AM - 2:00 PM",
+      uid: "132",
+      queuePosition: 123,
+    },
+    {
+      doctor: "Dr. James Rodriguez",
+      hospital: "Sunrise Medical Center",
+      specialization: "Dentist",
+      appointment_date: today,
+      appointment_time: "9:00 AM - 1:00 PM",
+      uid: "2",
+      queuePosition: 12,
+    },
+    {
+      doctor: "Dr. Sophia Lee",
+      hospital: "Harmony Children's Hospital",
+      specialization: "Dentist",
+      appointment_date: "28-09-2025",
+      appointment_time: "11:00 AM - 3:00 PM",
+      uid: "3",
+      queuePosition: 141,
+    },
+    {
+      doctor: "Dr. Ratiram Lee",
+      hospital: "Harmony Children's Hospital",
+      specialization: "Dentist",
+      appointment_date: "28-09-2025",
+      appointment_time: "11:00 AM - 3:00 PM",
+      uid: "3",
+      queuePosition: 1123,
+    },
+  ];
+  return testData;
+}
+
+export async function getPatientAppointmentHistory() {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  const testData = [
+    {
+      doctor: "Dr. Emily Carter",
+      hospital: "CityCare General Hospital",
+      specialization: "Dentist",
+      appointment_date: "28-01-2025",
+      appointment_time: "10:00 AM - 2:00 PM",
+      uid: "132",
+    },
+    {
+      doctor: "Dr. James Rodriguez",
+      hospital: "Sunrise Medical Center",
+      specialization: "Dentist",
+      appointment_date: "28-01-2025",
+      appointment_time: "9:00 AM - 1:00 PM",
+      uid: "2",
+    },
+    {
+      doctor: "Dr. Sophia Lee",
+      hospital: "Harmony Children's Hospital",
+      specialization: "Dentist",
+      appointment_date: "28-01-2025",
+      appointment_time: "11:00 AM - 3:00 PM",
+      uid: "3",
+    },
+  ];
+  return testData;
 }

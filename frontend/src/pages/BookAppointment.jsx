@@ -15,6 +15,7 @@ import { BarLoader } from "react-spinners";
 import BookingFormSelectSlots from "../components/BookingFormSelectSlots";
 import BookingFormReviewData from "../components/BookingFormReviewData";
 import { toast } from "sonner";
+import Loader from "../components/Loader";
 
 function BookAppointment() {
   const [formData, setFormData] = useState({
@@ -46,6 +47,8 @@ function BookAppointment() {
     isLoading: isLoadingSlots,
     data: dataSlots,
     error: errorSlots,
+    refetch: refetchSlots,
+    isFetching: isFetchingSlots,
   } = useGetDoctorSlots(dataDoctorType?.doctorType || null); // Fetch doctor slots based on selected doctor type
 
   console.log(isLoadingDoctorType, isLoadingSlots);
@@ -90,17 +93,11 @@ function BookAppointment() {
     console.log("Booking appointment...");
     toast.success("Appointment booked successfully.");
   }
+  console.log(isFetchingSlots);
 
   return (
     <>
-      {(isLoadingDoctorType || isLoadingSlots) && (
-        <div className="absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-[#2121216c] backdrop-blur-sm">
-          <div className="flex aspect-square flex-col items-center justify-center rounded-md bg-[#ffffff69] p-6 font-noto font-semibold">
-            <BarLoader color="#625aff" />
-            <div className="text-sm">Loading Data</div>
-          </div>
-        </div>
-      )}
+      {(isLoadingDoctorType || isLoadingSlots || isFetchingSlots) && <Loader />}
 
       <div
         className="w-full border-2 border-indigo-600 transition-all duration-700"
@@ -127,6 +124,7 @@ function BookAppointment() {
               doctors={doctorSlots}
               formData={formData}
               setFormData={setFormData}
+              refetchSlots={refetchSlots}
             />
           )}
           {formState === 3 && <BookingFormReviewData data={formData} />}

@@ -1,10 +1,37 @@
 import { Button, Code } from "@radix-ui/themes";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import React, { useEffect, useState } from "react";
 
 function AccountVerification() {
   const location = useLocation();
-  const email = location.state.email || "undefined email";
+  const email = location?.state?.email || "undefined email";
+  // add 1.5min timer to resend email
+
+  const [timer, setTimer] = useState(90); // Initial timer value in seconds
+  const [isTimerActive, setIsTimerActive] = useState(true);
+
+  useEffect(() => {
+    let interval = null;
+    if (isTimerActive && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      setIsTimerActive(false);
+    }
+    return () => clearInterval(interval); // Cleanup interval
+  }, [timer, isTimerActive]);
+
+  // const handleResend = () => {
+  //   // Trigger email resend logic here
+  //   console.log("Resend email triggered!");
+
+  //   // Start timer
+  //   setTimer(90);
+  //   setIsTimerActive(true);
+  // };
+
+  // const email = location.state.email || "undefined email";
   const [message, setMessage] = useState("");
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const handleResend = async () => {
@@ -17,7 +44,8 @@ function AccountVerification() {
           body: JSON.stringify({ email }),
         },
       );
-
+      setTimer(90);
+      setIsTimerActive(true);
       const data = await response.json();
       setMessage(data.message || "Failed to resend email");
     } catch (error) {
@@ -41,8 +69,12 @@ function AccountVerification() {
         <div className="flex flex-col items-center text-sm">
           <div>Still can't find the email?</div>
           <div className="my-1">
-            <Button color="iris" onClick={handleResend}>
-              Resend email
+            <Button
+              color="iris"
+              disabled={isTimerActive}
+              onClick={handleResend}
+            >
+              {isTimerActive ? `Resend email in ${timer}s` : `Resend email`}
             </Button>
           </div>
         </div>
