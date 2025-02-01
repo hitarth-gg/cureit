@@ -1,4 +1,5 @@
 import { Badge, Button, Code, DataList } from "@radix-ui/themes";
+import SeeDetails from "./SeeDetails";
 
 function HistoryAppointmentCard({ data, refetch }) {
   const {
@@ -54,16 +55,7 @@ function HistoryAppointmentCard({ data, refetch }) {
           </DataList.Item>
         </DataList.Root>
         <div className="ml-4 flex items-center justify-center">
-          <Button
-            variant="soft"
-            color="indigo"
-            size={{
-              initial: "1",
-              md: "2",
-            }}
-          >
-            See Details
-          </Button>
+          <SeeDetails data={data} refetch={refetch} />
         </div>
       </div>
     </div>

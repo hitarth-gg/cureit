@@ -1,7 +1,7 @@
 import { toast } from "sonner";
-import useGetUpcomingAppointments from "../hooks/useGetUpcomingAppointments";
+import useGetUpcomingAppointments from "../../hooks/useGetUpcomingAppointments";
 import AppointmentCard from "./AppointmentCard";
-import Loader from "./Loader";
+import Loader from "../Loader";
 
 function UpcomingAppointments() {
   const patientId = 123;

@@ -99,6 +99,15 @@ export async function getPatientAppointments(patientId) {
       queuePosition: 12,
     },
     {
+      doctor: "Dr. James Rodriguez",
+      hospital: "Sunrise Medical Center",
+      specialization: "Dentist",
+      appointment_date: today,
+      appointment_time: "9:00 AM - 1:00 PM",
+      uid: "2",
+      queuePosition: 46,
+    },
+    {
       doctor: "Dr. Sophia Lee",
       hospital: "Harmony Children's Hospital",
       specialization: "Dentist",
@@ -146,6 +155,58 @@ export async function getPatientAppointmentHistory() {
       appointment_date: "28-01-2025",
       appointment_time: "11:00 AM - 3:00 PM",
       uid: "3",
+    },
+  ];
+  return testData;
+}
+
+export async function getQueueForDoctor(doctorId) {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  const testData = [
+    {
+      patiendId: 1,
+      patientName: "John Doe",
+      age: 25,
+      gender: "Male",
+      issue: "Toothache",
+      issueDetails:
+        "I have a severe toothache since last night. My gums are swollen and I can't eat anything. My gums feel puffy and tender, especially around certain teeth. They look red and swollen, and sometimes they even bleed a little when I brush or floss. It feels sore, and chewing can be uncomfortable.",
+      currentMedication: "Crocin 500mg, Budamate 200mg",
+      appointment_date: "28-09-2025",
+      appointment_time: "10:00 AM - 2:00 PM",
+      hospital: "CityCare General Hospital",
+      uid: "132",
+      queuePosition: 123,
+    },
+    {
+      patiendId: 2,
+      patientName: "Jane Doe",
+      age: 25,
+      gender: "Male",
+      issue: "Toothache",
+      issueDetails:
+        "I have a severe toothache since last night. My gums are swollen and I can't eat anything. My gums feel puffy and tender, especially around certain teeth. They look red and swollen, and sometimes they even bleed a little when I brush or floss. It feels sore, and chewing can be uncomfortable.",
+      currentMedication: "Crocin 500mg, Budamate 200mg",
+      appointment_date: "28-09-2025",
+      appointment_time: "9:00 AM - 1:00 PM",
+      hospital: "CityCare General Hospital",
+      uid: "2",
+      queuePosition: 3,
+    },
+    {
+      patiendId: 1,
+      patientName: "John Doe",
+      age: 25,
+      gender: "Male",
+      issue: "Toothache",
+      issueDetails:
+        "I have a severe toothache since last night. My gums are swollen and I can't eat anything. My gums feel puffy and tender, especially around certain teeth. They look red and swollen, and sometimes they even bleed a little when I brush or floss. It feels sore, and chewing can be uncomfortable.",
+      currentMedication: "Crocin 500mg, Budamate 200mg",
+      appointment_date: "28-09-2025",
+      appointment_time: "11:00 AM - 3:00 PM",
+      hospital: "CityCare General Hospital",
+      uid: "3",
+      queuePosition: 141,
     },
   ];
   return testData;
