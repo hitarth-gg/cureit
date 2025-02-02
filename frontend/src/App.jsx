@@ -46,6 +46,11 @@ const router = createBrowserRouter([
       {
         path: "/bookappointment",
         element: <BookAppointment />,
+        // path: "/user/dashboard",
+        // element: <UserDashboard />,
+        errorElement: <ErrorPage />,
+      },
+      {
         path: "/user/dashboard",
         element: <UserDashboard />,
         errorElement: <ErrorPage />,

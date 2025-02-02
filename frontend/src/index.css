@@ -107,3 +107,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   height: 20px;
   border-width: thin;
 }
+
+.mdxeditor-toolbar{
+  border-radius: 0%;
+}
+
+._placeholder_uazmk_1084{
+  color: #969696;
+}

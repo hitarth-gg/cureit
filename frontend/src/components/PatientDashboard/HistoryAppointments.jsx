@@ -1,7 +1,7 @@
 import { toast } from "sonner";
-import useGetHistoryAppointment from "../hooks/useGetHistoryAppointment";
+import useGetHistoryAppointment from "../../hooks/useGetHistoryAppointment";
 import HistoryAppointmentCard from "./HistoryAppointmentCard";
-import Loader from "./Loader";
+import Loader from "../Loader";
 function HistoryAppointments() {
   const patientId = 123;
   const { isLoading, data, error, status, refetch, isFetching } =
