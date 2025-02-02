@@ -54,6 +54,7 @@ function BookAppointment() {
   console.log(isLoadingDoctorType, isLoadingSlots);
 
   const [doctorSlots, setDoctorSlots] = useState([]);
+  const [bookingSuccessful, setBookingSuccessful] = useState(false);
 
   // Filter doctor slots based on selected date
   useEffect(() => {
@@ -91,6 +92,7 @@ function BookAppointment() {
 
   function onBookAppointment() {
     console.log("Booking appointment...");
+    setBookingSuccessful(true);
     toast.success("Appointment booked successfully.");
   }
   console.log(isFetchingSlots);
@@ -127,10 +129,16 @@ function BookAppointment() {
               refetchSlots={refetchSlots}
             />
           )}
-          {formState === 3 && <BookingFormReviewData data={formData} />}
+          {formState === 3 && (
+            <BookingFormReviewData
+              data={formData}
+              bookingSuccessful={bookingSuccessful}
+              setBookingSuccessful={setBookingSuccessful}
+            />
+          )}
 
           <div className="flex w-full justify-between">
-            {formState > 0 ? (
+            {(formState > 0 && !bookingSuccessful) ? (
               <Button color="iris" size="2" onClick={() => handlePrev()}>
                 <ArrowLeftIcon width={15} height={15} /> Go Back
               </Button>
@@ -153,9 +161,16 @@ function BookAppointment() {
                 Next <ArrowRightIcon width={15} height={15} />
               </Button>
             )}
-            {formState === 3 && (
+            {formState === 3 && !bookingSuccessful && (
               <Button color="iris" size="2" onClick={() => onBookAppointment()}>
                 Book Appointment
+              </Button>
+            )}
+            {formState === 3 && bookingSuccessful && (
+              <Button color="iris" size="2" onClick={() => navigate(
+                "/dashboard", { state: { tab: "appointments" } }
+              )}>
+                Check out your appointments
               </Button>
             )}
           </div>

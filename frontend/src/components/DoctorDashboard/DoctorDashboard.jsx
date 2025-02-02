@@ -28,9 +28,9 @@ function DoctorDashboard() {
             <DoctorQueue />
           </Tabs.Content>
 
-          <Tabs.Content value="history">
+          {/* <Tabs.Content value="history">
             <HistoryAppointments />
-          </Tabs.Content>
+          </Tabs.Content> */}
         </Box>
       </Tabs.Root>
     </div>
