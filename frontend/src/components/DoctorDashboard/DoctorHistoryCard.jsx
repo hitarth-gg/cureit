@@ -1,7 +1,8 @@
 import { Badge, Button, Code, DataList } from "@radix-ui/themes";
 import SeeDetails from "./SeeDetails";
+import SeeDetailsHistory from "./SeeDetailsHistory";
 
-function DoctorQueueCard({ data, refetch }) {
+function DoctorHistoryCard({ data, refetch }) {
   const {
     patientName,
     age,
@@ -84,11 +85,11 @@ function DoctorQueueCard({ data, refetch }) {
         </DataList.Root>
         <div className="ml-4 flex items-center justify-center">
           {/* <CancelDialog data={data} refetch={refetch} /> */}
-          <SeeDetails data={data} refetch={refetch} />
+          <SeeDetailsHistory data={data} refetch={refetch} />
         </div>
       </div>
     </div>
   );
 }
 
-export default DoctorQueueCard;
+export default DoctorHistoryCard;
