@@ -2,11 +2,14 @@ import { Box, Tabs, Text } from "@radix-ui/themes";
 import ProfileTab from "./ProfileTab";
 import UpcomingAppointments from "./UpcomingAppointments";
 import HistoryAppointments from "./HistoryAppointments";
+import { useLocation } from "react-router-dom";
 
 function PatientDashboard() {
+  const location = useLocation();
+  const tab = location?.state?.tab || "profile";
   return (
     <div className="text-sm font-medium">
-      <Tabs.Root defaultValue="profile">
+      <Tabs.Root defaultValue={tab}>
         <Tabs.List
           size={{
             initial: "1",

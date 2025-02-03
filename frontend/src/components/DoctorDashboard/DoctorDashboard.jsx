@@ -1,6 +1,7 @@
 import { Box, Separator, Tabs } from "@radix-ui/themes";
 import DoctorProfileTab from "./DoctorProfileTab";
 import DoctorQueue from "./DoctorQueue";
+import DoctorHistory from "./DoctorHistory";
 
 
 function DoctorDashboard() {
@@ -29,7 +30,7 @@ function DoctorDashboard() {
           </Tabs.Content>
 
           <Tabs.Content value="history">
-            <HistoryAppointments />
+            <DoctorHistory />
           </Tabs.Content>
         </Box>
       </Tabs.Root>

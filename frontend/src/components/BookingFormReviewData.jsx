@@ -1,12 +1,22 @@
 import { Badge, Code, DataList, Flex } from "@radix-ui/themes";
 
-function BookingFormReviewData({ data }) {
+function BookingFormReviewData({
+  data,
+  bookingSuccessful,
+  setBookingSuccessful,
+}) {
   const formData = data;
   const selectedDoctor = formData?.selectedDoctor;
   return (
     <div>
       <div className="mb-4 flex select-none justify-center text-center font-noto text-base font-semibold md:text-lg">
-        Review the details before booking
+        {bookingSuccessful ? (
+          <p className="rounded-sm border border-green-400 bg-green-200 p-2 py-1 text-green-800">
+            Appointment booked successfully!
+          </p>
+        ) : (
+          <p className="p-2 py-1">Review your booking details</p>
+        )}
       </div>
       <div className="flex flex-col justify-between gap-y-10 rounded-md border-2 px-4 py-2 font-noto">
         <DataList.Root

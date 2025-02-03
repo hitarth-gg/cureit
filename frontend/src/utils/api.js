@@ -211,3 +211,88 @@ export async function getQueueForDoctor(doctorId) {
   ];
   return testData;
 }
+
+export async function getHistoryForDoctor(doctorId) {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  const testData = [
+    {
+      patiendId: 1,
+      patientName: "John Doe",
+      age: 25,
+      gender: "Male",
+      issue: "Toothache",
+      issueDetails:
+        "I have a severe toothache since last night. My gums are swollen and I can't eat anything. My gums feel puffy and tender, especially around certain teeth. They look red and swollen, and sometimes they even bleed a little when I brush or floss. It feels sore, and chewing can be uncomfortable.",
+      currentMedication: "Crocin 500mg, Budamate 200mg",
+      appointment_date: "28-09-2025",
+      appointment_time: "10:00 AM - 2:00 PM",
+      hospital: "CityCare General Hospital",
+      uid: "132",
+      queuePosition: 123,
+      doctorPrescription: `## Medical Prescription Report
+                            **Patient Name:** John Doe  
+                            **Age:** 45  
+                            **Gender:** Male  
+                            **Date:** 2025-02-02  
+
+                            ## Diagnosis
+                            - Hypertension
+                            - Type 2 Diabetes Mellitus
+
+                            ## Prescriptions
+                            | Medication          | Dosage          | Frequency         | Duration  |
+                            |---------------------|-----------------|-------------------|-----------|
+                            | Amlodipine 5mg      | 1 tablet        | Once daily (AM)   | 1 month   |
+                            | Metformin 500mg     | 1 tablet        | Twice daily (AM/PM) | 1 month   |
+                            | Atorvastatin 10mg   | 1 tablet        | Nightly (PM)      | 1 month   |
+
+                            ## Instructions
+                            - Maintain a low-sodium diet.
+                            - Monitor blood sugar levels daily.
+                            - Engage in moderate exercise for 30 minutes/day.
+
+                            ## Notes
+                            - Follow up in 4 weeks with updated blood pressure and glucose readings.
+
+                            **Doctor's Name:** Dr. Emily Carter  
+                            **Contact:** (123) 456-7890  
+                            **Signature:** ______________________`,
+      doctorRemarks: ``
+    },
+    {
+      patiendId: 2,
+      patientName: "Jane Doe",
+      age: 25,
+      gender: "Male",
+      issue: "Toothache",
+      issueDetails:
+        "I have a severe toothache since last night. My gums are swollen and I can't eat anything. My gums feel puffy and tender, especially around certain teeth. They look red and swollen, and sometimes they even bleed a little when I brush or floss. It feels sore, and chewing can be uncomfortable.",
+      currentMedication: "Crocin 500mg, Budamate 200mg",
+      appointment_date: "28-09-2025",
+      appointment_time: "9:00 AM - 1:00 PM",
+      hospital: "CityCare General Hospital",
+      uid: "2",
+      queuePosition: 3,
+      doctorPrescription: ``,
+      doctorRemarks: ``
+    },
+    {
+      patiendId: 1,
+      patientName: "John Doe",
+      age: 25,
+      gender: "Male",
+      issue: "Toothache",
+      issueDetails:
+        "I have a severe toothache since last night. My gums are swollen and I can't eat anything. My gums feel puffy and tender, especially around certain teeth. They look red and swollen, and sometimes they even bleed a little when I brush or floss. It feels sore, and chewing can be uncomfortable.",
+      currentMedication: "Crocin 500mg, Budamate 200mg",
+      appointment_date: "28-09-2025",
+      appointment_time: "11:00 AM - 3:00 PM",
+      hospital: "CityCare General Hospital",
+      uid: "3",
+      queuePosition: 141,
+      doctorPrescription: `Crocin 500mg, Budamate 200mg`,
+      doctorRemarks: ``
+    },
+  ];
+  return testData;
+}
