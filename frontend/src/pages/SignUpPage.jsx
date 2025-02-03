@@ -25,6 +25,7 @@ function SignUpPage() {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      phone: phoneNumber,
       options: {
         data: { display_name: name, phone: phoneNumber }, // Store display_name in metadata
       },

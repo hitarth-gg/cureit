@@ -4,8 +4,12 @@ import { useCureitContext } from "../utils/ContextProvider";
 import { Box, Button, DropdownMenu, Tooltip } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Logout from "./logout";
 
 function Header() {
+  const tokenString = localStorage.getItem(
+    "sb-vakmfwtcbdeaigysjgch-auth-token",
+  );
   const context = useCureitContext();
   const { theme, setTheme } = context;
   // get scrool position
@@ -34,7 +38,10 @@ function Header() {
         boxShadow: scrollPosition > 0 ? "0px 0px 2px 0px #00000050" : "none",
       }}
     >
-      <div className="my-auto w-16 cursor-pointer" onClick={() => navigate("/")}>
+      <div
+        className="my-auto w-16 cursor-pointer"
+        onClick={() => navigate("/")}
+      >
         <CureitLogo fillColor={theme === "dark" ? "#ffffff" : "#000000"} />
       </div>
 
@@ -56,17 +63,21 @@ function Header() {
           </Button>
         </Tooltip> */}
 
-        <Button
-          color="iris"
-          size={"2"}
-          variant="ghost"
-          style={{
-            fontWeight: "500",
-          }}
-          onClick={() => navigate("/login")}
-        >
-          Login
-        </Button>
+        {!tokenString ? (
+          <Button
+            color="iris"
+            size={"2"}
+            variant="ghost"
+            style={{
+              fontWeight: "500",
+            }}
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </Button>
+        ) : (
+          <Logout />
+        )}
 
         <Tooltip content="Notifications" side="bottom">
           <Button color="iris" size={"2"} variant="ghost">

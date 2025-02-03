@@ -1,8 +1,11 @@
 import { Button, Code } from "@radix-ui/themes";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function AccountVerification() {
+  const navigate = useNavigate();
   const location = useLocation();
   const email = location?.state?.email || "undefined email";
   // add 1.5min timer to resend email
@@ -52,6 +55,21 @@ function AccountVerification() {
       setMessage("Error sending email");
     }
   };
+
+  const checkAccessToken = () => {
+    const interval = setInterval(() => {
+      const token = localStorage.getItem("access-token");
+      if (token) {
+        clearInterval(interval); // Stop checking once token is found
+        console.log("Token found:", token);
+        navigate("/verified"); // Navigate or perform actions
+      }
+    }, 1000); // Check every second
+  };
+
+  // Call the function when the page loads
+  checkAccessToken();
+
   return (
     <div className="flex h-[94svh] w-full items-center justify-center bg-[#f7f8fa] font-noto font-medium">
       <div className="m-4 flex flex-col items-center justify-center gap-y-4 rounded-lg bg-white p-8 drop-shadow-lg">
