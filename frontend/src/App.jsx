@@ -50,13 +50,18 @@ const router = createBrowserRouter([
         // element: <UserDashboard />,
         errorElement: <ErrorPage />,
       },
+      // {
+      //   path: "/user/dashboard",
+      //   element: <UserDashboard />,
+      //   errorElement: <ErrorPage />,
+      // },
+      // {
+      //   path: "/user/dashboard",
+      //   element: <UserDashboard />,
+      //   errorElement: <ErrorPage />,
+      // },
       {
         path: "/user/dashboard",
-        element: <UserDashboard />,
-        errorElement: <ErrorPage />,
-      },
-      {
-        path: "/dashboard",
         element: <Dashboard />,
         errorElement: <ErrorPage />,
       },

@@ -1,6 +1,30 @@
 const express = require("express");
 const router = express.Router();
 const supabase = require("../config/supabaseClient");
+const verifyToken = require("../config/verifyToken");
+// const verifyToken = async (req, res, next) => {
+//   // console.log(req.headers.authorization);
+//   const token = req.headers.authorization?.split(" ")[1]; // Extract Bearer token
+//   console.log("in verify token", token);
+//   // console.log("in access token");
+//   if (!token) {
+//     return res.status(401).json({ error: "Unauthorized: No token provided" });
+//   }
+
+//   try {
+//     const { data: user, error } = await supabase.auth.getUser(token);
+
+//     if (error || !user) {
+//       return res.status(401).json({ error: "Unauthorized: Invalid token" });
+//     }
+
+//     req.user = user; // Attach user info to request
+//     next(); // Proceed to next middleware or route
+//   } catch (error) {
+//     res.status(500).json({ error: "Server error verifying token" });
+//   }
+// };
+
 // router.post("/register", async (req, res) => {
 //   console.log("Hit /register route");
 //   const { email, mobile, password, name, role } = req.body;
@@ -265,7 +289,7 @@ router.post("/addUserIfNotExist", async (req, res) => {
     name,
     phoneNumber,
     password,
-    aadharNumber,
+    aadhaarNumber,
     emailVerified,
     createdAt,
   } = req.body;
@@ -276,7 +300,7 @@ router.post("/addUserIfNotExist", async (req, res) => {
       name,
       phone_number: phoneNumber,
       // password, // ⚠ Consider hashing before storing
-      aadhar_number: aadharNumber,
+      aadhar_number: aadhaarNumber,
       email_verified: emailVerified,
       created_at: createdAt || new Date().toISOString(),
     },
@@ -334,6 +358,100 @@ router.post("/resend-verification", async (req, res) => {
     res.json({ message: "Verification email resent successfully", data });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+/*
+  should return an object containing
+    1)email
+    2)name
+    3)profile pic
+    4)address
+    5)age
+    6)gender
+    7)phone 
+    8)phone confirmed or not
+*/
+
+router.post("/getUserById", async (req, res) => {
+  console.log(req.body);
+  const { userId: id } = req.body;
+
+  console.log(id);
+  // Return the user data
+  // return res.json({ user });
+
+  // Fetch user profile from public.profiles
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", id)
+    .single();
+  // console.log(profile);
+  if (profileError) {
+    return res.status(500).json({ error: "Profile fetch failed" });
+  }
+
+  return res.json({ profile });
+});
+
+router.put("/updateDetails/:id", verifyToken, async (req, res) => {
+  const { id } = req.params;
+  const { name, address, age, gender } = req.body;
+  console.log(req.body);
+  // console.log(req.body);
+  console.log("in put", id);
+
+  // Ensure user can only update their own profile
+  console.log(req.body.userId, " ", id);
+  if (req.body.userId !== id) {
+    return res
+      .status(403)
+      .json({ error: "Forbidden: Cannot update other users" });
+  }
+
+  try {
+    console.log("request to update user recieved");
+    const { data, error } = await supabase
+      .from("profiles")
+      .update({ name, address, age, gender })
+      .eq("id", id);
+    console.log("request to update user completed");
+
+    if (error) {
+      console.log(error);
+      throw error;
+    }
+
+    console.log(data);
+    return res.json({ data });
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.post("/getRole", verifyToken, async (req, res) => {
+  // console.log(verifyToken);
+  const { userId } = req.body;
+  console.log(userId);
+  console.log(req.body);
+  console.log("in getRole", userId);
+
+  try {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("role") // Pass 'role' as a string
+      .eq("id", userId);
+
+    if (error) {
+      console.log(error);
+      // console.log(data);
+      throw error;
+    }
+    // console.log(data);
+    return res.json({ data });
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
   }
 });
 

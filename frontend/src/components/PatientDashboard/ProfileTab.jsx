@@ -5,21 +5,98 @@ import EditProfile from "./EditProfile";
 import AppointmentCard from "./AppointmentCard";
 import useGetUpcomingAppointments from "../../hooks/useGetUpcomingAppointments";
 import Loader from "../Loader";
+import { supabase } from "../../utils/supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 function ProfileTab() {
+  const [userId, setUserId] = useState(null);
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  const tokenString = localStorage.getItem(
+    "sb-vakmfwtcbdeaigysjgch-auth-token",
+  );
+  const token = JSON.parse(tokenString);
+
+  const accessToken = token.access_token;
+
+  // const MyComponent = () => {
+  const [profileImage, setProfileImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const [profile, setProfile] = useState({
-    name: "Rakesh Manmohan Tiwari",
-    email: "rakeshmtiwari12@email.com",
-    phone: "+91 9827593710",
-    address: "Sector 24, Aliganj, Lucknow, India",
+    userId: "",
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
     profileImage: "",
-    age: 25,
-    gender: "Male",
+    age: "",
+    gender: "",
+    phone_verified: "",
   });
   const profileImagePlaceholder =
     "https://static.vecteezy.com/system/resources/thumbnails/003/337/584/small/default-avatar-photo-placeholder-profile-icon-vector.jpg";
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    const checkUserSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      console.log("Session Data:", data);
+      if (error) {
+        console.error("Session Error:", error);
+        navigate("/login");
+      }
+    };
+    //can enter a toast here user not authenticated to view this page
+    checkUserSession();
+  }, []);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+      if (user) setUserId(user.id);
+      if (error) console.error("Error fetching user:", error);
+    };
+    fetchUser();
+  }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/users/getUserById`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch user data");
+
+      const data = await response.json();
+      setProfile({
+        name: data.profile.name || "",
+        email: data.profile.email || "",
+        phone: data.profile.phone_number || "",
+        address: data.profile.address || "",
+        profileImage: data.profile.avatar_url || "",
+        age: data.profile.age || null,
+        gender: data.profile.gender || "",
+        phone_verified: data.profile.phone_verified,
+      });
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+    }
+  };
+
+  useEffect(() => {
+    console.log("hello", " ", userId);
+    if (userId) fetchUserProfile();
+  }, [userId]);
   const patientId = 123;
+
   const { isLoading, data, error, status, refetch, isFetching } =
     useGetUpcomingAppointments(patientId);
 
@@ -33,6 +110,50 @@ function ProfileTab() {
       setAppointmentsToday(appointments);
     }
   }, [data]);
+  console.log(profile);
+
+  const handleUpload = async (event) => {
+    const file = event.target.files[0];
+
+    if (!file) {
+      console.error("No file selected");
+      return;
+    }
+    console.log("file: ", file);
+
+    const formData = new FormData(); // Create a FormData object to hold the file
+    formData.append("file", file);
+    formData.append("userId", userId);
+    console.log(formData);
+
+    // Add the file to the FormData object
+
+    try {
+      // Assuming your backend endpoint is '/upload'
+      const response = await fetch(
+        `${API_BASE_URL}/api/uploadProfiles/upload`,
+        {
+          method: "POST",
+          body: formData, // Send the formData as the request body
+          // headers: {
+          //   // Include any headers your backend requires (e.g., Authorization)
+          //   Authorization: `Bearer ${accessToken}`,
+          // },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Error uploading file");
+      }
+
+      const data = await response.json();
+      console.log("File uploaded successfully", data);
+      const fileUrl = data.fileUrl;
+      console.log("File available at:", fileUrl);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-y-6">
@@ -47,10 +168,18 @@ function ProfileTab() {
                 md: "6",
               }}
               radius="full"
-              src={profile.profileImage || profileImagePlaceholder}
+              src={profile.profileImage}
               fallback={profile.name[0]?.toUpperCase()}
             />
           </Flex>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleUpload}
+            id="profile-image-upload"
+            // style={{ display: "none" }} // Hide the input field
+          />
+
           <div className="mt-1 w-32 text-center">{profile.name}</div>
         </div>
         <div className="flex flex-col justify-center gap-3">
@@ -68,7 +197,11 @@ function ProfileTab() {
             {profile.gender}
           </div>
           <div>
-            <EditProfile profile={profile} setProfile={setProfile} />
+            <EditProfile
+              id={userId}
+              profile={profile}
+              setProfile={setProfile}
+            />
           </div>
         </div>
       </div>

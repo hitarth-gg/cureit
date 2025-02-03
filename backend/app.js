@@ -8,7 +8,10 @@ const doctorRoutes = require("./routes/doctorRoutes");
 const appointmentRoutes = require("./routes/appointmentRoutes");
 const prescriptionRoutes = require("./routes/prescriptionRoutes");
 const testReportsRoutes = require("./routes/testReportsRoutes");
+const doctorProfileRoutes = require("./routes/doctorProfileRoutes");
 // connectDB();
+const profileRoutes = require("./routes/profileRoutes");
+
 const cors = require("cors");
 
 // connectDB();
@@ -25,6 +28,8 @@ app.use("/api/doctors", doctorRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/prescriptions", prescriptionRoutes);
 app.use("/api/testReports", testReportsRoutes);
+app.use("/api/uploadProfiles", profileRoutes);
+app.use("/api/doctorProfileRoutes", doctorProfileRoutes);
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

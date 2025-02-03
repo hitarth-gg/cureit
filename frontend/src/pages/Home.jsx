@@ -19,8 +19,6 @@ function Home() {
   const { theme } = useCureitContext();
   const navigate = useNavigate();
   const token = localStorage.getItem("sb-vakmfwtcbdeaigysjgch-auth-token");
-
-  // console.log(token);
   const userData = token;
   const [userInfo, setUserInfo] = useState({
     id: "",

@@ -7,17 +7,59 @@ import {
   Text,
   TextField,
 } from "@radix-ui/themes";
+import { stringify } from "postcss";
 import { useState } from "react";
 
-function EditProfile({ profile, setProfile }) {
+function EditProfile({ id, profile, setProfile }) {
   //   const editedProfile = profile;
+  console.log("in edit profile", id);
   const [editedProfile, setEditedProfile] = useState(profile);
   const { name, address, email, profileImage, age, gender } = editedProfile;
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const tokenString = localStorage.getItem(
+    "sb-vakmfwtcbdeaigysjgch-auth-token",
+  );
+  const token = JSON.parse(tokenString);
+
+  const accessToken = token.access_token;
+
+  // console.log(accessToken);
 
   function onSave() {
     // Save the edited profile
     // save the edited profile to the database
     setProfile(editedProfile);
+    const user_id = String(id);
+    profile.userId = user_id;
+    console.log("in on save", profile);
+
+    const updateUser = async (id, updatedData) => {
+      console.log(updatedData);
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/users/updateDetails/${user_id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`, // Include token
+            },
+            body: JSON.stringify(profile),
+          },
+        );
+        const data = await response.json(); // Parse response JSON
+        console.log("Updated User:", data);
+
+        console.log("User updated successfully:", data);
+        return data;
+      } catch (error) {
+        console.error(
+          "Error updating user:",
+          error.response?.data || error.message,
+        );
+      }
+    };
+    updateUser(id, editedProfile);
   }
 
   function onCancel() {
@@ -53,7 +95,7 @@ function EditProfile({ profile, setProfile }) {
                 }
               />
             </label>
-            <label>
+            {/* <label>
               <Text as="div" size="2" mb="1" weight="bold">
                 Email
               </Text>
@@ -64,7 +106,7 @@ function EditProfile({ profile, setProfile }) {
                   setEditedProfile({ ...editedProfile, email: e.target.value })
                 }
               />
-            </label>
+            </label> */}
             <label>
               <Text as="div" size="2" mb="1" weight="bold">
                 Address
@@ -137,7 +179,7 @@ function EditProfile({ profile, setProfile }) {
               </Button>
             </Dialog.Close>
             <Dialog.Close>
-              <Button onClick={() => onSave()}>Save</Button>
+              <Button onClick={onSave}>Save</Button>
             </Dialog.Close>
           </Flex>
         </Dialog.Content>
