@@ -4,7 +4,7 @@ import AppointmentCard from "./AppointmentCard";
 import Loader from "../Loader";
 
 function UpcomingAppointments() {
-  const patientId = 123;
+  const patientId = "00bb0259-6a09-4151-9a86-29d475b28a7f";
   const { isLoading, data, error, status, refetch, isFetching } =
     useGetUpcomingAppointments(patientId);
 

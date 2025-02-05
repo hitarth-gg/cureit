@@ -95,7 +95,7 @@ function ProfileTab() {
     console.log("hello", " ", userId);
     if (userId) fetchUserProfile();
   }, [userId]);
-  const patientId = 123;
+  const patientId = "00bb0259-6a09-4151-9a86-29d475b28a7f";
 
   const { isLoading, data, error, status, refetch, isFetching } =
     useGetUpcomingAppointments(patientId);
@@ -103,7 +103,8 @@ function ProfileTab() {
   const [appointmentsToday, setAppointmentsToday] = useState([]);
   useEffect(() => {
     if (data) {
-      const today = new Date().toLocaleDateString("en-IN").replace(/\//g, "-");
+      console.log("Data:", data);
+      const today = new Date().toISOString().split("T")[0]; 
       const appointments = data.filter(
         (appointment) => appointment.appointment_date === today,
       );
@@ -177,7 +178,7 @@ function ProfileTab() {
             accept="image/*"
             onChange={handleUpload}
             id="profile-image-upload"
-            // style={{ display: "none" }} // Hide the input field
+          // style={{ display: "none" }} // Hide the input field
           />
 
           <div className="mt-1 w-32 text-center">{profile.name}</div>
@@ -201,6 +202,7 @@ function ProfileTab() {
               id={userId}
               profile={profile}
               setProfile={setProfile}
+              fetchUserProfile={fetchUserProfile}
             />
           </div>
         </div>

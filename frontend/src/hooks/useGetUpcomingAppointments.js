@@ -10,6 +10,5 @@ export default function useGetUpcomingAppointments(patientId) {
     },
     staleTime: 1000 * 1, // 1 second
   });
-
   return { isLoading, data, error, status, refetch, isFetching };
 }

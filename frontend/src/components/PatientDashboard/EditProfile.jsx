@@ -9,11 +9,16 @@ import {
 } from "@radix-ui/themes";
 import { stringify } from "postcss";
 import { useState } from "react";
-
-function EditProfile({ id, profile, setProfile }) {
+import { useEffect } from "react";
+function EditProfile({ id, profile, setProfile, fetchUserProfile }) {
   //   const editedProfile = profile;
   console.log("in edit profile", id);
+  console.log(profile);
   const [editedProfile, setEditedProfile] = useState(profile);
+  useEffect(() => {
+    setEditedProfile(profile);
+  }, [profile]);
+  console.log("edited profile", editedProfile);
   const { name, address, email, profileImage, age, gender } = editedProfile;
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const tokenString = localStorage.getItem(
@@ -28,12 +33,12 @@ function EditProfile({ id, profile, setProfile }) {
   function onSave() {
     // Save the edited profile
     // save the edited profile to the database
-    setProfile(editedProfile);
+    // setProfile(editedProfile);
     const user_id = String(id);
     profile.userId = user_id;
     console.log("in on save", profile);
 
-    const updateUser = async (id, updatedData) => {
+    const updateUser = async (user_id, updatedData) => {
       console.log(updatedData);
       try {
         const response = await fetch(
@@ -51,6 +56,8 @@ function EditProfile({ id, profile, setProfile }) {
         console.log("Updated User:", data);
 
         console.log("User updated successfully:", data);
+        fetchUserProfile();
+
         return data;
       } catch (error) {
         console.error(
@@ -88,7 +95,7 @@ function EditProfile({ id, profile, setProfile }) {
                 Name
               </Text>
               <TextField.Root
-                value={name}
+                value={editedProfile.name}
                 placeholder="Enter your full name"
                 onChange={(e) =>
                   setEditedProfile({ ...editedProfile, name: e.target.value })
@@ -179,7 +186,7 @@ function EditProfile({ id, profile, setProfile }) {
               </Button>
             </Dialog.Close>
             <Dialog.Close>
-              <Button onClick={onSave}>Save</Button>
+              <Button onClick={() => { onSave() }}>Save</Button>
             </Dialog.Close>
           </Flex>
         </Dialog.Content>

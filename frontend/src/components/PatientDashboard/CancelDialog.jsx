@@ -8,9 +8,12 @@ import {
   Text,
   TextField,
 } from "@radix-ui/themes";
+import useDeleteAppointment from "../../hooks/useDeleteAppointment";
+import { use } from "react";
 
 function CancelDialog({ data, refetch }) {
   const {
+    appointmentId,
     doctor,
     specialization,
     hospital,
@@ -18,13 +21,18 @@ function CancelDialog({ data, refetch }) {
     appointment_date,
     queuePosition,
   } = data;
-  const appointmentTypes = ["orange", "blue"]; // green for today's appointment, blue for future appointment
+  const appointmentTypes = ["green", "blue"]; // green for today's appointment, blue for future appointment
   const appointmentType =
     appointment_date ===
-    new Date().toLocaleDateString("en-IN").replace(/\//g, "-")
+    new Date().toISOString().split("T")[0]
       ? appointmentTypes[0]
       : appointmentTypes[1];
 
+  //cancel appointment
+  const { mutate: cancelAppointment } = useDeleteAppointment();
+  const handleCancel = () => {
+    cancelAppointment.mutate(appointmentId);
+  };
   return (
     <div className="font-noto">
       <Dialog.Root>
@@ -103,11 +111,7 @@ function CancelDialog({ data, refetch }) {
             <Dialog.Close>
               <Button
                 color="red"
-                onClick={
-                  () =>
-                    // PERFORM CANCELATION LOGIC HERE
-                    refetch() // refetch the upcoming appointments after cancelation
-                }
+                onClick={handleCancel}
               >
                 Yes, Cancel
               </Button>

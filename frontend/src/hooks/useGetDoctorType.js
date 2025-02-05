@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { getDoctorSlots, getDoctorType } from "../utils/api";
+import { getDoctorSlots, getDoctorDetails } from "../utils/api";
 
 export default function useGetDoctorType(data2) {
   const { isLoading, data, error, status } = useQuery({
     queryKey: ["doctor_type", data2],
     queryFn: () => {
-      if (data2 !== null) return getDoctorType(data2);
+      if (data2 !== null) return getDoctorDetails(data2);
         console.log("Null returned type");
         return null;
     },

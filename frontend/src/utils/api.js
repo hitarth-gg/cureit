@@ -1,3 +1,5 @@
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 export async function getAddressFromCoords(lat, lng) {
   try {
     const response = await fetch(
@@ -70,94 +72,115 @@ export async function getDoctorSlots(doctorType) {
   if (doctorType === "Dentist") return testData;
   else return null;
 }
-export async function getDoctorType(data) {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  return { doctorType: "Dentist" };
+export async function getProfileDetails(userId) {
+  const response = await fetch(`${API_URL}/api/users/userById/${userId}`);
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} ${response.statusText}`);
+  }
+  const data = await response.json();
+  return data;
 }
+export async function getDoctorDetails(doctorId) {
+  const response = await fetch(`${API_URL}/api/doctors/doctorDetailsById/${doctorId}`);
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} ${response.statusText}`);
+  }
+  const data = await response.json();
+  return data;
+}
+export async function deleteAppointment(appointmentId) {
+  const response = await fetch(`${API_URL}/api/appointments/delete/${appointmentId}`, {
+    method: "DELETE",
+  });
 
+  if (!response.ok) {
+    throw new Error("Failed to delete appointment");
+  }
+
+  return response.json();
+}
 export async function getPatientAppointments(patientId) {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  const today = new Date().toLocaleDateString("en-IN").replace(/\//g, "-"); // today's date in dd-mm-yyyy format
-  const testData = [
-    {
-      doctor: "Dr. Emily Carter",
-      hospital: "CityCare General Hospital",
-      specialization: "Dentist",
-      appointment_date: "28-09-2025",
-      appointment_time: "10:00 AM - 2:00 PM",
-      uid: "132",
-      queuePosition: 123,
-    },
-    {
-      doctor: "Dr. James Rodriguez",
-      hospital: "Sunrise Medical Center",
-      specialization: "Dentist",
-      appointment_date: today,
-      appointment_time: "9:00 AM - 1:00 PM",
-      uid: "2",
-      queuePosition: 12,
-    },
-    {
-      doctor: "Dr. James Rodriguez",
-      hospital: "Sunrise Medical Center",
-      specialization: "Dentist",
-      appointment_date: today,
-      appointment_time: "9:00 AM - 1:00 PM",
-      uid: "2",
-      queuePosition: 46,
-    },
-    {
-      doctor: "Dr. Sophia Lee",
-      hospital: "Harmony Children's Hospital",
-      specialization: "Dentist",
-      appointment_date: "28-09-2025",
-      appointment_time: "11:00 AM - 3:00 PM",
-      uid: "3",
-      queuePosition: 141,
-    },
-    {
-      doctor: "Dr. Ratiram Lee",
-      hospital: "Harmony Children's Hospital",
-      specialization: "Dentist",
-      appointment_date: "28-09-2025",
-      appointment_time: "11:00 AM - 3:00 PM",
-      uid: "3",
-      queuePosition: 1123,
-    },
-  ];
-  return testData;
+  const today = new Date().toISOString().split("T")[0]; // Formats as YYYY-MM-DD
+
+  try {
+    const response = await fetch(`${API_URL}/api/appointments/upcomingAppointments/${patientId}?date=${today}`);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    // Fetch doctor details for each appointment
+    const updatedData = await Promise.all(
+      data.map(async (appointment) => {
+        try {
+          const doctor = await getDoctorDetails(appointment.doctor_id);
+          const doctorProfileDetails = await getProfileDetails(appointment.doctor_id);
+          console.log("Doctor Details:", doctorProfileDetails);
+          return { ...appointment, doctorDetails: doctor, doctorProfileDetails: doctorProfileDetails };
+        } catch (error) {
+          console.error("Failed to fetch doctor details:", error);
+          return { ...appointment, doctorDetails: null }; // Avoid breaking the loop
+        }
+      })
+    );
+
+    // Return an array of appointments with doctor details
+    const finalAppointments = updatedData.map((appointment) => ({
+      appointmentId: appointment.id,
+      doctor: appointment.doctorProfileDetails?.name || "Unknown",
+      specialization: appointment.doctorDetails?.specialization || "Unknown",
+      hospital: appointment.doctorDetails?.hospital_name || "Unknown",
+      appointment_time: appointment.appointment_time?.appointment_time || "N/A",
+      appointment_date: appointment.appointment_date,
+      queuePosition: appointment.queuePosition || "N/A",
+    }));
+
+    return finalAppointments; // Return the array
+  } catch (error) {
+    console.error("Failed to fetch patient appointments:", error);
+    throw new Error("Failed to fetch patient appointments.");
+  }
 }
 
-export async function getPatientAppointmentHistory() {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  const testData = [
-    {
-      doctor: "Dr. Emily Carter",
-      hospital: "CityCare General Hospital",
-      specialization: "Dentist",
-      appointment_date: "28-01-2025",
-      appointment_time: "10:00 AM - 2:00 PM",
-      uid: "132",
-    },
-    {
-      doctor: "Dr. James Rodriguez",
-      hospital: "Sunrise Medical Center",
-      specialization: "Dentist",
-      appointment_date: "28-01-2025",
-      appointment_time: "9:00 AM - 1:00 PM",
-      uid: "2",
-    },
-    {
-      doctor: "Dr. Sophia Lee",
-      hospital: "Harmony Children's Hospital",
-      specialization: "Dentist",
-      appointment_date: "28-01-2025",
-      appointment_time: "11:00 AM - 3:00 PM",
-      uid: "3",
-    },
-  ];
-  return testData;
+export async function getPatientAppointmentHistory(patiendId) {
+  try {
+    const response = await fetch(`${API_URL}/api/appointments/completedAppointments/${patiendId}`);
+    if (!response.ok) {
+      console.error(`Error: ${response.status} ${response.statusText}`);
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    console.log("Appointment History:", data);
+    const updatedData = await Promise.all(
+      data.map(async (appointment) => {
+        try {
+          const doctor = await getDoctorDetails(appointment.doctor_id);
+          const doctorProfileDetails = await getProfileDetails(appointment.doctor_id);
+          console.log("Doctor Details:", doctorProfileDetails);
+          return { ...appointment, doctorDetails: doctor, doctorProfileDetails: doctorProfileDetails };
+        } catch (error) {
+          console.error("Failed to fetch doctor details:", error);
+          return { ...appointment, doctorDetails: null }; // Avoid breaking the loop
+        }
+      })
+    );
+
+    const finalAppointments = updatedData.map((appointment) => ({
+      appointmentId: appointment.id,
+      doctor: appointment.doctorProfileDetails?.name || "Unknown",
+      specialization: appointment.doctorDetails?.specialization || "Unknown",
+      hospital: appointment.doctorDetails?.hospital_name || "Unknown",
+      appointment_time: appointment.appointment_time?.appointment_time || "N/A",
+      appointment_date: appointment.appointment_date,
+    }));
+
+    return finalAppointments; 
+  }
+  catch (error) {
+    console.error("Failed to fetch patient appointments:", error);
+    throw new Error("Failed to fetch patient appointments.");
+  }
 }
 
 export async function getQueueForDoctor(doctorId) {
