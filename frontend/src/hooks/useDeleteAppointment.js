@@ -1,5 +1,5 @@
 //use mutations
-import { Query, useMutation, useQueryClient } from "@tanstack/react-query";
+import {useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteAppointment } from "../utils/api";
 export default function useDeleteAppointment() {
     const queryClient = useQueryClient();

@@ -74,14 +74,14 @@ function DoctorHistoryCard({ data, refetch }) {
               </Badge>
             </DataList.Value>
           </DataList.Item>
-          <DataList.Item>
+          {/* <DataList.Item>
             <DataList.Label minWidth="88px">Queue Position</DataList.Label>
             <DataList.Value>
               <Badge variant="" color={appointmentType}>
                 {queuePosition}
               </Badge>
             </DataList.Value>
-          </DataList.Item>
+          </DataList.Item> */}
         </DataList.Root>
         <div className="ml-4 flex items-center justify-center">
           {/* <CancelDialog data={data} refetch={refetch} /> */}

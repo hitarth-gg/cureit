@@ -80,7 +80,7 @@ router.post("/updateStatus/:appointmentId", async (req, res) => {
   res.json(data);
   console.log("Appointment status updated successfully");
 });
-//fetching appointments by patient Id
+//fetching upcoming appointments by patient Id
 router.get("/upcomingAppointments/:patientId" , async (req, res) => {
   const {patientId} = req.params;
   const {date} = req.query;
@@ -100,7 +100,7 @@ router.get("/upcomingAppointments/:patientId" , async (req, res) => {
   res.json(updatedAppointments);
   
 })
-
+//fetching completed appointments by patient Id
 router.get("/completedAppointments/:patientId" , async (req , res)=> {
   const {patientId} = req.params;
   const {data: appointments, error} = await supabase.from('appointments').select('*').eq('patient_id', patientId).eq("status" , "completed")
@@ -110,7 +110,35 @@ router.get("/completedAppointments/:patientId" , async (req , res)=> {
   console.log(appointments);
   res.json(appointments);
 })
-
+//fetching upcoming appointments by doctor Id
+router.get("/doctorUpcomingAppointments/:doctorId" , async (req, res) => {
+  const {doctorId} = req.params;
+  const {date} = req.query;
+  const {data: appointments, error} = await supabase.from('appointments').select('*').eq('doctor_id', doctorId).gte('appointment_date' , date).eq('book_status', "completed").eq("status" , "scheduled");
+  if (error) {
+    return res.status(400).json({ error: error.message });
+  }
+  const updatedAppointments = await Promise.all(
+  appointments.map(async (appointment) => {
+    const queuePosition = await getQueuePosition(appointment.doctor_id, appointment.created_at, appointment.appointment_date);
+    if(queuePosition !== -1){
+      console.log("appointment: ", appointment);
+      console.log("Queue position:", queuePosition);
+      return {...appointment, queuePosition: queuePosition};
+    }
+  }))
+  res.json(updatedAppointments);
+})
+//fetching completed appointments by doctor Id
+router.get("/doctorCompletedAppointments/:doctorId" , async (req , res)=> {
+  const {doctorId} = req.params;
+  const {data: appointments, error} = await supabase.from('appointments').select('*').eq('doctor_id', doctorId).eq("status" , "completed")
+  if (error) {
+    return res.status(400).json({ error: error.message });
+  }
+  console.log(appointments);
+  res.json(appointments);
+})
 //deleteAppointment
 router.delete("/delete/:appointmentId", async (req, res) => {
   const { appointmentId } = req.params;
@@ -121,5 +149,4 @@ router.delete("/delete/:appointmentId", async (req, res) => {
   res.json(data);
   console.log("Appointment deleted successfully");
 });
-
 module.exports = router;

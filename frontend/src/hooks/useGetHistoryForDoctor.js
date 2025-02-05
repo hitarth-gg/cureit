@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getHistoryForDoctor } from "../utils/api";
 export default function useGetHistoryForDoctor(doctorId) {
   const { isLoading, data, error, status, refetch, isFetching } = useQuery({
-    queryKey: ["doctor_slots", doctorId],
+    queryKey: ["doctor_queue_history", doctorId],
     queryFn: () => {
       if (doctorId) return getHistoryForDoctor(doctorId);
       return null;
