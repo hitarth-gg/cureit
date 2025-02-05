@@ -67,6 +67,15 @@ router.get("/allusers", async (req, res) => {
   res.status(200).json(data);
 });
 
+router.get("/userById/:Id" , async(req, res) => {
+  const {Id} = req.params;
+  const {data , error} = await supabase.from('profiles').select('*').eq('id', Id).single();
+  if(error) {
+    return res.status(400).json({error: error.message});
+  }
+  res.json(data);
+});
+
 router.post("/check-email", async (req, res) => {
   const { email } = req.body;
   console.log(email);
