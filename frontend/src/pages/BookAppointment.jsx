@@ -51,7 +51,7 @@ function BookAppointment() {
     error: errorSlots,
     refetch: refetchSlots,
     isFetching: isFetchingSlots,
-  } = useGetDoctorSlots({formData, patientId, dataDoctorType}); // Fetch doctor slots based on selected doctor type
+  } = useGetDoctorSlots(formState === 2 ? {formData, patientId, dataDoctorType} : null); // Fetch doctor slots based on selected doctor type
 
   console.log(isLoadingDoctorType, isLoadingSlots);
 
@@ -100,6 +100,12 @@ function BookAppointment() {
     bookAppointment.mutate({formData , patientId});
   }
   // console.log(isFetchingSlots);
+  console.log(isLoadingDoctorType, isLoadingSlots, isFetchingSlots);
+  console.log("isLoadingDoctorType", isLoadingDoctorType);
+  console.log("isLoadingSlots", isLoadingSlots);
+  console.log("isFetchingSlots", isFetchingSlots);
+  
+  
  
   return (
     <>

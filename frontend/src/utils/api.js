@@ -28,6 +28,8 @@ export async function getDoctorSlots(date, specialization, userId) {
   // const userId = appointmentData.userId;
   // const specialization = appointmentData.specialization;
   // const date = appointmentData.date;
+  console.log("Get Doctor Slots: ", date, specialization, userId);
+  
   const response = await fetch(`${API_URL}/api/doctors/availableSlots/${userId}?specialization=${specialization}&date=${date}`, {
     method: "GET",
     headers: {
