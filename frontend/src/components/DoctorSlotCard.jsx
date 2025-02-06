@@ -28,25 +28,26 @@ function DoctorSlotCard({ data, formData, setFormData }) {
         <DataList.Item>
           <DataList.Label minWidth="88px">Hospital</DataList.Label>
           <DataList.Value>
-            <Code variant="ghost">{data?.hospital}</Code>
+            <Code variant="ghost">{data?.hospital_name}</Code>
           </DataList.Value>
         </DataList.Item>
         <DataList.Item>
           <DataList.Label minWidth="88px">Available Time</DataList.Label>
           <DataList.Value>
-            <Code variant="ghost">{data?.available_time}</Code>
+            <Code variant="ghost">{data?.available_from}</Code>
           </DataList.Value>
         </DataList.Item>
-        <DataList.Item>
+        {/* Available date is not required as users selects the date */}
+        {/* <DataList.Item>
           <DataList.Label minWidth="88px">Available Date</DataList.Label>
           <DataList.Value>
             <Code variant="ghost">{data?.available_date}</Code>
           </DataList.Value>
-        </DataList.Item>
+        </DataList.Item> */}
       </DataList.Root>
       <div className="ml-4 flex items-center justify-center">
         <Checkbox
-          checked={formData?.selectedDoctor?.uid === data?.uid}
+          checked={formData?.selectedDoctor?.id === data?.id}
           onCheckedChange={(checked) => {
             checked && setFormData({ ...formData, selectedDoctor: data });
             !checked && setFormData({ ...formData, selectedDoctor: null });

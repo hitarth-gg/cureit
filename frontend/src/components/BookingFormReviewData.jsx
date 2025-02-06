@@ -7,6 +7,7 @@ function BookingFormReviewData({
 }) {
   const formData = data;
   const selectedDoctor = formData?.selectedDoctor;
+  
   return (
     <div>
       <div className="mb-4 flex select-none justify-center text-center font-noto text-base font-semibold md:text-lg">
@@ -98,19 +99,19 @@ function BookingFormReviewData({
               <DataList.Item>
                 <DataList.Label minWidth="88px">Hospital</DataList.Label>
                 <DataList.Value>
-                  <Code variant="ghost">{selectedDoctor?.hospital}</Code>
+                  <Code variant="ghost">{selectedDoctor?.hospital_name}</Code>
                 </DataList.Value>
               </DataList.Item>
               <DataList.Item>
                 <DataList.Label minWidth="88px">Available Time</DataList.Label>
                 <DataList.Value>
-                  <Code variant="ghost">{selectedDoctor?.available_time}</Code>
+                  <Code variant="ghost">{selectedDoctor?.available_from}</Code>
                 </DataList.Value>
               </DataList.Item>
               <DataList.Item>
                 <DataList.Label minWidth="88px">Available Date</DataList.Label>
                 <DataList.Value>
-                  <Code variant="ghost">{selectedDoctor?.available_date}</Code>
+                  <Code variant="ghost">{formData?.selectedDate}</Code>
                 </DataList.Value>
               </DataList.Item>
             </DataList.Root>

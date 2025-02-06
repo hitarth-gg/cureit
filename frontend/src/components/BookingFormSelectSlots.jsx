@@ -1,8 +1,31 @@
 import { Button } from "@radix-ui/themes";
 import DoctorSlotCard from "./DoctorSlotCard";
 // import "rsuite/dist/rsuite.min.css";
+import { useState, useEffect } from "react";
+function BookingFormSelectSlots({doctors, formData, setFormData, refetchSlots }) {
+  //  const base =import.meta.env.VITE_API_BASE_URL;
+  //  //make api call to get doctors
+  //  const getDoctors = async () => {
+  //   const userId = "00bb0259-6a09-4151-9a86-29d475b28a7f" //logged in user's id will come here
+  //    const specialization = "Cardiologist"; //ml model will predict the specialization
+  //    const date = formData.selectedDate.split("-").reverse().join("-");
+  //   const response = await fetch(`${base}/api/doctors/availableSlots/${userId}?specialization=${specialization}&date=${date}`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   });
+  //   const data = await response.json();
+  //   console.log(data);
+  //   return data;
+  //  }
 
-function BookingFormSelectSlots({ doctors, formData, setFormData, refetchSlots }) {
+  //  const [doctors, setDoctors] = useState([]);
+  //   useEffect(() => {
+  //   getDoctors().then((data) => setDoctors(data));
+  // }, [formData.selectedDate]);
+
+
   return (
     <div>
       <div className="animate-fade">
@@ -30,6 +53,7 @@ function BookingFormSelectSlots({ doctors, formData, setFormData, refetchSlots }
             }}
           />
           <Button
+            // onClick={() => getDoctors().then((data) => setDoctors(data))}
             onClick={() => refetchSlots()}
           > Refresh Slots</Button>
         </div>

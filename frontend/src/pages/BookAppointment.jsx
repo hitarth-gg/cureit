@@ -16,6 +16,7 @@ import BookingFormSelectSlots from "../components/BookingFormSelectSlots";
 import BookingFormReviewData from "../components/BookingFormReviewData";
 import { toast } from "sonner";
 import Loader from "../components/Loader";
+import usePostBookAppointment from "../hooks/usePostBookAppointment";
 
 function BookAppointment() {
   const [formData, setFormData] = useState({
@@ -42,31 +43,34 @@ function BookAppointment() {
     isLoading: isLoadingDoctorType,
     data: dataDoctorType,
     error: errorDoctorType,
-  } = useGetDoctorType(formState === 2 ? formData.healthIssue : null); // Fetch doctor type based on health issue using ML model
+  } = useGetDoctorType(formState === 2 ? formData.healthIssue : null);
+  const patientId = "00bb0259-6a09-4151-9a86-29d475b28a7f"; // Fetch doctor type based on health issue using ML model
   const {
     isLoading: isLoadingSlots,
     data: dataSlots,
     error: errorSlots,
     refetch: refetchSlots,
     isFetching: isFetchingSlots,
-  } = useGetDoctorSlots(dataDoctorType?.doctorType || null); // Fetch doctor slots based on selected doctor type
+  } = useGetDoctorSlots({formData, patientId, dataDoctorType}); // Fetch doctor slots based on selected doctor type
 
   console.log(isLoadingDoctorType, isLoadingSlots);
 
   const [doctorSlots, setDoctorSlots] = useState([]);
   const [bookingSuccessful, setBookingSuccessful] = useState(false);
-
+  
   // Filter doctor slots based on selected date
   useEffect(() => {
-    if (dataSlots && !formData.selectedDate) {
+    // && !formData.selectedDate
+    if (dataSlots) {
       setDoctorSlots(dataSlots);
-    } else {
-      setDoctorSlots(
-        dataSlots?.filter(
-          (slot) => slot.available_date === formData.selectedDate,
-        ),
-      );
-    }
+    } 
+    // else {
+    //   setDoctorSlots(
+    //     dataSlots?.filter(
+    //       (slot) => slot.available_date === formData.selectedDate,
+    //     ),
+    //   );
+    // }
   }, [dataSlots, formData.selectedDate]);
 
   const canProceed = () => {
@@ -88,15 +92,15 @@ function BookAppointment() {
     if (formState === 3) return true;
   };
 
-  console.log(formData);
-
-  function onBookAppointment() {
-    console.log("Booking appointment...");
-    setBookingSuccessful(true);
-    toast.success("Appointment booked successfully.");
+  // console.log(formData);
+  // const base =import.meta.env.VITE_API_BASE_URL;
+  const { mutate: bookAppointment } = usePostBookAppointment();
+  const onBookAppointment = () => {
+    const patientId = "00bb0259-6a09-4151-9a86-29d475b28a7f";
+    bookAppointment.mutate({formData , patientId});
   }
-  console.log(isFetchingSlots);
-
+  // console.log(isFetchingSlots);
+ 
   return (
     <>
       {(isLoadingDoctorType || isLoadingSlots || isFetchingSlots) && <Loader />}
