@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabaseClient";
 import { AuthApiError } from "@supabase/supabase-js";
+import { useCheckLogin } from "../hooks/useCheckLogin";
 
 function LoginPage() {
   const [loginData, setLoginData] = useState({
@@ -12,44 +13,27 @@ function LoginPage() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const { mutate, onSuccess, onError } = useCheckLogin();
+
   const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
-  const handleSignIn = async () => {
-    console.log("Attempting log-in...");
-    const { email, password } = loginData;
 
-    try {
-      const { error, data } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        console.log("error: ", error);
-        throw error; // Throw error to be caught in the catch block
-      }
-
-      setErrorMessage("");
-      setSuccessMessage("Sign-in successful! Welcome back.");
-      console.log("Success:", data);
-
-      // Navigate only after state update
-      navigate("/user/dashboard");
-    } catch (err) {
-      // console.error("Authentication error:", err.message);
-      console.error("Caught Error:", err); // Debugging output
-
-      if (err instanceof AuthApiError) {
-        console.log("AuthApiError Detected");
-        setErrorMessage("Invalid email or password. Please try again.");
-      } else {
-        console.log("Unknown Error Type");
-        setErrorMessage("Something went wrong. Please try again later.");
-      }
-      setSuccessMessage("");
-    }
+  const handleSignIn = () => {
+    mutate.mutate(loginData, {
+      onSuccess: (data) => {
+        console.log("Login Success:", data);
+        setSuccessMessage("Logging in....");
+        navigate("/user/dashboard"); // Redirect on success
+      },
+      onError: (error) => {
+        console.error("Login Error:", error);
+        setErrorMessage("Wrong credentials. Please Try Again.");
+      },
+    });
   };
 
+
+  
   return (
     <div className="dotted flex h-screen items-center justify-center">
       <div className="relative my-6 flex w-11/12 flex-col gap-y-4 rounded-md border-2 bg-white p-8 font-inter text-sm font-medium text-[#5d5d5d] shadow-2xl shadow-indigo-300 sm:w-8/12 md:w-6/12 lg:w-4/12">

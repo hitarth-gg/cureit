@@ -1,4 +1,6 @@
+import { supabase } from "../utils/supabaseClient";
 const API_URL = import.meta.env.VITE_API_BASE_URL;
+
 export async function getAddressFromCoords(lat, lng) {
   try {
     const response = await fetch(
@@ -95,7 +97,9 @@ export async function getProfileDetails(userId) {
   return data;
 }
 export async function getDoctorDetails(doctorId) {
-  const response = await fetch(`${API_URL}/api/doctors/doctorDetailsById/${doctorId}`);
+  const response = await fetch(
+    `${API_URL}/api/doctors/doctorDetailsById/${doctorId}`,
+  );
   if (!response.ok) {
     throw new Error(`Error: ${response.status} ${response.statusText}`);
   }
@@ -103,9 +107,12 @@ export async function getDoctorDetails(doctorId) {
   return data;
 }
 export async function deleteAppointment(appointmentId) {
-  const response = await fetch(`${API_URL}/api/appointments/delete/${appointmentId}`, {
-    method: "DELETE",
-  });
+  const response = await fetch(
+    `${API_URL}/api/appointments/delete/${appointmentId}`,
+    {
+      method: "DELETE",
+    },
+  );
 
   if (!response.ok) {
     throw new Error("Failed to delete appointment");
@@ -117,7 +124,9 @@ export async function getPatientAppointments(patientId) {
   const today = new Date().toISOString().split("T")[0]; // Formats as YYYY-MM-DD
 
   try {
-    const response = await fetch(`${API_URL}/api/appointments/upcomingAppointments/${patientId}?date=${today}`);
+    const response = await fetch(
+      `${API_URL}/api/appointments/upcomingAppointments/${patientId}?date=${today}`,
+    );
     if (!response.ok) {
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
@@ -129,14 +138,20 @@ export async function getPatientAppointments(patientId) {
       data.map(async (appointment) => {
         try {
           const doctor = await getDoctorDetails(appointment.doctor_id);
-          const doctorProfileDetails = await getProfileDetails(appointment.doctor_id);
+          const doctorProfileDetails = await getProfileDetails(
+            appointment.doctor_id,
+          );
           console.log("Doctor Details:", doctorProfileDetails);
-          return { ...appointment, doctorDetails: doctor, doctorProfileDetails: doctorProfileDetails };
+          return {
+            ...appointment,
+            doctorDetails: doctor,
+            doctorProfileDetails: doctorProfileDetails,
+          };
         } catch (error) {
           console.error("Failed to fetch doctor details:", error);
           return { ...appointment, doctorDetails: null }; // Avoid breaking the loop
         }
-      })
+      }),
     );
 
     // Return an array of appointments with doctor details
@@ -159,7 +174,9 @@ export async function getPatientAppointments(patientId) {
 
 export async function getPatientAppointmentHistory(patientId) {
   try {
-    const response = await fetch(`${API_URL}/api/appointments/completedAppointments/${patientId}`);
+    const response = await fetch(
+      `${API_URL}/api/appointments/completedAppointments/${patientId}`,
+    );
     if (!response.ok) {
       console.error(`Error: ${response.status} ${response.statusText}`);
       throw new Error(`Error: ${response.status} ${response.statusText}`);
@@ -170,14 +187,20 @@ export async function getPatientAppointmentHistory(patientId) {
       data.map(async (appointment) => {
         try {
           const doctor = await getDoctorDetails(appointment.doctor_id);
-          const doctorProfileDetails = await getProfileDetails(appointment.doctor_id);
+          const doctorProfileDetails = await getProfileDetails(
+            appointment.doctor_id,
+          );
           console.log("Doctor Details:", doctorProfileDetails);
-          return { ...appointment, doctorDetails: doctor, doctorProfileDetails: doctorProfileDetails };
+          return {
+            ...appointment,
+            doctorDetails: doctor,
+            doctorProfileDetails: doctorProfileDetails,
+          };
         } catch (error) {
           console.error("Failed to fetch doctor details:", error);
           return { ...appointment, doctorDetails: null }; // Avoid breaking the loop
         }
-      })
+      }),
     );
 
     const finalAppointments = updatedData.map((appointment) => ({
@@ -189,9 +212,8 @@ export async function getPatientAppointmentHistory(patientId) {
       appointment_date: appointment.appointment_date,
     }));
 
-    return finalAppointments; 
-  }
-  catch (error) {
+    return finalAppointments;
+  } catch (error) {
     console.error("Failed to fetch patient appointments:", error);
     throw new Error("Failed to fetch patient appointments.");
   }
@@ -200,8 +222,10 @@ export async function getPatientAppointmentHistory(patientId) {
 export async function getQueueForDoctor(doctorId) {
   const today = new Date().toISOString().split("T")[0]; // Formats as YYYY-MM-DD
 
-  try{
-     const response = await fetch(`${API_URL}/api/appointments/doctorUpcomingAppointments/${doctorId}?date=${today}`);
+  try {
+    const response = await fetch(
+      `${API_URL}/api/appointments/doctorUpcomingAppointments/${doctorId}?date=${today}`,
+    );
     if (!response.ok) {
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
@@ -220,14 +244,13 @@ export async function getQueueForDoctor(doctorId) {
           queuePosition: appointment.queuePosition,
           currentMedication: "N/A",
           issue: "N/A",
-          issueDetails: appointment.personal_details.health_issue ,
+          issueDetails: appointment.personal_details.health_issue,
           appointment_time: "N/A",
-    };
-      })
+        };
+      }),
     );
     return finalData;
-  }
-  catch(error){
+  } catch (error) {
     console.error("Failed to fetch queue for doctor:", error);
     throw new Error("Failed to fetch queue for doctor.");
   }
@@ -283,7 +306,9 @@ export async function getQueueForDoctor(doctorId) {
 
 export async function getHistoryForDoctor(doctorId) {
   try {
-    const response = await fetch(`${API_URL}/api/appointments/doctorCompletedAppointments/${doctorId}`);
+    const response = await fetch(
+      `${API_URL}/api/appointments/doctorCompletedAppointments/${doctorId}`,
+    );
     if (!response.ok) {
       console.error(`Error: ${response.status} ${response.statusText}`);
       throw new Error(`Error: ${response.status} ${response.statusText}`);
@@ -303,14 +328,13 @@ export async function getHistoryForDoctor(doctorId) {
           queuePosition: "N/A",
           currentMedication: "N/A",
           issue: "N/A",
-          issueDetails: appointment.personal_details.health_issue ,
+          issueDetails: appointment.personal_details.health_issue,
           appointment_time: "N/A",
-    };
-      })
+        };
+      }),
     );
     return finalData;
-  }
-  catch (error) {
+  } catch (error) {
     console.error("Failed to fetch patient appointments:", error);
     throw new Error("Failed to fetch patient appointments.");
   }
@@ -330,10 +354,10 @@ export async function getHistoryForDoctor(doctorId) {
   //     uid: "132",
   //     queuePosition: 123,
   //     doctorPrescription: `## Medical Prescription Report
-  //                           **Patient Name:** John Doe  
-  //                           **Age:** 45  
-  //                           **Gender:** Male  
-  //                           **Date:** 2025-02-02  
+  //                           **Patient Name:** John Doe
+  //                           **Age:** 45
+  //                           **Gender:** Male
+  //                           **Date:** 2025-02-02
 
   //                           ## Diagnosis
   //                           - Hypertension
@@ -354,8 +378,8 @@ export async function getHistoryForDoctor(doctorId) {
   //                           ## Notes
   //                           - Follow up in 4 weeks with updated blood pressure and glucose readings.
 
-  //                           **Doctor's Name:** Dr. Emily Carter  
-  //                           **Contact:** (123) 456-7890  
+  //                           **Doctor's Name:** Dr. Emily Carter
+  //                           **Contact:** (123) 456-7890
   //                           **Signature:** ______________________`,
   //     doctorRemarks: ``
   //   },
@@ -451,4 +475,119 @@ export async function getDoctorType(healthIssue)
     console.error("Failed to fetch doctor type:", error);
     throw new Error("Failed to fetch doctor type.");
   }
+}
+
+export async function logIn(loginData) {
+  console.log("Attempting log-in...");
+  console.log(loginData);
+  const { email, password } = loginData;
+  console.log("email :", email);
+  console.log("pasword :", password);
+
+  // try {
+  const { error, data } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+  // }
+
+  //   if (error) {
+  //     console.log("error: ", error);
+  //     throw error; // Throw error to be caught in the catch block
+  //   }
+  //   return data;
+  // } catch (err) {
+  //   console.error("Caught Error:", err);
+  //   return err;
+  return data;
+}
+
+export async function getUserRoleById(userId, accessToken) {
+  const response = await fetch(`${API_URL}/api/users/getRole/${userId}`, {
+    method: "GET", // Use POST method to send data
+    headers: {
+      Authorization: `Bearer ${accessToken}`, // Send the token as part of the header
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch role");
+  }
+
+  const data = await response.json();
+  console.log(data);
+  return data;
+}
+
+export async function getCurrentActiveUser() {
+  console.log("Attempting log-in...");
+  const { error, data } = await supabase.auth.getUser();
+  // console.log("in api", data);
+  return data;
+}
+
+export async function signUpNewUser(userData) {
+  const apiUrl = `${API_URL}/api/users/addUserIfNotExist`;
+  console.log(apiUrl);
+  const response = await fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  });
+  const result = await response.json();
+}
+
+export async function getUserDetailsByID(userId, accessToken) {
+  const response = await fetch(`${API_URL}/api/users/getUserById/${userId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`, // Send the token as part of the header
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) throw new Error("Failed to fetch user data");
+
+  const data = await response.json();
+  return data;
+}
+
+export async function updateUserDetailsById(
+  userId,
+  accessToken,
+  editedProfile,
+) {
+  const response = await fetch(`${API_URL}/api/users/updateDetails/${userId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`, // Include token
+    },
+    body: JSON.stringify(editedProfile),
+  });
+  const data = await response.json(); // Parse response JSON
+  // console.log("Updated User:", data);
+
+  // console.log("User updated successfully:", data);
+  // fetchUserProfile();
+
+  return data;
+}
+
+export async function updateUserProfilePicture(userId, accessToken, formData) {
+  console.log("in api", formData.file);
+  const response = await fetch(`${API_URL}/api/uploadProfiles/upload`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Error uploading file");
+  }
+
+  const data = await response.json();
+  return data;
 }

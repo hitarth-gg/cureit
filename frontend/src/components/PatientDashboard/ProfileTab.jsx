@@ -7,6 +7,8 @@ import useGetUpcomingAppointments from "../../hooks/useGetUpcomingAppointments";
 import Loader from "../Loader";
 import { supabase } from "../../utils/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import { useGetUserDetails } from "../../hooks/useGetUserDetails";
+import useUpdateUserProfilePicture from "../../hooks/useUpdateUserProfilePicture";
 
 function ProfileTab() {
   const [userId, setUserId] = useState(null);
@@ -22,6 +24,14 @@ function ProfileTab() {
   // const MyComponent = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const {
+    isLoading: isLoadingDetails,
+    data: dataDetails,
+    error: errorDetails,
+    refetch: refetchDetails,
+    isFetching: isFetchingDetails,
+  } = useGetUserDetails(userId, accessToken);
+  const { mutate, onSuccess, onError } = useUpdateUserProfilePicture();
 
   const [profile, setProfile] = useState({
     userId: "",
@@ -65,26 +75,15 @@ function ProfileTab() {
 
   const fetchUserProfile = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/users/getUserById`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId }),
-      });
-
-      if (!response.ok) throw new Error("Failed to fetch user data");
-
-      const data = await response.json();
       setProfile({
-        name: data.profile.name || "",
-        email: data.profile.email || "",
-        phone: data.profile.phone_number || "",
-        address: data.profile.address || "",
-        profileImage: data.profile.avatar_url || "",
-        age: data.profile.age || null,
-        gender: data.profile.gender || "",
-        phone_verified: data.profile.phone_verified,
+        name: dataDetails.profile.name || "",
+        email: dataDetails.profile.email || "",
+        phone: dataDetails.profile.phone_number || "",
+        address: dataDetails.profile.address || "",
+        profileImage: dataDetails.profile.avatar_url || "",
+        age: dataDetails.profile.age || null,
+        gender: dataDetails.profile.gender || "",
+        phone_verified: dataDetails.profile.phone_verified,
       });
     } catch (error) {
       console.error("Error fetching user profile:", error);
@@ -93,8 +92,8 @@ function ProfileTab() {
 
   useEffect(() => {
     console.log("hello", " ", userId);
-    if (userId) fetchUserProfile();
-  }, [userId]);
+    if (dataDetails) fetchUserProfile();
+  }, [userId, dataDetails]);
   const patientId = "00bb0259-6a09-4151-9a86-29d475b28a7f";
 
   const { isLoading, data, error, status, refetch, isFetching } =
@@ -104,7 +103,7 @@ function ProfileTab() {
   useEffect(() => {
     if (data) {
       console.log("Data:", data);
-      const today = new Date().toISOString().split("T")[0]; 
+      const today = new Date().toISOString().split("T")[0];
       const appointments = data.filter(
         (appointment) => appointment.appointment_date === today,
       );
@@ -122,38 +121,24 @@ function ProfileTab() {
     }
     console.log("file: ", file);
 
-    const formData = new FormData(); // Create a FormData object to hold the file
+    const formData = new FormData();
     formData.append("file", file);
     formData.append("userId", userId);
     console.log(formData);
-
-    // Add the file to the FormData object
-
-    try {
-      // Assuming your backend endpoint is '/upload'
-      const response = await fetch(
-        `${API_BASE_URL}/api/uploadProfiles/upload`,
-        {
-          method: "POST",
-          body: formData, // Send the formData as the request body
-          // headers: {
-          //   // Include any headers your backend requires (e.g., Authorization)
-          //   Authorization: `Bearer ${accessToken}`,
-          // },
+    mutate.mutate(
+      { userId: userId, accessToken, formData },
+      {
+        onSuccess: (data) => {
+          console.log("ProfilePicture Uploaded sucessfully:", data);
         },
-      );
-
-      if (!response.ok) {
-        throw new Error("Error uploading file");
-      }
-
-      const data = await response.json();
-      console.log("File uploaded successfully", data);
-      const fileUrl = data.fileUrl;
-      console.log("File available at:", fileUrl);
-    } catch (error) {
-      console.error("Error:", error);
-    }
+        onError: (error) => {
+          console.error(
+            "Error uploading profile picture:",
+            error.response?.data || error.message,
+          );
+        },
+      },
+    );
   };
 
   return (
@@ -178,7 +163,7 @@ function ProfileTab() {
             accept="image/*"
             onChange={handleUpload}
             id="profile-image-upload"
-          // style={{ display: "none" }} // Hide the input field
+            // style={{ display: "none" }} // Hide the input field
           />
 
           <div className="mt-1 w-32 text-center">{profile.name}</div>

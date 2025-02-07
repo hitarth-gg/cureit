@@ -2,10 +2,13 @@ import DoctorDashboard from "../components/DoctorDashboard/DoctorDashboard";
 import PatientDashboard from "../components/PatientDashboard/PatientDashboard";
 import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
+import useUserRoleById from "../hooks/useUserRoleById";
+import { useGetCurrentUser } from "../hooks/useGetCurrentUser";
 
 function Dashboard() {
   const [role, setRole] = useState(null);
   const [error, setError] = useState(null);
+  const [userId, setUserId] = useState(null);
   const tokenString = localStorage.getItem(
     "sb-vakmfwtcbdeaigysjgch-auth-token",
   );
@@ -14,47 +17,36 @@ function Dashboard() {
   console.log(accessToken);
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+  const {
+    isLoading: isLoadingRole,
+    data: dataRole,
+    error: errorRole,
+    refetch: refetchRole,
+    isFetching: isFetchingRole,
+  } = useUserRoleById(userId, accessToken);
+
+  const {
+    isLoading: isLoadingUser,
+    data: dataUser,
+    error: errorUser,
+    refetch: refetchUser,
+    isFetching: isFetchingUser,
+  } = useGetCurrentUser();
+  // const { mutate, onSuccess, onError } = useGetCurrentUser();
+
   useEffect(() => {
-    const fetchUserRole = async () => {
-      if (!accessToken) {
-        setError("User is not authenticated");
-        return;
-      }
+    if (dataUser) {
+      console.log(dataUser);
+      setUserId(dataUser.user.id);
+    }
+  }, [dataUser]);
 
-      try {
-        // Fetch the userId from Supabase (this is where you get the user ID)
-        const { data: user, error: userError } = await supabase.auth.getUser();
+  useEffect(() => {
+    if (dataRole?.data && dataRole.data.length > 0) {
+      setRole(dataRole.data[0].role);
+    }
+  }, [userId, dataRole]);
 
-        if (userError || !user) {
-          setError("Failed to fetch user data");
-          return;
-        }
-        console.log(user.user.id);
-
-        // Now, make a request to your API with the userId in the body
-        const response = await fetch(`${API_BASE_URL}/api/users/getRole`, {
-          method: "POST", // Use POST method to send data
-          headers: {
-            Authorization: `Bearer ${accessToken}`, // Send the token as part of the header
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userId: user.user.id }), // Send the userId in the request body
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch role");
-        }
-
-        const data = await response.json();
-        console.log(data);
-        setRole(data.data[0].role);
-      } catch (error) {
-        setError(error.message);
-      }
-    };
-
-    fetchUserRole();
-  }, []);
   return (
     <div className="flex flex-col overflow-hidden p-4 font-noto md:px-12 md:py-8">
       {role &&

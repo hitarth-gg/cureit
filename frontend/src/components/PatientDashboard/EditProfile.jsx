@@ -7,66 +7,76 @@ import {
   Text,
   TextField,
 } from "@radix-ui/themes";
+import { useMutation } from "@tanstack/react-query";
 import { stringify } from "postcss";
 import { useState } from "react";
 import { useEffect } from "react";
+import useHandleEditProfile from "../../hooks/useHandleEditProfile";
 function EditProfile({ id, profile, setProfile, fetchUserProfile }) {
   //   const editedProfile = profile;
   console.log("in edit profile", id);
-  console.log(profile);
+  // console.log(profile);
   const [editedProfile, setEditedProfile] = useState(profile);
-  useEffect(() => {
-    setEditedProfile(profile);
-  }, [profile]);
-  console.log("edited profile", editedProfile);
+  const { mutate, onSuccess, onError } = useHandleEditProfile();
+
+  // useEffect(() => {
+  //   setEditedProfile(profile);
+  // }, [profile]);
+
+  // console.log("edited profile", editedProfile);
   const { name, address, email, profileImage, age, gender } = editedProfile;
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const tokenString = localStorage.getItem(
     "sb-vakmfwtcbdeaigysjgch-auth-token",
   );
   const token = JSON.parse(tokenString);
-
   const accessToken = token.access_token;
 
-  // console.log(accessToken);
-
   function onSave() {
-    // Save the edited profile
-    // save the edited profile to the database
-    // setProfile(editedProfile);
     const user_id = String(id);
     profile.userId = user_id;
-    console.log("in on save", profile);
-
-    const updateUser = async (user_id, updatedData) => {
-      console.log(updatedData);
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/users/updateDetails/${user_id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`, // Include token
-            },
-            body: JSON.stringify(profile),
+    const updateUser = async (userId, accessToken, editedProfile) => {
+      console.log(editedProfile);
+      mutate.mutate(
+        { userId, accessToken, editedProfile },
+        {
+          onSuccess: (data) => {
+            console.log("Updated user info successfully :", data);
           },
-        );
-        const data = await response.json(); // Parse response JSON
-        console.log("Updated User:", data);
-
-        console.log("User updated successfully:", data);
-        fetchUserProfile();
-
-        return data;
-      } catch (error) {
-        console.error(
-          "Error updating user:",
-          error.response?.data || error.message,
-        );
-      }
+          onError: (error) => {
+            console.error(
+              "Error updating user:",
+              error.response?.data || error.message,
+            );
+          },
+        },
+      );
     };
+    // console.log("Sending user data:", signUpData2);
+    updateUser(user_id, accessToken, editedProfile);
     updateUser(id, editedProfile);
+    setProfile(editedProfile);
+  }
+
+  function onSave() {
+    const user_id = String(id);
+    profile.userId = user_id;
+    mutate.mutate(
+      { userId: user_id, accessToken, editedProfile },
+      {
+        onSuccess: (data) => {
+          console.log("Updated user info successfully:", data);
+        },
+        onError: (error) => {
+          console.error(
+            "Error updating user:",
+            error.response?.data || error.message,
+          );
+        },
+      },
+    );
+    setProfile(editedProfile);
   }
 
   function onCancel() {
@@ -186,7 +196,13 @@ function EditProfile({ id, profile, setProfile, fetchUserProfile }) {
               </Button>
             </Dialog.Close>
             <Dialog.Close>
-              <Button onClick={() => { onSave() }}>Save</Button>
+              <Button
+                onClick={() => {
+                  onSave();
+                }}
+              >
+                Save
+              </Button>
             </Dialog.Close>
           </Flex>
         </Dialog.Content>

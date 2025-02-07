@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
 import { supabase } from "../utils/supabaseClient";
+import useHandleSignUp from "../hooks/useHandleSignUp";
+
 function SignUpPage() {
   const [signupData, setSignupData] = useState({
     id: "",
@@ -15,13 +17,29 @@ function SignUpPage() {
     createdAt: "",
     emailVerified: "",
   });
+  // const [signupData2, setSignupData2] = useState({
+  //   id: "",
+  //   name: "",
+  //   email: "",
+  //   password: "",
+  //   phoneNumber: "",
+  //   aadhaarNumber: "",
+  //   createdAt: "",
+  //   emailVerified: "",
+  // });
+  const { mutate, error, success } = useHandleSignUp();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const handleSignUp = async () => {
-    const { email, password, name, phoneNumber } = signupData; // Supabase requires only email and password for authentication
+    const { email, password, name, phoneNumber } = signupData;
+    const signUpData2 = { ...signupData };
+    console.log(signUpData2);
+
+    // Supabase requires only email and password for authentication
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -38,44 +56,29 @@ function SignUpPage() {
     } else {
       const userId = data?.user?.id; // Get the user ID from auth response
       console.log("User ID:", userId);
-      signupData.id = userId;
+      signUpData2.id = userId;
       console.log(data?.user);
       console.log(data?.user?.user_metadata?.email_confirmed_at);
 
-      // console.log(id);
-
-      if (userId) {
-        const sendUserInfoToBackend = async (userData) => {
-          console.log(userData);
-          try {
-            const apiUrl = `${API_BASE_URL}/api/users/addUserIfNotExist`;
-            console.log(apiUrl);
-            const response = await fetch(apiUrl, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(userData),
-            });
-            if (response.ok) {
-              const result = await response.json();
-              console.log("User info successfully sent to backend:", result);
+      if (userId != null) {
+        const sendUserInfoToBackend = async (signUpData2) => {
+          console.log(signupData);
+          mutate.mutate(signUpData2, {
+            onSuccess: (data) => {
+              console.log("User info successfully sent to backend:");
               setErrorMessage("");
               setSuccessMessage(
                 "Sign-up successful! Please check your email to verify your account.",
               );
               navigate("/verification", { state: { email } });
-            } else {
-              console.error("Failed to send user info:", response.statusText);
+            },
+            onError: (error) => {
               setErrorMessage("Email already exists");
-            }
-          } catch (error) {
-            console.error("Error sending data to backend:", error);
-            setErrorMessage(error);
-          }
+            },
+          });
         };
-        console.log("Sending user data:", signupData);
-        sendUserInfoToBackend(signupData);
+        console.log("Sending user data:", signUpData2);
+        sendUserInfoToBackend(signUpData2);
       }
     }
   };
@@ -143,7 +146,7 @@ function SignUpPage() {
 
   return (
     <div className="dotted flex min-h-screen items-center justify-center">
-      <div className="relative my-6  flex w-11/12 flex-col gap-y-4 rounded-md border-2 bg-white p-8 font-inter text-sm font-medium text-[#5d5d5d] shadow-2xl shadow-indigo-300 sm:w-8/12 md:w-6/12 lg:w-4/12">
+      <div className="relative my-6 flex w-11/12 flex-col gap-y-4 rounded-md border-2 bg-white p-8 font-inter text-sm font-medium text-[#5d5d5d] shadow-2xl shadow-indigo-300 sm:w-8/12 md:w-6/12 lg:w-4/12">
         <div className="absolute left-3 top-3 -z-10 h-full w-full animate-fade-up rounded-md bg-gradient-to-r from-violet-300 to-indigo-400"></div>
         <div className="mb-2 flex select-none text-center font-noto text-base font-semibold md:text-lg">
           Your first appointment is just a sign-up away.
