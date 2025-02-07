@@ -67,11 +67,15 @@ router.get("/allusers", async (req, res) => {
   res.status(200).json(data);
 });
 
-router.get("/userById/:Id" , async(req, res) => {
-  const {Id} = req.params;
-  const {data , error} = await supabase.from('profiles').select('*').eq('id', Id).single();
-  if(error) {
-    return res.status(400).json({error: error.message});
+router.get("/userById/:Id", async (req, res) => {
+  const { Id } = req.params;
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", Id)
+    .single();
+  if (error) {
+    return res.status(400).json({ error: error.message });
   }
   res.json(data);
 });
@@ -382,11 +386,13 @@ router.post("/resend-verification", async (req, res) => {
     8)phone confirmed or not
 */
 
-router.post("/getUserById", async (req, res) => {
-  console.log(req.body);
-  const { userId: id } = req.body;
+router.get("/getUserById/:userId", verifyToken, async (req, res) => {
+  const { userId } = req.params;
 
-  console.log(id);
+  const id = userId;
+  console.log(req.params);
+
+  console.log(userId);
   // Return the user data
   // return res.json({ user });
 
@@ -396,35 +402,38 @@ router.post("/getUserById", async (req, res) => {
     .select("*")
     .eq("id", id)
     .single();
-  // console.log(profile);
   if (profileError) {
     return res.status(500).json({ error: "Profile fetch failed" });
   }
-
   return res.json({ profile });
 });
 
 router.put("/updateDetails/:id", verifyToken, async (req, res) => {
-  const { id } = req.params;
+  const id = req.params;
+  const userId = id.id;
+  console.log(userId);
+
   const { name, address, age, gender } = req.body;
-  console.log(req.body);
   // console.log(req.body);
-  console.log("in put", id);
+  console.log(
+    "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj"
+  );
+  console.log("in update user backend", userId);
 
   // Ensure user can only update their own profile
-  console.log(req.body.userId, " ", id);
-  if (req.body.userId !== id) {
-    return res
-      .status(403)
-      .json({ error: "Forbidden: Cannot update other users" });
-  }
+  // console.log(req.body.userId, " ", id);
+  // if (req.body.userId !== id) {
+  //   return res
+  //     .status(403)
+  //     .json({ error: "Forbidden: Cannot update other users" });
+  // }
 
   try {
     console.log("request to update user recieved");
     const { data, error } = await supabase
       .from("profiles")
       .update({ name, address, age, gender })
-      .eq("id", id);
+      .eq("id", userId);
     console.log("request to update user completed");
 
     if (error) {
@@ -439,9 +448,9 @@ router.put("/updateDetails/:id", verifyToken, async (req, res) => {
   }
 });
 
-router.post("/getRole", verifyToken, async (req, res) => {
-  // console.log(verifyToken);
-  const { userId } = req.body;
+router.get("/getRole/:userId", verifyToken, async (req, res) => {
+  // console.log("hhhhhh", req.params);
+  const { userId } = req.params;
   console.log(userId);
   console.log(req.body);
   console.log("in getRole", userId);

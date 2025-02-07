@@ -3,6 +3,9 @@ import { Button, Code } from "@radix-ui/themes";
 import { useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../utils/supabaseClient";
+
+import { useGetCurrentUser } from "../hooks/useGetCurrentUser";
 
 function AccountVerification() {
   const navigate = useNavigate();
@@ -12,6 +15,13 @@ function AccountVerification() {
 
   const [timer, setTimer] = useState(90); // Initial timer value in seconds
   const [isTimerActive, setIsTimerActive] = useState(true);
+  const {
+    isLoading: isLoadingUser,
+    data: dataUser,
+    error: errorUser,
+    refetch: refetchUser,
+    isFetching: isFetchingUser,
+  } = useGetCurrentUser();
 
   useEffect(() => {
     let interval = null;
@@ -56,19 +66,43 @@ function AccountVerification() {
     }
   };
 
-  const checkAccessToken = () => {
-    const interval = setInterval(() => {
-      const token = localStorage.getItem("access-token");
-      if (token) {
-        clearInterval(interval); // Stop checking once token is found
-        console.log("Token found:", token);
-        navigate("/verified"); // Navigate or perform actions
-      }
-    }, 1000); // Check every second
-  };
+  const [userEmailStatus, setUserEmailStatus] = useState(false);
+  useEffect(() => {
+    refetchUser(); // Call once on mount
+  }, []);
+  // useEffect(() => {
+  //   if (dataUser && dataUser?.user) {
+  //     console.log("dataUser", dataUser);
+  //     console.log("emailStatus", dataUser?.user.confirmed_at);
+  //     if (dataUser?.user?.confirmed_at != null) {
+  //       navigate("/verified");
+  //     }
 
-  // Call the function when the page loads
-  checkAccessToken();
+  //     // setUserEmailStatus(dataUser.data.user.email_confirmed_at);
+  //   }
+  // }, [dataUser?.user]);
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        // When the user verifies their email, session.user.confirmed_at should be set.
+        if (session?.user?.confirmed_at) {
+          console.log("User verified via auth state change, navigating...");
+          navigate("/verified");
+        }
+      },
+    );
+
+    return () => {
+      authListener?.unsubscribe();
+    };
+  }, [navigate]);
+  // const checkEmailVerificationstatus = () => {
+  //   // const { mutate, onSuccess, onError } = useGetCurrentUser();
+
+  // };
+
+  // // Call the function when the page loads
+  // checkEmailVerificationstatus();
 
   return (
     <div className="flex h-[94svh] w-full items-center justify-center bg-[#f7f8fa] font-noto font-medium">
