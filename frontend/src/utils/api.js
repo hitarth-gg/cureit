@@ -31,14 +31,17 @@ export async function getDoctorSlots(date, specialization, userId) {
   // const specialization = appointmentData.specialization;
   // const date = appointmentData.date;
   console.log("Get Doctor Slots: ", date, specialization, userId);
-  
-  const response = await fetch(`${API_URL}/api/doctors/availableSlots/${userId}?specialization=${specialization}&date=${date}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
+
+  const response = await fetch(
+    `${API_URL}/api/doctors/availableSlots/${userId}?specialization=${specialization}&date=${date}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     },
-  });
-  if(!response.ok){
+  );
+  if (!response.ok) {
     console.log("error in getDoctorSlots: ", response.status);
     throw new Error(`Error: ${response.status} ${response.statusText}`);
   }
@@ -419,8 +422,7 @@ export async function getHistoryForDoctor(doctorId) {
   //   },
   // ];
 }
-export async function postBookAppointment(bookingData)
-{
+export async function postBookAppointment(bookingData) {
   const formData = bookingData.formData;
   const patientId = bookingData.patientId;
   const response = await fetch(`${API_URL}/api/appointments/book/`, {
@@ -429,7 +431,7 @@ export async function postBookAppointment(bookingData)
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      patientId: patientId,//logged in user's id will come here
+      patientId: patientId, //logged in user's id will come here
       doctorId: formData.selectedDoctor.id,
       appointment_date: formData.selectedDate.split("-").reverse().join("-"),
       book_status: "completed",
@@ -438,7 +440,7 @@ export async function postBookAppointment(bookingData)
         address: formData.address,
         age: formData.age,
         gender: formData.gender,
-        health_issue: formData.healthIssue
+        health_issue: formData.healthIssue,
       }),
     }),
   });
@@ -448,21 +450,19 @@ export async function postBookAppointment(bookingData)
   const data = await response.json();
   console.log(data);
 }
-export async function getDoctorType(healthIssue)
-{
+export async function getDoctorType(healthIssue) {
   console.log("in side ml");
   console.log(healthIssue);
-  try{
-    const response = await fetch(`https://hackofiesta.onrender.com/predict/`,{
+  try {
+    const response = await fetch(`https://hackofiesta.onrender.com/predict/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        comment: healthIssue
+        comment: healthIssue,
       }),
-    }
-    );
+    });
     if (!response.ok) {
       console.log(response.status);
       throw new Error(`Error: ${response.status} ${response.statusText}`);
@@ -470,8 +470,7 @@ export async function getDoctorType(healthIssue)
     const data = await response.json();
     console.log("docotor type: ", data);
     return data.predicted_specialist;
-  }
-  catch(error){
+  } catch (error) {
     console.error("Failed to fetch doctor type:", error);
     throw new Error("Failed to fetch doctor type.");
   }
@@ -586,6 +585,19 @@ export async function updateUserProfilePicture(userId, accessToken, formData) {
 
   if (!response.ok) {
     throw new Error("Error uploading file");
+  }
+
+  const data = await response.json();
+  return data;
+}
+
+export async function chatBot(message) {
+  const response = await fetch(
+    `https://hackofiesta-1.onrender.com/faq/?query="${message}"`,
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch chatbot response");
   }
 
   const data = await response.json();
