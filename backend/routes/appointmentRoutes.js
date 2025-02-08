@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 // const Appointment = require("../models/appointment");
 const supabase = require("../config/supabaseClient");
+const sendEmail = require("../services/emailService");
 
 const getQueuePosition = async (doctorId , timestamp, date) => {
   const {data , error} = await supabase.from('appointments').select('id').eq('doctor_id', doctorId).eq('appointment_date' , date).lt('created_at', timestamp);
@@ -41,6 +42,15 @@ router.post("/book", async (req, res) => {
     return res.status(400).json({ error: error.message });
   }
   console.log("Appointment booked successfully");
+  //sedning booking confirmation email to patient
+  const {data: patientData, error: patientError} = await supabase.from('profiles').select('*').eq('id', patientId).single();
+  if (patientError) {
+    return res.status(400).json({ error: patientError.message });
+  }
+  const patientEmail = patientData.email; //"mailaryam1000@gmail.com" //
+  const patientName = patientData.name;
+  sendEmail(patientEmail, "Appointment Booked", `Hello ${patientName}, Your appointment has been successfully booked with the doctor. Please check your dashboard for more details.`);
+
   return res.status(201).json(data); 
 });
 // //Fetch upcoming appointments by patient ID

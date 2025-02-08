@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const supabase = require("../config/supabaseClient");
 const verifyToken = require("../config/verifyToken");
+const sendOtp = require("../services/OtpService");
+const validateOtp = require("../services/validateOtpService")
 // const verifyToken = async (req, res, next) => {
 //   // console.log(req.headers.authorization);
 //   const token = req.headers.authorization?.split(" ")[1]; // Extract Bearer token
@@ -58,7 +60,19 @@ const verifyToken = require("../config/verifyToken");
 //   process.env.SUPABASE_URL,
 //   process.env.SUPABASE_KEY
 // );
-
+//later this route can be used as forgot password route
+router.get("/sendOtp/:id" , async(req , res)=>{
+  const {id}= req.params;
+  const info = await sendOtp(id);
+  res.json({info});
+})
+//later this route can be used with forgot password route
+router.get("/validateOtp/:id" , async(req,res)=>{
+  const id = req.params.id;
+  const {otp} = req.query;
+  const info = await validateOtp(id , otp);
+  res.json({info});
+})
 router.get("/allusers", async (req, res) => {
   const { data, error } = await supabase.from("user").select("*");
 
