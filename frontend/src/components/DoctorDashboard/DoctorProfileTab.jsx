@@ -1,10 +1,11 @@
 import { Avatar, Badge, Code, Flex } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
-import useGetUpcomingAppointments from "../../hooks/useGetUpcomingAppointments";
+import useGetDoctorProfileDetails from "../../hooks/useGetDoctorProfileDetails";
 import Loader from "../Loader";
 import EditDoctorProfile from "./EditDoctorProfile";
 import { supabase } from "../../utils/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import { data } from "autoprefixer";
 
 function DoctorProfileTab() {
   const [profile, setProfile] = useState({
@@ -18,6 +19,7 @@ function DoctorProfileTab() {
     specialization: "",
     uid: 234,
   });
+
   const profileImagePlaceholder =
     "https://static.vecteezy.com/system/resources/thumbnails/003/337/584/small/default-avatar-photo-placeholder-profile-icon-vector.jpg";
   const [userId, setUserId] = useState(null);
@@ -26,6 +28,7 @@ function DoctorProfileTab() {
   const tokenString = localStorage.getItem(
     "sb-vakmfwtcbdeaigysjgch-auth-token",
   );
+
   const token = JSON.parse(tokenString);
 
   const accessToken = token.access_token;
@@ -35,6 +38,13 @@ function DoctorProfileTab() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const {
+    isLoading: isLoadingDetails,
+    data: dataDetails,
+    error: errorDetails,
+    refetch: refetchDetails,
+    isFetching: isFetchingDetails,
+  } = useGetDoctorProfileDetails(userId, accessToken);
 
   useEffect(() => {
     const checkUserSession = async () => {
@@ -63,32 +73,20 @@ function DoctorProfileTab() {
 
   const fetchUserProfile = async () => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/doctorProfileRoutes/getDoctorDetailsById`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userId }),
-        },
-      );
-
-      if (!response.ok) throw new Error("Failed to fetch user data");
-
-      const data = await response.json();
-      console.log(data);
-      setProfile({
-        name: data.profiles.name || "",
-        email: data.profiles.email || "",
-        phone: data.profiles.phone_number || "",
-        address: data.profiles.address || "",
-        profileImage: data.profiles.avatar_url,
-        age: data.profile.age || null,
-        gender: data.profiles.gender || "",
-        // phone_verified: data.profiles.phone_verified,
-        specialization: data.profile.specialization || "",
-      });
+      if (dataDetails) {
+        console.log(dataDetails);
+        setProfile({
+          name: dataDetails.profiles.name || "",
+          email: dataDetails.profiles.email || "",
+          phone: dataDetails.profiles.phone_number || "",
+          address: dataDetails.profiles.address || "",
+          profileImage: dataDetails.profiles.avatar_url,
+          age: dataDetails.profile.age || null,
+          gender: dataDetails.profiles.gender || "",
+          // phone_verified: data.profiles.phone_verified,
+          specialization: dataDetails.profile.specialization || "",
+        });
+      }
     } catch (error) {
       console.error("Error fetching user profile:", error);
     }
@@ -97,11 +95,12 @@ function DoctorProfileTab() {
   useEffect(() => {
     console.log("hello", " ", userId);
     if (userId) fetchUserProfile();
-  }, [userId]);
+  }, [userId, dataDetails]);
 
   useEffect(() => {
     console.log("profile ", profile);
   }, [profile]);
+
   return (
     <div className="flex flex-col gap-y-6">
       {/* {isLoading && <Loader />} */}
@@ -140,7 +139,7 @@ function DoctorProfileTab() {
             {profile.gender}
           </div>
           <div>
-            <EditDoctorProfile profile={profile} setProfile={setProfile} />
+            {/* <EditDoctorProfile profile={profile} setProfile={setProfile} /> */}
           </div>
         </div>
       </div>

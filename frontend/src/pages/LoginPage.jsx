@@ -22,18 +22,22 @@ function LoginPage() {
     mutate.mutate(loginData, {
       onSuccess: (data) => {
         console.log("Login Success:", data);
+        // if (data.user) {
         setSuccessMessage("Logging in....");
         navigate("/user/dashboard"); // Redirect on success
+        // } else {
+        //   setErrorMessage("Wrong credentials. Please Try Again.");
+        // }
       },
       onError: (error) => {
         console.error("Login Error:", error);
         setErrorMessage("Wrong credentials. Please Try Again.");
+        window.alert("Wrong credentials. Please Try Again.");
+        // setErrorMessage("Wrong credentials. Please Try Again.");
       },
     });
   };
 
-
-  
   return (
     <div className="dotted flex h-screen items-center justify-center">
       <div className="relative my-6 flex w-11/12 flex-col gap-y-4 rounded-md border-2 bg-white p-8 font-inter text-sm font-medium text-[#5d5d5d] shadow-2xl shadow-indigo-300 sm:w-8/12 md:w-6/12 lg:w-4/12">
