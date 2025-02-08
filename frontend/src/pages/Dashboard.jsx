@@ -9,14 +9,17 @@ function Dashboard() {
   const [role, setRole] = useState(null);
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState(null);
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  // var accessToken = null;
+
+  // useEffect(() => {
+  // if (token) {
   const tokenString = localStorage.getItem(
     "sb-vakmfwtcbdeaigysjgch-auth-token",
   );
   const token = JSON.parse(tokenString);
   const accessToken = token.access_token;
   console.log(accessToken);
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
   const {
     isLoading: isLoadingRole,
     data: dataRole,
@@ -35,7 +38,7 @@ function Dashboard() {
   // const { mutate, onSuccess, onError } = useGetCurrentUser();
 
   useEffect(() => {
-    if (dataUser) {
+    if (token && dataUser) {
       console.log(dataUser);
       setUserId(dataUser.user.id);
     }
