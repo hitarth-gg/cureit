@@ -490,15 +490,13 @@ export async function logIn(loginData) {
   });
   // }
 
-  //   if (error) {
-  //     console.log("error: ", error);
-  //     throw error; // Throw error to be caught in the catch block
-  //   }
-  //   return data;
-  // } catch (err) {
-  //   console.error("Caught Error:", err);
-  //   return err;
+  if (error) {
+    // Throw an error to tigger onError
+    throw new Error(error.message || "Login failed");
+  }
   return data;
+
+  // return data;
 }
 
 export async function getUserRoleById(userId, accessToken) {
@@ -580,6 +578,10 @@ export async function updateUserProfilePicture(userId, accessToken, formData) {
   console.log("in api", formData.file);
   const response = await fetch(`${API_URL}/api/uploadProfiles/upload`, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`, // Include token
+    },
     body: formData,
   });
 
@@ -601,5 +603,26 @@ export async function chatBot(message) {
   }
 
   const data = await response.json();
+  return data;
+}
+
+export async function getDoctorProfileDetails(userId, accessToken) {
+  // console.log(accessToken);
+  console.log("in api:", userId);
+  const response = await fetch(
+    `${API_URL}/api/doctorProfileRoutes/getDoctorDetailsById/${userId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`, // Include token
+      },
+    },
+  );
+
+  if (!response.ok) return Error("Failed to fetch user data");
+
+  const data = await response.json();
+  console.log(data);
   return data;
 }

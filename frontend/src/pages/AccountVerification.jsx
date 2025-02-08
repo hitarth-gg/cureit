@@ -48,6 +48,7 @@ function AccountVerification() {
   const [message, setMessage] = useState("");
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const handleResend = async () => {
+    console.log("sending resend email:");
     try {
       const response = await fetch(
         `${API_BASE_URL}/api/users/resend-verification`,
@@ -65,44 +66,48 @@ function AccountVerification() {
       setMessage("Error sending email");
     }
   };
+  const tokenString = localStorage.getItem(
+    "sb-vakmfwtcbdeaigysjgch-auth-token",
+  );
+  const [token, setToken] = useState(() => {
+    const tokenString = localStorage.getItem(
+      "sb-vakmfwtcbdeaigysjgch-auth-token",
+    );
+    return JSON.parse(tokenString);
+  });
+
+  const updateToken = () => {
+    const tokenString = localStorage.getItem(
+      "sb-vakmfwtcbdeaigysjgch-auth-token",
+    );
+    setToken(JSON.parse(tokenString));
+  };
 
   const [userEmailStatus, setUserEmailStatus] = useState(false);
-  useEffect(() => {
-    refetchUser(); // Call once on mount
-  }, []);
-  // useEffect(() => {
-  //   if (dataUser && dataUser?.user) {
-  //     console.log("dataUser", dataUser);
-  //     console.log("emailStatus", dataUser?.user.confirmed_at);
-  //     if (dataUser?.user?.confirmed_at != null) {
-  //       navigate("/verified");
-  //     }
 
-  //     // setUserEmailStatus(dataUser.data.user.email_confirmed_at);
-  //   }
-  // }, [dataUser?.user]);
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        // When the user verifies their email, session.user.confirmed_at should be set.
-        if (session?.user?.confirmed_at) {
-          console.log("User verified via auth state change, navigating...");
-          navigate("/verified");
+        if (session) {
+          setToken(session);
+          // Optionally, re-fetch user data if needed
+          refetchUser();
         }
       },
     );
+    // return () => {
+    //   authListener?.unsubscribe();
+    // };
+  }, [dataUser]);
 
-    return () => {
-      authListener?.unsubscribe();
-    };
-  }, [navigate]);
-  // const checkEmailVerificationstatus = () => {
-  //   // const { mutate, onSuccess, onError } = useGetCurrentUser();
-
-  // };
-
-  // // Call the function when the page loads
-  // checkEmailVerificationstatus();
+  useEffect(() => {
+    console.log("in useeffect");
+    if (dataUser?.user) {
+      if (token?.user?.email === email) {
+        navigate("/verified");
+      }
+    }
+  }, [dataUser, token, email, navigate]);
 
   return (
     <div className="flex h-[94svh] w-full items-center justify-center bg-[#f7f8fa] font-noto font-medium">

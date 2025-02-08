@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const supabase = require("../config/supabaseClient");
+const verifyToken = require("../config/verifyToken");
 /*
 name: "Dr. Amit Mishra",
 email: "amitmishra@email.com",
@@ -12,11 +13,10 @@ gender: "Male",
 specialization: "Cardiologist",
 uid: 234,
 */
-router.post("/getDoctorDetailsById", async (req, res) => {
+router.get("/getDoctorDetailsById/:userId", verifyToken, async (req, res) => {
   try {
-    console.log("Request body:", req.body);
-
-    const { userId } = req.body; // Corrected destructuring
+    console.log("Request body:", req.params);
+    const userId = req.params.userId; // Corrected destructuring
     if (!userId) {
       return res.status(400).json({ error: "User ID is required" });
     }
@@ -40,6 +40,7 @@ router.post("/getDoctorDetailsById", async (req, res) => {
         .status(500)
         .json({ error: "Profile fetch failed", details: profileError.message });
     }
+    // console.log({ profile, profiles });
 
     return res.json({ profile, profiles });
   } catch (error) {
