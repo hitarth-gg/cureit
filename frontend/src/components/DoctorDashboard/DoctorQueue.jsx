@@ -1,10 +1,17 @@
 import { toast } from "sonner";
+import { useEffect, useState } from "react";
 import Loader from "../Loader";
 import useGetQueueForDoctor from "../../hooks/useGetQueueForDoctor";
 import DoctorQueueCard from "./DoctorQueueCard";
-
+import { useAuthContext } from "../../utils/ContextProvider";
 function DoctorQueue() {
-  const doctorId = "1fbbdc70-f8b5-49a5-ad46-4ed7c24dbdb3";
+  const user = useAuthContext();
+  const [doctorId, setDoctorId] = useState(null);
+  useEffect(()=>{
+    if(user.currentUser!=null){
+      setDoctorId (user.currentUser.id);
+      console.log(user.currentUser.id)
+    } },[user])
   const { isLoading, data, error, status, refetch, isFetching } =
     useGetQueueForDoctor(doctorId);
 

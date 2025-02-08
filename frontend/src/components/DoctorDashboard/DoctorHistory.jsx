@@ -3,9 +3,10 @@ import Loader from "../Loader";
 import useGetQueueForDoctor from "../../hooks/useGetQueueForDoctor";
 import DoctorHistoryCard from "./DoctorHistoryCard";
 import useGetHistoryForDoctor from "../../hooks/useGetHistoryForDoctor";
-
+import { useAuthContext } from "../../utils/ContextProvider";
 function DoctorHistory() {
-  const doctorId = "1fbbdc70-f8b5-49a5-ad46-4ed7c24dbdb3";
+  const user = useAuthContext();
+    const doctorId = user.id;
   const { isLoading, data, error, status, refetch, isFetching } =
     useGetHistoryForDoctor(doctorId);
 

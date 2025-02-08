@@ -17,8 +17,22 @@ import BookingFormReviewData from "../components/BookingFormReviewData";
 import { toast } from "sonner";
 import Loader from "../components/Loader";
 import usePostBookAppointment from "../hooks/usePostBookAppointment";
-
+import { useAuthContext } from "../utils/ContextProvider";
 function BookAppointment() {
+
+  const user = useAuthContext();
+  const [patientId, setPatientId] = useState(null);
+  useEffect(()=>{
+    if(user.currentUser!=null){
+      setPatientId (user.currentUser.id);
+      console.log(user.currentUser.id)
+    } },[user])
+  // if(user.currentUser.id)
+  // {
+  //   // patientId =user.currentUser.id;
+  // console.log(user.currentUser.id);
+  // patientId = user.currentUser.id;
+  // }
   const [formData, setFormData] = useState({
     fullName: "Rakesh Mishra",
     address: "",
@@ -43,8 +57,7 @@ function BookAppointment() {
     isLoading: isLoadingDoctorType,
     data: dataDoctorType,
     error: errorDoctorType,
-  } = useGetDoctorType(formState === 2 ? formData.healthIssue : null);
-  const patientId = "00bb0259-6a09-4151-9a86-29d475b28a7f"; // Fetch doctor type based on health issue using ML model
+  } = useGetDoctorType(formState === 2 ? formData.healthIssue : null); // Fetch doctor type based on health issue using ML model
   const {
     isLoading: isLoadingSlots,
     data: dataSlots,
@@ -96,7 +109,6 @@ function BookAppointment() {
   // const base =import.meta.env.VITE_API_BASE_URL;
   const { mutate: bookAppointment } = usePostBookAppointment();
   const onBookAppointment = () => {
-    const patientId = "00bb0259-6a09-4151-9a86-29d475b28a7f";
     bookAppointment.mutate({formData , patientId});
   }
   // console.log(isFetchingSlots);

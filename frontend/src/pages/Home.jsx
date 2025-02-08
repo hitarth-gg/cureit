@@ -6,7 +6,7 @@ import { Typewriter } from "react-simple-typewriter";
 
 import CureitLogoWhite from "../assets/CureitLogoWhite.png";
 import docotorsImage from "../assets/doctors.png";
-import { useCureitContext } from "../utils/ContextProvider";
+import { useCureitContext , useAuthContext } from "../utils/ContextProvider";
 import { Button } from "@radix-ui/themes";
 import Features from "../components/Features";
 import { useNavigate } from "react-router-dom";
@@ -30,6 +30,8 @@ function Home() {
     last_sign_in_at: "",
     phone: "",
   });
+  // const user = useAuthContext();
+  // useEffect(()=>{console.log(user)},[user])
 
   return (
     <div className="flex flex-col overflow-hidden font-noto">

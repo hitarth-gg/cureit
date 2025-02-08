@@ -16,6 +16,7 @@ import "@fontsource/inter/800.css";
 import "@fontsource/inter/900.css";
 import "@fontsource-variable/noto-sans-mono";
 import CureitProvider from "./utils/ContextProvider.jsx";
+import { AuthContextProvider } from "./utils/ContextProvider.jsx";
 import { Toaster } from "sonner";
 /* ------------------------------------------------------ */
 
@@ -24,7 +25,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <>
     <Toaster richColors closeButton />
     <CureitProvider>
+      <AuthContextProvider>
       <App />
+      </AuthContextProvider>
     </CureitProvider>
   </>,
   // </React.StrictMode>,
