@@ -1,16 +1,16 @@
 import { Badge, Button, Code, DataList } from "@radix-ui/themes";
 import CancelDialog from "./CancelDialog";
-
+import { useState, useEffect } from "react";
 function AppointmentCard({ data, refetch }) {
   const {
     doctor,
     specialization,
     hospital,
-    appointment_time,
     address,
     appointment_date,
     queuePosition,
     plus_code,
+    available_from,
   } = data;
   const appointmentTypes = ["orange", "blue"]; // green for today's appointment, blue for future appointment
   const appointmentType =
@@ -18,6 +18,37 @@ function AppointmentCard({ data, refetch }) {
     new Date().toLocaleDateString("en-IN").replace(/\//g, "-")
       ? appointmentTypes[0]
       : appointmentTypes[1];
+
+    const [expectedTime, setExpectedTime] = useState(null);
+
+    useEffect(() => {
+      if (available_from === "N/A" || queuePosition === "N/A" || isNaN(queuePosition) || appointment_date === "N/A") {
+        setExpectedTime("N/A");
+      } else {
+        let availableTime = available_from;
+        if (availableTime && !availableTime.includes('T')) {
+          availableTime = `${appointment_date}T${availableTime}`;
+        }
+    
+        const availableDate = new Date(availableTime);
+        const currentTime = new Date();
+        const availableTimeWithQueue = new Date(availableDate.getTime() + (Number(queuePosition) - 1) * 15 * 60000);
+        const currentTimeWithQueue = new Date(currentTime.getTime() + (Number(queuePosition) - 1) * 15 * 60000);
+        if (currentTime.toISOString().split('T')[0] < appointment_date) {
+          setExpectedTime(availableTimeWithQueue.toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }));
+        } else if (currentTime.toISOString().split('T')[0] === appointment_date) {
+          if (currentTime > availableDate) {
+            setExpectedTime(currentTimeWithQueue.toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }));
+          } else {
+            setExpectedTime(availableTimeWithQueue.toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }));
+          }
+        } else {
+          setExpectedTime(availableTimeWithQueue.toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }));
+        }
+      }
+    }, [available_from, queuePosition, appointment_date]);
+    
+  
 
   return (
     <div>
@@ -66,9 +97,9 @@ function AppointmentCard({ data, refetch }) {
             </DataList.Value>
          </DataList.Item>
           <DataList.Item>
-            <DataList.Label minWidth="88px">Appointment Time</DataList.Label>
+            <DataList.Label minWidth="88px">Expected Time</DataList.Label>
             <DataList.Value>
-              <Badge variant="ghost" color={appointmentType}>{appointment_time}</Badge>
+              <Badge variant="ghost" color={appointmentType}>{expectedTime}</Badge>
             </DataList.Value>
           </DataList.Item>
           <DataList.Item>

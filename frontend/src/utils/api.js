@@ -165,6 +165,7 @@ export async function getPatientAppointments(patientId) {
       queuePosition: appointment.queuePosition || "N/A",
       address: appointment.doctorDetails?.address || "N/A",
       plus_code: appointment.doctorDetails?.plus_code || "N/A",
+      available_from: appointment.doctorDetails?.available_from || null,
     }));
 
     return finalAppointments; // Return the array
@@ -252,6 +253,7 @@ export async function getQueueForDoctor(doctorId) {
           age: appointment.personal_details.age,
           gender: appointment.personal_details.gender,
           hospital: doctorProfileDetails.hospital_name,
+          available_from: doctorProfileDetails?.available_from || "N/A",
           appointment_date: appointment.appointment_date,
           queuePosition: appointment.queuePosition,
           currentMedication: "N/A",

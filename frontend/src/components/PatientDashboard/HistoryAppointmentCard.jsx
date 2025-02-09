@@ -11,7 +11,7 @@ function HistoryAppointmentCard({ data, refetch , setShowLoader }) {
     appointment_time,
     appointment_date,
     plus_code,
-    address
+    address,
   } = data;
 
   const { isLoading, data: prescriptionData, error, status, refetchPrescriptions, isFetching } =
@@ -24,6 +24,8 @@ function HistoryAppointmentCard({ data, refetch , setShowLoader }) {
         else
         setShowLoader(false);
     } , [isLoading, isFetching]);
+
+    
   
   return (
     <div>
