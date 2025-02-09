@@ -3,13 +3,12 @@ const router = express.Router();
 const supabase = require("../config/supabaseClient");
 const multer = require("multer");
 const upload = multer();
-//pushing new test report
+//pushing new profile picture
 router.post("/upload", upload.single("file"), async (req, res) => {
+  console.log("req to upload profile pic recieved", req.body);
   const { userId } = req.body;
-  //   console.log("reqbody ", req.body);
-  //   console.log("id ", userId);
-  const file = req.file; // File is extracted using multer
-  //   console.log(file);
+  console.log("req.body:", req.body);
+  const file = req.file;
 
   if (!file) {
     return res.status(400).json({ error: "No file uploaded" });

@@ -91,7 +91,7 @@ function ProfileTab() {
   };
 
   useEffect(() => {
-    console.log("hello", " ", userId);
+    console.log("hello", " data details/userId changed ", userId);
     if (dataDetails) fetchUserProfile();
   }, [userId, dataDetails]);
   const patientId = "00bb0259-6a09-4151-9a86-29d475b28a7f";
@@ -114,6 +114,7 @@ function ProfileTab() {
 
   const handleUpload = async (event) => {
     const file = event.target.files[0];
+    console.log("in handle upload", file);
 
     if (!file) {
       console.error("No file selected");
@@ -124,12 +125,15 @@ function ProfileTab() {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("userId", userId);
-    console.log(formData);
+    console.log(" formdata in frontend1", formData);
     mutate.mutate(
       { userId: userId, accessToken, formData },
       {
         onSuccess: (data) => {
           console.log("ProfilePicture Uploaded sucessfully:", data);
+          refetchDetails();
+          // console.log("2222");
+          // fetchUserProfile();
         },
         onError: (error) => {
           console.error(
@@ -157,7 +161,7 @@ function ProfileTab() {
               src={profile.profileImage}
               fallback={profile.name[0]?.toUpperCase()}
             />
-            <div className="p-image right-0 hover:scale-110 transition-all duration-300 bottom-0 absolute w-6 cursor-pointer rounded-full border-black bg-white p-[2px]">
+            <div className="p-image absolute bottom-0 right-0 w-6 cursor-pointer rounded-full border-black bg-white p-[2px] transition-all duration-300 hover:scale-110">
               <span className="z-20">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
                   <rect width="256" height="256" fill="none" />

@@ -6,8 +6,10 @@ export default function useUpdateUserProfilePicture() {
 
   const mutate = useMutation({
     // The mutationFn now accepts an object with userId, accessToken, and editedProfile
-    mutationFn: ({ userId, accessToken, formData }) =>
-      updateUserProfilePicture(userId, accessToken, formData),
+    mutationFn: ({ userId, accessToken, formData }) => {
+      console.log("in frontend2", formData);
+      return updateUserProfilePicture(userId, accessToken, formData);
+    },
 
     // Here, 'variables' contains the object passed to mutate.mutate()
     onSuccess: (data, variables) => {

@@ -95,13 +95,10 @@ function AccountVerification() {
         }
       },
     );
-    // return () => {
-    //   authListener?.unsubscribe();
-    // };
   }, [dataUser]);
 
   useEffect(() => {
-    console.log("in useeffect");
+    console.log("in useeffect:", dataUser);
     if (dataUser?.user) {
       if (token?.user?.email === email) {
         navigate("/verified");

@@ -5,17 +5,28 @@ const supabase = require("../config/supabaseClient");
 
 // Add a new doctor
 router.post("/", async (req, res) => {
-  const { userId, specialization, experience, hospital, available_from, available_to } = req.body;
-  const { data, error } = await supabase.from('doctors').insert([
-    {
-      user_id: userId,
-      specialization: specialization,
-      experience_years: experience,
-      hospital_name: hospital,
-      available_from: available_from,
-      available_to: available_to
-    }
-  ]).select('*').single();
+  const {
+    userId,
+    specialization,
+    experience,
+    hospital,
+    available_from,
+    available_to,
+  } = req.body;
+  const { data, error } = await supabase
+    .from("doctors")
+    .insert([
+      {
+        user_id: userId,
+        specialization: specialization,
+        experience_years: experience,
+        hospital_name: hospital,
+        available_from: available_from,
+        available_to: available_to,
+      },
+    ])
+    .select("*")
+    .single();
 
   if (error) {
     return res.status(400).json({ error: error.message });
@@ -26,14 +37,20 @@ router.post("/", async (req, res) => {
 
 router.put("/:Id", async (req, res) => {
   const Id = req.params.Id;
-  const { specialization, experience, hospital, available_from, available_to } = req.body;
-  const { data, error } = await supabase.from('doctors').update({
-    specialization: specialization,
-    experience_years: experience,
-    hospital_name: hospital,
-    available_from: available_from,
-    available_to: available_to
-  }).eq('id', Id).select('*').single();
+  const { specialization, experience, hospital, available_from, available_to } =
+    req.body;
+  const { data, error } = await supabase
+    .from("doctors")
+    .update({
+      specialization: specialization,
+      experience_years: experience,
+      hospital_name: hospital,
+      available_from: available_from,
+      available_to: available_to,
+    })
+    .eq("id", Id)
+    .select("*")
+    .single();
 
   if (error) {
     return res.status(400).json({ error: error.message });
@@ -45,7 +62,11 @@ router.put("/:Id", async (req, res) => {
 router.get("/availableSlots/:userId", async (req, res) => {
   const userId = req.params.userId;
   console.log("userId: ", userId);
-  const { data, error } = await supabase.from('appointments').delete().eq('patient_id', userId).eq('book_status', 'pending');
+  const { data, error } = await supabase
+    .from("appointments")
+    .delete()
+    .eq("patient_id", userId)
+    .eq("book_status", "pending");
   if (error) {
     return res.status(400).json({ error: error.message });
   }
@@ -70,6 +91,7 @@ router.get("/availableSlots/:userId", async (req, res) => {
           .eq("doctor_id", doctor.id)
           .in("book_status", ["pending", "completed"])
           .eq("appointment_date", date);
+          
 
         if (appointmentsError) {
           throw new Error(appointmentsError.message);
@@ -79,21 +101,27 @@ router.get("/availableSlots/:userId", async (req, res) => {
           .from("profiles")
           .select("*")
           .eq("id", doctor.id)
-          .select("name").single();
+          .select("name")
+          .single();
         if (nameError) {
           throw new Error(nameError.message);
         }
         console.log(name);
         console.log(appointments);
         if (appointments.length < doctor.max_appointments) {
-          const { data: appointmentPending, error: appointmentPendingError } = await supabase.from('appointments').insert([
-            {
-              patient_id: userId,
-              doctor_id: doctor.id,
-              appointment_date: date,
-              book_status: "pending",
-            }
-          ]).select('*').single();
+          const { data: appointmentPending, error: appointmentPendingError } =
+            await supabase
+              .from("appointments")
+              .insert([
+                {
+                  patient_id: userId,
+                  doctor_id: doctor.id,
+                  appointment_date: date,
+                  book_status: "pending",
+                },
+              ])
+              .select("*")
+              .single();
           if (appointmentPendingError) {
             console.log(appointmentPendingError);
             throw new Error(appointmentPendingError.message);
@@ -147,7 +175,8 @@ router.get("/doctorDetailsById/:Id", async (req, res) => {
   const { Id } = req.params;
 
   // Validate UUID format before querying
-  const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+  const uuidRegex =
+    /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
   if (!uuidRegex.test(Id)) {
     return res.status(400).json({ error: "Invalid UUID format" });
   }
@@ -157,7 +186,8 @@ router.get("/doctorDetailsById/:Id", async (req, res) => {
   const { data, error } = await supabase
     .from("doctors")
     .select("*")
-    .eq("id", Id).single(); // Ensure the UUID is passed correctly
+    .eq("id", Id)
+    .single(); // Ensure the UUID is passed correctly
 
   if (error) {
     console.error("Supabase error:", error);
@@ -166,6 +196,5 @@ router.get("/doctorDetailsById/:Id", async (req, res) => {
 
   res.json(data);
 });
-
 
 module.exports = router;

@@ -5,6 +5,7 @@ import { Box, Button, DropdownMenu, Tooltip } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Logout from "./logout";
+import { supabase } from "../utils/supabaseClient";
 
 function Header() {
   const tokenString = localStorage.getItem(
@@ -28,6 +29,19 @@ function Header() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error("Error signing out:", error.message);
+      } else {
+        console.log("User signed out successfully");
+        navigate("/login"); // Redirect to login page
+      }
+    } catch (err) {
+      console.error("Unexpected error during logout:", err);
+    }
+  };
 
   return (
     <div
@@ -113,7 +127,11 @@ function Header() {
             <DropdownMenu.Item>Share</DropdownMenu.Item>
             <DropdownMenu.Item>Add to favorites</DropdownMenu.Item>
             <DropdownMenu.Separator />
-            <DropdownMenu.Item shortcut="⌘ ⌫" color="red">
+            <DropdownMenu.Item
+              shortcut="⌘ ⌫"
+              color="red"
+              onClick={handleLogout}
+            >
               Logout
             </DropdownMenu.Item>
           </DropdownMenu.Content>

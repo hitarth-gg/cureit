@@ -614,11 +614,11 @@ export async function updateUserDetailsById(
 }
 
 export async function updateUserProfilePicture(userId, accessToken, formData) {
-  console.log("in api", formData.file);
+  console.log("in frontend3", formData);
   const response = await fetch(`${API_URL}/api/uploadProfiles/upload`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      // "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`, // Include token
     },
     body: formData,
