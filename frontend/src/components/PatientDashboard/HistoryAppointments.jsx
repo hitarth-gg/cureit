@@ -18,17 +18,28 @@ function HistoryAppointments() {
   if (error) {
     toast.error("Error fetching data");
   }
+  
+  const [showLoader, setShowLoader] = useState(true);
+  useEffect(()=>{
+    if(isLoading || isFetching){
+      setShowLoader(true);
+    }
+      else
+      setShowLoader(false);
+  } , [isLoading, isFetching]);
+
 
   return (
     <div>
       <div className="">
-        {(isLoading || isFetching) && <Loader />}
+        {(showLoader) && <Loader />}
         <div className="flex flex-col gap-4">
           {data?.map((appointment, ix) => (
             <HistoryAppointmentCard
               key={ix + "history"}
               data={appointment}
               refetch={refetch}
+              setShowLoader = {setShowLoader}
             />
           ))}
         </div>

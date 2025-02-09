@@ -1,7 +1,9 @@
 import { Badge, Button, Code, DataList } from "@radix-ui/themes";
 import SeeDetails from "./SeeDetails";
-
-function HistoryAppointmentCard({ data, refetch }) {
+import useGetPrescription from "../../hooks/useGetPrescription";
+import { useEffect } from "react";
+function HistoryAppointmentCard({ data, refetch , setShowLoader }) {
+  console.log("HistoryAppointmentCard data: ", data);
   const {
     doctor,
     specialization,
@@ -10,6 +12,17 @@ function HistoryAppointmentCard({ data, refetch }) {
     appointment_date,
   } = data;
 
+  const { isLoading, data: prescriptionData, error, status, refetchPrescriptions, isFetching } =
+      useGetPrescription(data.appointmentId);
+  
+    useEffect(()=>{
+      if(isLoading || isFetching){
+        setShowLoader(true);
+      }
+        else
+        setShowLoader(false);
+    } , [isLoading, isFetching]);
+  
   return (
     <div>
       <div className="flex justify-between gap-y-1 rounded-md border-2 px-4 py-2 font-noto">
@@ -55,7 +68,7 @@ function HistoryAppointmentCard({ data, refetch }) {
           </DataList.Item>
         </DataList.Root>
         <div className="ml-4 flex items-center justify-center">
-          <SeeDetails data={data} refetch={refetch} />
+          <SeeDetails data={data} refetch={refetch} prescriptionData={prescriptionData} />
         </div>
       </div>
     </div>
