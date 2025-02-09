@@ -163,6 +163,8 @@ export async function getPatientAppointments(patientId) {
       appointment_time: appointment.appointment_time?.appointment_time || "N/A",
       appointment_date: appointment.appointment_date,
       queuePosition: appointment.queuePosition || "N/A",
+      address: appointment.doctorDetails?.address || "N/A",
+      plus_code: appointment.doctorDetails?.plus_code || "N/A",
     }));
 
     return finalAppointments; // Return the array
@@ -216,12 +218,10 @@ export async function getPatientAppointmentHistory(patientId) {
       issue: "N/A",
       issueDetails: appointment.personal_details.health_issue,
       appointment_time: "N/A",
-      // appointmentId: appointment.id,
       doctor: appointment.doctorProfileDetails?.name || "Unknown",
       specialization: appointment.doctorDetails?.specialization || "Unknown",
-      // hospital: appointment.doctorDetails?.hospital_name || "Unknown",
-      // appointment_time: appointment.appointment_time?.appointment_time || "N/A",
-      // appointment_date: appointment.appointment_date,
+      address: appointment.doctorDetails?.address || "N/A",
+      plus_code: appointment.doctorDetails?.plus_code || "N/A",
     }));
 
     return finalAppointments;

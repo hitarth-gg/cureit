@@ -10,6 +10,8 @@ function HistoryAppointmentCard({ data, refetch , setShowLoader }) {
     hospital,
     appointment_time,
     appointment_date,
+    plus_code,
+    address
   } = data;
 
   const { isLoading, data: prescriptionData, error, status, refetchPrescriptions, isFetching } =
@@ -54,6 +56,21 @@ function HistoryAppointmentCard({ data, refetch , setShowLoader }) {
               <Code variant="ghost">{hospital}</Code>
             </DataList.Value>
           </DataList.Item>
+          <DataList.Item>
+            <DataList.Label minWidth="88px">Address</DataList.Label>
+            <DataList.Value>
+              <Code variant="ghost">{address}</Code>
+              <Button
+                color="iris"
+                size="1"
+                onClick={() =>
+                  window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(plus_code)}`, '_blank')
+                }
+              >
+                Get Directions
+              </Button>
+            </DataList.Value>
+         </DataList.Item>
           <DataList.Item>
             <DataList.Label minWidth="88px">Appointment Time</DataList.Label>
             <DataList.Value>

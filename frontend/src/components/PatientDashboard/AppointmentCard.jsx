@@ -7,8 +7,10 @@ function AppointmentCard({ data, refetch }) {
     specialization,
     hospital,
     appointment_time,
+    address,
     appointment_date,
     queuePosition,
+    plus_code,
   } = data;
   const appointmentTypes = ["orange", "blue"]; // green for today's appointment, blue for future appointment
   const appointmentType =
@@ -48,6 +50,21 @@ function AppointmentCard({ data, refetch }) {
               <Code variant="ghost">{hospital}</Code>
             </DataList.Value>
           </DataList.Item>
+          <DataList.Item>
+            <DataList.Label minWidth="88px">Address</DataList.Label>
+            <DataList.Value>
+              <Code variant="ghost">{address}</Code>
+              <Button
+                color="iris"
+                size="1"
+                onClick={() =>
+                  window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(plus_code)}`, '_blank')
+                }
+              >
+                Get Directions
+              </Button>
+            </DataList.Value>
+         </DataList.Item>
           <DataList.Item>
             <DataList.Label minWidth="88px">Appointment Time</DataList.Label>
             <DataList.Value>
