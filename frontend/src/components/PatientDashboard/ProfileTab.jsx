@@ -1,4 +1,4 @@
-import { Pencil2Icon } from "@radix-ui/react-icons";
+import { CameraIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { Avatar, Button, Flex } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import EditProfile from "./EditProfile";
@@ -61,15 +61,6 @@ function ProfileTab() {
     checkUserSession();
   }, []);
 
-
-
-
-
-
-
-
-
-
   useEffect(() => {
     const fetchUser = async () => {
       const {
@@ -82,8 +73,6 @@ function ProfileTab() {
     fetchUser();
   }, []);
 
-
-  
   const fetchUserProfile = async () => {
     try {
       setProfile({
@@ -157,7 +146,7 @@ function ProfileTab() {
       {isLoading && <Loader />}
       <div className="flex flex-col justify-start gap-x-4 rounded-md border px-8 py-4 text-xs sm:gap-x-12 md:flex-row md:text-sm">
         <div className="flex flex-col items-center justify-center p-4">
-          <Flex gap="2">
+          <Flex gap="2" className="relative">
             <Avatar
               size={{
                 initial: "4",
@@ -168,14 +157,46 @@ function ProfileTab() {
               src={profile.profileImage}
               fallback={profile.name[0]?.toUpperCase()}
             />
+            <div className="p-image right-0 hover:scale-110 transition-all duration-300 bottom-0 absolute w-6 cursor-pointer rounded-full border-black bg-white p-[2px]">
+              <span className="z-20">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+                  <rect width="256" height="256" fill="none" />
+                  <path
+                    d="M208,208H48a16,16,0,0,1-16-16V80A16,16,0,0,1,48,64H80L96,40h64l16,24h32a16,16,0,0,1,16,16V192A16,16,0,0,1,208,208Z"
+                    fill="none"
+                    stroke="#222222"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="16"
+                  />
+                  <circle
+                    cx="128"
+                    cy="132"
+                    r="36"
+                    fill="none"
+                    stroke="#222222"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="16"
+                  />
+                </svg>
+              </span>
+              <input
+                className="file-upload absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
+                type="file"
+                accept="image/*"
+                onChange={handleUpload}
+                id="profile-image-upload"
+              />
+            </div>
           </Flex>
-          <input
+          {/* <input
             type="file"
             accept="image/*"
             onChange={handleUpload}
             id="profile-image-upload"
             // style={{ display: "none" }} // Hide the input field
-          />
+          /> */}
 
           <div className="mt-1 w-32 text-center">{profile.name}</div>
         </div>
