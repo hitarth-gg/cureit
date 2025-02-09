@@ -32,15 +32,12 @@ export async function getDoctorSlots(date, specialization, userId) {
   // const date = appointmentData.date;
   console.log("Get Doctor Slots: ", date, specialization, userId);
 
-  const response = await fetch(
-    `${API_URL}/api/doctors/availableSlots/${userId}?specialization=${specialization}&date=${date}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+  const response = await fetch(`${API_URL}/api/doctors/availableSlots/${userId}?specialization=${specialization}&date=${date}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+  });
   if (!response.ok) {
     console.log("error in getDoctorSlots: ", response.status);
     throw new Error(`Error: ${response.status} ${response.statusText}`);
@@ -185,7 +182,6 @@ export async function getPatientAppointmentHistory(patientId) {
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
-    console.log("Appointment History:", data);
     const updatedData = await Promise.all(
       data.map(async (appointment) => {
         try {
@@ -205,14 +201,27 @@ export async function getPatientAppointmentHistory(patientId) {
         }
       }),
     );
+    console.log("Appointment History:", updatedData);
 
     const finalAppointments = updatedData.map((appointment) => ({
       appointmentId: appointment.id,
+      patientId: appointment.patient_id,
+      patientName: appointment.personal_details.name,
+      age: appointment.personal_details.age,
+      gender: appointment.personal_details.gender,
+      hospital: appointment.doctorDetails.hospital_name,
+      appointment_date: appointment.appointment_date,
+      queuePosition: "N/A",
+      currentMedication: "N/A",
+      issue: "N/A",
+      issueDetails: appointment.personal_details.health_issue,
+      appointment_time: "N/A",
+      // appointmentId: appointment.id,
       doctor: appointment.doctorProfileDetails?.name || "Unknown",
       specialization: appointment.doctorDetails?.specialization || "Unknown",
-      hospital: appointment.doctorDetails?.hospital_name || "Unknown",
-      appointment_time: appointment.appointment_time?.appointment_time || "N/A",
-      appointment_date: appointment.appointment_date,
+      // hospital: appointment.doctorDetails?.hospital_name || "Unknown",
+      // appointment_time: appointment.appointment_time?.appointment_time || "N/A",
+      // appointment_date: appointment.appointment_date,
     }));
 
     return finalAppointments;
@@ -341,6 +350,7 @@ export async function getHistoryForDoctor(doctorId) {
     console.error("Failed to fetch patient appointments:", error);
     throw new Error("Failed to fetch patient appointments.");
   }
+
   // const testData = [
   //   {
   //     patiendId: 1,
@@ -422,6 +432,34 @@ export async function getHistoryForDoctor(doctorId) {
   //   },
   // ];
 }
+export async function getPrescription(appointmentId) {
+  try {
+    const response = await fetch(`${API_URL}/api/prescriptions/${appointmentId}`)
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data.data;
+  }
+  catch (error) {
+    console.error("Failed to fetch prescription:", error);
+    throw new Error("Failed to fetch prescription.");
+  }
+}
+export async function putPrescription(prescriptionData) {
+  const response = await fetch(`${API_URL}/api/prescriptions/generate`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(prescriptionData),
+  });
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} ${response.statusText}`);
+  }
+  const data = await response.json();
+  console.log(data);
+}
 export async function postBookAppointment(bookingData) {
   const formData = bookingData.formData;
   const patientId = bookingData.patientId;
@@ -470,7 +508,8 @@ export async function getDoctorType(healthIssue) {
     const data = await response.json();
     console.log("docotor type: ", data);
     return data.predicted_specialist;
-  } catch (error) {
+  }
+  catch (error) {
     console.error("Failed to fetch doctor type:", error);
     throw new Error("Failed to fetch doctor type.");
   }

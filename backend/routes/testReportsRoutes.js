@@ -47,51 +47,40 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     }
   });
 
-// router.get("/:reportId", async (req, res) => {
-//   const { reportId } = req.params;
+router.get("/download/:reportId", async (req, res) => {
+  const { reportId } = req.params;
 
-//   try {
-//     // Fetch the test report details from the database
-//     const { data, error } = await supabase
-//       .from("test_reports")
-//       .select("*")
-//       .eq("id", reportId)
-//       .single();
+  try {
+    // Fetch the test report details from the database
+    const { data, error } = await supabase
+      .from("test_reports")
+      .select("*")
+      .eq("id", reportId)
+      .single();
 
-//     if (error) {
-//     console
-//       return res.status(400).json({ error: error.message });
-//     }
-//     if (!data) {
-//       return res.status(404).json({ error: "Test report not found" });
-//     }
-//     // Get the file URL from the database record
-//     const fileUrl = data.report_url;
+    if (error) {
+    console
+      return res.status(400).json({ error: error.message });
+    }
+    if (!data) {
+      return res.status(404).json({ error: "Test report not found" });
+    }
+    
+    const {data:file , error:fileError} = await supabase.storage.from("testReports").download(data.report_url);
+    if (fileError) {
+      return res.status(400).json({ error: fileError.message });
+    }
+    const contentType = file.type || "application/octet-stream"; // Default to binary if type is missing
+    // Set headers for file download
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("Content-Disposition", `attachment; filename="${data.report_url.split("/").pop()}"`);
 
-//     // Generate a signed URL to access the file (optional for restricted buckets)
-//     const { data: signedUrlData, error: signedUrlError } = await supabase.storage
-//       .from("testReports")
-//       .createSignedUrl(fileUrl, 60); // 60 seconds validity
-
-//     if (signedUrlError) {
-//       return res.status(400).json({ error: signedUrlError.message });
-//     }
-
-//     const signedUrl = signedUrlData.signedUrl;
-
-//     // Fetch the file content from the signed URL
-//     const fileResponse = await axios.get(signedUrl, {
-//       responseType: "arraybuffer", // Ensure the response is a binary buffer
-//     });
-
-//     // Set the appropriate headers for file download
-//     res.setHeader("Content-Disposition", `attachment; filename=${fileUrl.split("/").pop()}`);
-//     res.setHeader("Content-Type", fileResponse.headers["content-type"]);
-//     res.status(200).send(fileResponse.data);
-//   } catch (err) {
-//     console.error("Error fetching the file:", err);
-//     res.status(500).json({ error: "An error occurred while fetching the test report file." });
-//   }
-// });
+    return res.send(Buffer.from(await file.arrayBuffer())); 
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error while fetching file" });
+}
+}
+);
 
 module.exports = router;

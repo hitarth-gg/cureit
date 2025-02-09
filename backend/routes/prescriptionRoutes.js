@@ -21,7 +21,7 @@ router.get('/:appointmentId', async (req, res) => {
   const { appointmentId } = req.params;
 
   try {
-    const prescription = await Prescription.findOne({ appointmentId });
+    const prescription = await supabase.from('prescriptions').select('*').eq('appointment_id', appointmentId);
     if (!prescription) {
       return res.status(404).json({ message: 'Prescription not found.' });
     }

@@ -33,7 +33,7 @@ import {
 } from "@mdxeditor/editor";
 import SlidingPane from "react-sliding-pane";
 import "react-sliding-pane/dist/react-sliding-pane.css";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import SlidingPanel from "react-sliding-side-panel";
 import "react-sliding-side-panel/lib/index.css";
 import { Cross1Icon } from "@radix-ui/react-icons";
@@ -41,7 +41,7 @@ import HBorder from "../HBorder";
 import { toast } from "sonner";
 import debounce from "lodash.debounce";
 
-function SeeDetails({ data, refetch }) {
+function SeeDetails({ data, refetch , prescriptionData}) {
   const {
     patientName,
     age,
@@ -54,34 +54,58 @@ function SeeDetails({ data, refetch }) {
     appointment_date,
     queuePosition,
   } = data;
+  console.log("see details data: " , data);
   const [isPaneOpen, setIsPaneOpen] = useState(false);
 
-  const [doctorRemarks, setDoctorRemarks] = useState(`
-## Doctor's Remarks  
+const [doctoRemarks , setDoctorRemarks]=useState("");
+const [medicines , setMedcines]=useState("");
+useEffect(() => {
+  if (!prescriptionData || prescriptionData.length === 0) {
+    setDoctorRemarks("No prescription available.");
+    setMedcines(""); 
+    return;
+  }
 
-## Patient Information  
-- **Name**: John Doe  
-- **Age**: 45  
-- **Gender**: Male  
-- **Date of Visit**: 2025-02-02  
+  setDoctorRemarks(prescriptionData[0]?.doctor_notes || "No remarks provided");
 
-## Summary  
-- **Complaint**: Persistent headache and dizziness.  
-- **Vitals**: BP: 150/90 mmHg, Pulse: 82 bpm.  
-- **Diagnosis**: Hypertension-related headache.  
+  let markdown = "### Prescription Details\n\n";
+  markdown += "| Medicine Name  | Dosage  | Frequency    | Duration  |\n";
+  markdown += "|---------------|--------|------------|----------|\n";
 
-## Recommendations  
-- **Medications**:
-  - Amlodipine 5 mg - Daily.  
-  - Paracetamol 500 mg - As needed.  
-- **Tests**: CBC, KFT, ECG.  
-- **Advice**: Reduce salt, daily walking, avoid alcohol.  
+  if (Array.isArray(prescriptionData[0]?.medicines)) {
+    prescriptionData[0].medicines.forEach((med) => {
+      markdown += `| ${med.medicine_name}  | ${med.dosage}  | ${med.frequency} | ${med.duration}  |\n`;
+    });
+  }
 
-**Doctor**: Dr. Alice Smith  
-**Specialization**: Internal Medicine  
-`); // can either debounce or use a normal variable to store the doctorRemarks to avoid unnecessary re-renders
+  setMedcines(markdown);
+}, [prescriptionData]);
+//   const [doctorRemarks, setDoctorRemarks] = useState(`
+// ## Doctor's Remarks  
 
-  const [doctorPrescription, setDoctorPrescription] = useState("");
+// ## Patient Information  
+// - **Name**: John Doe  
+// - **Age**: 45  
+// - **Gender**: Male  
+// - **Date of Visit**: 2025-02-02  
+
+// ## Summary  
+// - **Complaint**: Persistent headache and dizziness.  
+// - **Vitals**: BP: 150/90 mmHg, Pulse: 82 bpm.  
+// - **Diagnosis**: Hypertension-related headache.  
+
+// ## Recommendations  
+// - **Medications**:
+//   - Amlodipine 5 mg - Daily.  
+//   - Paracetamol 500 mg - As needed.  
+// - **Tests**: CBC, KFT, ECG.  
+// - **Advice**: Reduce salt, daily walking, avoid alcohol.  
+
+// **Doctor**: Dr. Alice Smith  
+// **Specialization**: Internal Medicine  
+// `); // can either debounce or use a normal variable to store the doctorRemarks to avoid unnecessary re-renders
+
+console.log("patient details: ", prescriptionData);
 
   return (
     <div className="">
@@ -156,14 +180,14 @@ function SeeDetails({ data, refetch }) {
                 </Text>
               </label>
 
-              <label className="flex gap-3">
+              {/* <label className="flex gap-3">
                 <Text as="div" size="2" mb="1" weight="bold">
                   Queue Position:
                 </Text>
                 <Code as="div" weight={"bold"} size="2" mb="1">
                   {queuePosition}
                 </Code>
-              </label>
+              </label> */}
 
               <label className="flex gap-3">
                 <Text as="div" size="2" mb="1" weight="bold">
@@ -191,7 +215,7 @@ function SeeDetails({ data, refetch }) {
               <MDXEditor
                 readOnly={true}
                 contentEditableClassName="prose max-w-none h-full mb-4 border-2"
-                markdown={doctorRemarks || ""}
+                markdown={ doctoRemarks || "hello"}
                 placeholder="Nothing to show here..."
                 plugins={[
                   toolbarPlugin({
@@ -217,7 +241,7 @@ function SeeDetails({ data, refetch }) {
               <MDXEditor
                 readOnly={true}
                 contentEditableClassName="prose max-w-none mb-4 h-full border-2 "
-                markdown={""}
+                markdown={ medicines || ""}
                 placeholder="Nothing to show here..."
                 plugins={[
                   toolbarPlugin({
