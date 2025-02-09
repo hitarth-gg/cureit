@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postBookAppointment } from "../utils/api";
 import { toast } from "sonner";
-export default function usePostBookAppointment() {
+export default function usePostBookAppointment(setBookingStatus) {
     const queryClient = useQueryClient();
     const mutate = useMutation({
         mutationFn: postBookAppointment,
@@ -12,6 +12,7 @@ export default function usePostBookAppointment() {
             queryClient.invalidateQueries({ queryKey: ['patient_appointment_history'] });
             queryClient.invalidateQueries({ queryKey: ['doctor_queue_history'] });
             queryClient.invalidateQueries({ queryKey: ['doctor_queue'] });
+            setBookingStatus(true);
         },
         onError: (error) => {
             console.log("Error booking appointment", error);

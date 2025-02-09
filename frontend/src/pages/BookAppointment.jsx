@@ -19,14 +19,14 @@ import Loader from "../components/Loader";
 import usePostBookAppointment from "../hooks/usePostBookAppointment";
 import { useAuthContext } from "../utils/ContextProvider";
 function BookAppointment() {
-
   const user = useAuthContext();
   const [patientId, setPatientId] = useState(null);
-  useEffect(()=>{
-    if(user.currentUser!=null){
-      setPatientId (user.currentUser.id);
-      console.log(user.currentUser.id)
-    } },[user])
+  useEffect(() => {
+    if (user.currentUser != null) {
+      setPatientId(user.currentUser.id);
+      console.log(user.currentUser.id);
+    }
+  }, [user]);
   // if(user.currentUser.id)
   // {
   //   // patientId =user.currentUser.id;
@@ -64,19 +64,21 @@ function BookAppointment() {
     error: errorSlots,
     refetch: refetchSlots,
     isFetching: isFetchingSlots,
-  } = useGetDoctorSlots(formState === 2 ? {formData, patientId, dataDoctorType} : null); // Fetch doctor slots based on selected doctor type
+  } = useGetDoctorSlots(
+    formState === 2 ? { formData, patientId, dataDoctorType } : null,
+  ); // Fetch doctor slots based on selected doctor type
 
   console.log(isLoadingDoctorType, isLoadingSlots);
 
   const [doctorSlots, setDoctorSlots] = useState([]);
   const [bookingSuccessful, setBookingSuccessful] = useState(false);
-  
+
   // Filter doctor slots based on selected date
   useEffect(() => {
     // && !formData.selectedDate
     if (dataSlots) {
       setDoctorSlots(dataSlots);
-    } 
+    }
     // else {
     //   setDoctorSlots(
     //     dataSlots?.filter(
@@ -107,18 +109,17 @@ function BookAppointment() {
 
   // console.log(formData);
   // const base =import.meta.env.VITE_API_BASE_URL;
-  const { mutate: bookAppointment } = usePostBookAppointment();
+  const { mutate: bookAppointment } =
+    usePostBookAppointment(setBookingSuccessful);
   const onBookAppointment = () => {
-    bookAppointment.mutate({formData , patientId});
-  }
+    bookAppointment.mutate({ formData, patientId });
+  };
   // console.log(isFetchingSlots);
   console.log(isLoadingDoctorType, isLoadingSlots, isFetchingSlots);
   console.log("isLoadingDoctorType", isLoadingDoctorType);
   console.log("isLoadingSlots", isLoadingSlots);
   console.log("isFetchingSlots", isFetchingSlots);
-  
-  
- 
+
   return (
     <>
       {(isLoadingDoctorType || isLoadingSlots || isFetchingSlots) && <Loader />}
@@ -160,7 +161,7 @@ function BookAppointment() {
           )}
 
           <div className="flex w-full justify-between">
-            {(formState > 0 && !bookingSuccessful) ? (
+            {formState > 0 && !bookingSuccessful ? (
               <Button color="iris" size="2" onClick={() => handlePrev()}>
                 <ArrowLeftIcon width={15} height={15} /> Go Back
               </Button>
@@ -189,9 +190,13 @@ function BookAppointment() {
               </Button>
             )}
             {formState === 3 && bookingSuccessful && (
-              <Button color="iris" size="2" onClick={() => navigate(
-                "/dashboard", { state: { tab: "appointments" } }
-              )}>
+              <Button
+                color="iris"
+                size="2"
+                onClick={() =>
+                  navigate("/user/dashboard", { state: { tab: "appointments" } })
+                }
+              >
                 Check out your appointments
               </Button>
             )}
