@@ -4,7 +4,9 @@ import { deleteAppointment, signUpNewUser } from "../utils/api";
 export default function useHandleSignUp(signUpData) {
   //   const queryClient = useQueryClient(signUpData);
   const mutate = useMutation({
-    mutationFn: (data) => signUpNewUser(data),
+    mutationFn: (data) => {
+      return signUpNewUser(data);
+    },
 
     onSuccess: (data) => {
       console.log("User signed up successfully");

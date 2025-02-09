@@ -19,9 +19,9 @@ function EditProfile({ id, profile, setProfile, fetchUserProfile }) {
   const [editedProfile, setEditedProfile] = useState(profile);
   const { mutate, onSuccess, onError } = useHandleEditProfile();
 
-  // useEffect(() => {
-  //   setEditedProfile(profile);
-  // }, [profile]);
+  useEffect(() => {
+    setEditedProfile(profile);
+  }, [profile]);
 
   // console.log("edited profile", editedProfile);
   const { name, address, email, profileImage, age, gender } = editedProfile;
