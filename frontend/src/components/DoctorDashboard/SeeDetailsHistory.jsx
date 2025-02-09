@@ -40,8 +40,10 @@ import { Cross1Icon } from "@radix-ui/react-icons";
 import HBorder from "../HBorder";
 import { toast } from "sonner";
 import debounce from "lodash.debounce";
+import { useEffect } from "react";
 
-function SeeDetailsHistory({ data, refetch }) {
+
+function SeeDetailsHistory({ data, refetch, prescriptionData}) {
   const {
     patientName,
     age,
@@ -53,14 +55,32 @@ function SeeDetailsHistory({ data, refetch }) {
     appointment_time,
     appointment_date,
     queuePosition,
-    doctorPrescription,
-    doctorRemarks
   } = data;
   const [isPaneOpen, setIsPaneOpen] = useState(false);
-
-  // const [doctorRemarks, setDoctorRemarks] = useState(""); // can either debounce or use a normal variable to store the doctorRemarks to avoid unnecessary re-renders
-  // const [doctorPrescription, setDoctorPrescription] = useState(doctorMedication);
-
+  
+  const [doctorRemarks, setDoctorRemarks] = useState(""); 
+  const [doctorPrescription, setDoctorPrescription] = useState("");
+  useEffect(() => {
+      if (!prescriptionData || prescriptionData.length === 0) {
+        setDoctorRemarks("No prescription available.");
+        setDoctorPrescription(""); 
+        return;
+      }
+    
+      setDoctorRemarks(prescriptionData[0]?.doctor_notes || "No remarks provided");
+    
+      let markdown = "### Prescription Details\n\n";
+      markdown += "| Medicine Name  | Dosage  | Frequency    | Duration  |\n";
+      markdown += "|---------------|--------|------------|----------|\n";
+    
+      if (Array.isArray(prescriptionData[0]?.medicines)) {
+        prescriptionData[0].medicines.forEach((med) => {
+          markdown += `| ${med.medicine_name}  | ${med.dosage}  | ${med.frequency} | ${med.duration}  |\n`;
+        });
+      }
+    
+      setDoctorPrescription(markdown);
+    }, [prescriptionData]);
   // async function saveDetails() {
   //   // Save the doctorRemarks and doctorPrescription to the database
   //   // Refetch the data
@@ -279,10 +299,10 @@ function SeeDetailsHistory({ data, refetch }) {
                 ]}
               />
             </Flex>
-            <div className="flex w-full gap-x-4 py-4">
+            {/* <div className="flex w-full gap-x-4 py-4">
               <Button>Save</Button>
               <Button>Save & Mark as Done</Button>
-            </div>
+            </div> */}
           </div>
         </div>
       </SlidingPanel>

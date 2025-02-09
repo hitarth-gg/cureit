@@ -20,12 +20,22 @@ function DoctorHistory() {
     toast.error("Error fetching data");
   }
 
+  const [showLoader, setShowLoader] = useState(true);
+  useEffect(()=>{
+    if(isLoading || isFetching){
+      setShowLoader(true);
+    }
+      else
+      setShowLoader(false);
+  } , [isLoading, isFetching]);
+
+
   return (
     <div className="">
-      {(isLoading || isFetching) && <Loader />}
+      {(showLoader) && <Loader />}
       <div className="flex flex-col gap-4">
         {data?.map((queue, ix) => (
-          <DoctorHistoryCard key={ix} data={queue} refetch={refetch} />
+          <DoctorHistoryCard key={ix} data={queue} refetch={refetch} setShowLoader={setShowLoader} />
         ))}
       </div>
     </div>

@@ -1,8 +1,9 @@
 import { Badge, Button, Code, DataList } from "@radix-ui/themes";
 import SeeDetails from "./SeeDetails";
 import SeeDetailsHistory from "./SeeDetailsHistory";
-
-function DoctorHistoryCard({ data, refetch }) {
+import { useEffect } from "react";
+import useGetPrescription from "../../hooks/useGetPrescription";
+function DoctorHistoryCard({ data, refetch , setShowLoader}) {
   const {
     patientName,
     age,
@@ -20,6 +21,17 @@ function DoctorHistoryCard({ data, refetch }) {
     new Date().toLocaleDateString("en-IN").replace(/\//g, "-")
       ? appointmentTypes[0]
       : appointmentTypes[1];
+
+  const { isLoading, data: prescriptionData, error, status, refetchPrescriptions, isFetching } =
+        useGetPrescription(data.appointmentId);
+    
+      useEffect(()=>{
+        if(isLoading || isFetching){
+          setShowLoader(true);
+        }
+          else
+          setShowLoader(false);
+      } , [isLoading, isFetching]);
 
   return (
     <div>
@@ -85,7 +97,7 @@ function DoctorHistoryCard({ data, refetch }) {
         </DataList.Root>
         <div className="ml-4 flex items-center justify-center">
           {/* <CancelDialog data={data} refetch={refetch} /> */}
-          <SeeDetailsHistory data={data} refetch={refetch} />
+          <SeeDetailsHistory data={data} refetch={refetch} prescriptionData={prescriptionData} />
         </div>
       </div>
     </div>
