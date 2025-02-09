@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 dotenv.config();
+require("./services/cronJob.js"); 
 const userRoutes = require("./routes/userRoutes");
 const doctorRoutes = require("./routes/doctorRoutes");
 const appointmentRoutes = require("./routes/appointmentRoutes");
