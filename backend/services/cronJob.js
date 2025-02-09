@@ -5,5 +5,5 @@ cron.schedule("0 9 * * *", async () => {
     console.log("Running daily reminder job...");
     await sendReminder();
   }, {
-    timezone: "Asia/Kolkata" // Set timezone as per your requirement
+    timezone: "Asia/Kolkata"
   });
