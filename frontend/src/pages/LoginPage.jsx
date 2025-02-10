@@ -5,12 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabaseClient";
 import { AuthApiError } from "@supabase/supabase-js";
 import { useCheckLogin } from "../hooks/useCheckLogin";
+import { useQueryClient } from "@tanstack/react-query";
 
 function LoginPage() {
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
+  const queryClient = useQueryClient();
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const { mutate, onSuccess, onError } = useCheckLogin();
@@ -24,7 +26,9 @@ function LoginPage() {
         console.log("Login Success:", data);
         // if (data.user) {
         setSuccessMessage("Logging in....");
-        navigate("/user/dashboard"); // Redirect on success
+        // navigate("/user/dashboard"); // Redirect on success
+        window.location.href = "/user/dashboard";
+        queryClient.invalidateQueries("userDetails");
         // } else {
         //   setErrorMessage("Wrong credentials. Please Try Again.");
         // }

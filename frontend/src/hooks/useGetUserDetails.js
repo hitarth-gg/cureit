@@ -8,7 +8,9 @@ export function useGetUserDetails(userId, accessToken) {
       if (userId) return getUserDetailsByID(userId, accessToken);
       return null;
     },
-    staleTime: 1000 * 1, // 1 second
+    staleTime: 1000 * 60 * 20, // 1 second
+    
+    
   });
   return { isLoading, data, error, status, refetch, isFetching };
 }
