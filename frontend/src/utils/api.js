@@ -218,7 +218,7 @@ export async function getPatientAppointmentHistory(patientId) {
       currentMedication: "N/A",
       issue: "N/A",
       issueDetails: appointment.personal_details.health_issue,
-      appointment_time: "N/A",
+      appointment_time: appointment.updated_at,
       doctor: appointment.doctorProfileDetails?.name || "Unknown",
       specialization: appointment.doctorDetails?.specialization || "Unknown",
       address: appointment.doctorDetails?.address || "N/A",
@@ -343,7 +343,7 @@ export async function getHistoryForDoctor(doctorId) {
           currentMedication: "N/A",
           issue: "N/A",
           issueDetails: appointment.personal_details.health_issue,
-          appointment_time: "N/A",
+          appointment_time: appointment.updated_at,
         };
       }),
     );
@@ -447,6 +447,37 @@ export async function getPrescription(appointmentId) {
     console.error("Failed to fetch prescription:", error);
     throw new Error("Failed to fetch prescription.");
   }
+}
+
+export async function sendOtp(patientId)
+{
+  const response = await fetch(`${API_URL}/api/users/sendOtp/${patientId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} ${response.statusText}`);
+  }
+  const data = await response.json();
+  console.log(data);
+  return response;
+}
+export async function validateOtp(patientId , otp)
+{
+  const response = await fetch(`${API_URL}/api/users/validateOtp/${patientId}?otp=${otp}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} ${response.statusText}`);
+  }
+  const data = await response.json();
+  console.log(data);
+  return data.info.check;
 }
 export async function postPrescription(prescriptionData) {
   const response = await fetch(`${API_URL}/api/prescriptions/generate`, {

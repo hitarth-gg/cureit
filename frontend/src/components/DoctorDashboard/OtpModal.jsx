@@ -9,8 +9,8 @@ import {
 import { useEffect, useState } from "react";
 import OTPInput from "react-otp-input";
 import { toast } from "sonner";
-
-function OtpModal({ otpVerified, setOtpVerified }) {
+import {sendOtp , validateOtp} from "../../utils/api.js"
+function OtpModal({ otpVerified, setOtpVerified , id }) {
   const [timer, setTimer] = useState(0); // Initial timer value in seconds
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [otpMatchStatus, setOtpMatchStatus] = useState("notVerified"); // notVerified, verified, wrong
@@ -39,20 +39,36 @@ function OtpModal({ otpVerified, setOtpVerified }) {
     setSendingOtp(true);
     setTimer(5);
     setIsTimerActive(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    toast.success("OTP sent to the patient's email address!");
+    const response = await sendOtp(id);
+    if(response.status === 200) {
+     toast.success("OTP sent to the patient's email address!");
+    }
+    else {
+      toast.error("Error sending OTP to the patient's email address!");
+    }
     setSendingOtp(false);
   }
-
+  
+  const [otp, setOtp] = useState("");
   async function verifyOtp() {
     // Verify the OTP entered by the patient
     // Set the otpMatchStatus to verified or wrong
     setVerifyingOtp(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setOtpMatchStatus("verified");
-    setOtpVerified(true);
-    setModalMessage("OTP Verified Successfully!"); // or "Wrong OTP entered!"
-    setVerifyingOtp(false);
+    const val = await validateOtp(id , otp);
+    if(val)
+    {
+      setOtpMatchStatus("verified");
+      setOtpVerified(true);
+      setModalMessage("OTP Verified Successfully!"); // or "Wrong OTP entered!"
+      setVerifyingOtp(false);
+    }
+    else
+    {
+      setOtpMatchStatus("wrong");
+      setModalMessage("Wrong OTP entered!");
+      setVerifyingOtp(false);
+    }
+    
   }
 
   const [otpStyle, setOtpStyle] = useState("inputStyle");
@@ -65,7 +81,6 @@ function OtpModal({ otpVerified, setOtpVerified }) {
     }
   }, []);
 
-  const [otp, setOtp] = useState("");
   return (
     <div>
       <Dialog.Root>

@@ -170,7 +170,7 @@ function SeeDetails({ data, refetch, otpVerified }) {
                 </Text>
               </label>
 
-              <label className="flex gap-3">
+              {/* <label className="flex gap-3">
                 <Text as="div" size="2" mb="1" weight="bold">
                   Current Medication:
                 </Text>
@@ -179,7 +179,7 @@ function SeeDetails({ data, refetch, otpVerified }) {
                     {med}
                   </Code>
                 ))}
-              </label>
+              </label> */}
 
               <label className="flex gap-3">
                 <Text as="div" size="2" mb="1" weight="bold">
@@ -208,14 +208,14 @@ function SeeDetails({ data, refetch, otpVerified }) {
                 </Code>
               </label>
 
-              <label className="flex gap-3">
+              {/* <label className="flex gap-3">
                 <Text as="div" size="2" mb="1" weight="bold">
                   Appointment Time:
                 </Text>
                 <Code as="div" weight={"bold"} size="2" mb="1">
                   {appointment_time}
                 </Code>
-              </label>
+              </label> */}
 
               <label className="flex flex-col gap-3">
                 <Text as="div" size="2" mb="1" weight="bold">

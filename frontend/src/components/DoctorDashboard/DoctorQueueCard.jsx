@@ -7,6 +7,7 @@ import { DoubleArrowDownIcon } from "@radix-ui/react-icons";
 function DoctorQueueCard({ data, refetch }) {
   const {
     patientName,
+    patientId,
     age,
     gender,
     hospital,
@@ -174,7 +175,7 @@ function DoctorQueueCard({ data, refetch }) {
         </DataList.Root>
         <div className="ml-4 hidden flex-col items-center justify-center gap-2 md:flex md:flex-row">
           {/* <CancelDialog data={data} refetch={refetch} /> */}
-          <OtpModal otpVerified={otpVerified} setOtpVerified={setOtpVerified} />
+          <OtpModal otpVerified={otpVerified} setOtpVerified={setOtpVerified} id={patientId} />
           <SeeDetails data={data} refetch={refetch} otpVerified={otpVerified} />
         </div>
       </div>

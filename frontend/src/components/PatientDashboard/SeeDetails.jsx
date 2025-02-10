@@ -160,7 +160,7 @@ console.log("patient details: ", prescriptionData);
                 </Text>
               </label>
 
-              <label className="flex gap-3">
+              {/* <label className="flex gap-3">
                 <Text as="div" size="2" mb="1" weight="bold">
                   Current Medication:
                 </Text>
@@ -169,7 +169,7 @@ console.log("patient details: ", prescriptionData);
                     {med}
                   </Code>
                 ))}
-              </label>
+              </label> */}
 
               <label className="flex gap-3">
                 <Text as="div" size="2" mb="1" weight="bold">
@@ -203,7 +203,7 @@ console.log("patient details: ", prescriptionData);
                   Appointment Time:
                 </Text>
                 <Code as="div" weight={"bold"} size="2" mb="1">
-                  {appointment_time}
+                  {new Date(appointment_time).toLocaleTimeString([] , { hour: '2-digit', minute: '2-digit' })}
                 </Code>
               </label>
 

@@ -81,7 +81,7 @@ function DoctorHistoryCard({ data, refetch, setShowLoader }) {
             <DataList.Label minWidth="88px">Appointment Time</DataList.Label>
             <DataList.Value>
               <Badge variant="ghost" color={appointmentType}>
-                {appointment_time}
+                {new Date(appointment_time).toLocaleTimeString([] , { hour: '2-digit', minute: '2-digit' })}
               </Badge>
             </DataList.Value>
           </DataList.Item>
