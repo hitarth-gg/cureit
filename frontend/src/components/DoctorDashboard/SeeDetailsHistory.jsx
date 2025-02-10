@@ -62,24 +62,24 @@ function SeeDetailsHistory({ data, refetch, prescriptionData}) {
   const [doctorPrescription, setDoctorPrescription] = useState("");
   useEffect(() => {
       if (!prescriptionData || prescriptionData.length === 0) {
-        setDoctorRemarks("No prescription available.");
-        setDoctorPrescription(""); 
+        setDoctorRemarks("No remarks provided");
+        setDoctorPrescription("No prescription provided"); 
         return;
       }
     
       setDoctorRemarks(prescriptionData[0]?.doctor_notes || "No remarks provided");
     
-      let markdown = "### Prescription Details\n\n";
-      markdown += "| Medicine Name  | Dosage  | Frequency    | Duration  |\n";
-      markdown += "|---------------|--------|------------|----------|\n";
+      // let markdown = "### Prescription Details\n\n";
+      // markdown += "| Medicine Name  | Dosage  | Frequency    | Duration  |\n";
+      // markdown += "|---------------|--------|------------|----------|\n";
     
-      if (Array.isArray(prescriptionData[0]?.medicines)) {
-        prescriptionData[0].medicines.forEach((med) => {
-          markdown += `| ${med.medicine_name}  | ${med.dosage}  | ${med.frequency} | ${med.duration}  |\n`;
-        });
-      }
+      // if (Array.isArray(prescriptionData[0]?.medicines)) {
+      //   prescriptionData[0].medicines.forEach((med) => {
+      //     markdown += `| ${med.medicine_name}  | ${med.dosage}  | ${med.frequency} | ${med.duration}  |\n`;
+      //   });
+      // }
     
-      setDoctorPrescription(markdown);
+      setDoctorPrescription(prescriptionData[0]?.medicines || "No prescription provided");
     }, [prescriptionData]);
   // async function saveDetails() {
   //   // Save the doctorRemarks and doctorPrescription to the database

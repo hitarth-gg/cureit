@@ -1,11 +1,15 @@
 import { useMutation , useQueryClient } from "@tanstack/react-query";
-import { putPrescription } from "../utils/api";
-export default function usePutPrescription() {
+import { postPrescription } from "../utils/api";
+import { set } from "lodash";
+import {toast} from "sonner";
+export default function usePostPrescription(setSavePrescriptionSuccess) {
     const queryClient = useQueryClient();
     const mutate = useMutation({
-        mutationFn: putPrescription,
+        mutationFn: postPrescription,
         onSuccess: (data) => {
+            setSavePrescriptionSuccess(true);
             console.log("Prescription updated successfully");
+            toast.success("Prescription updated successfully");
             queryClient.invalidateQueries({ queryKey: ['prescription'] });
         },
         onError: (error) => {
