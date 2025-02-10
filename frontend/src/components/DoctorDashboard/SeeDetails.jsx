@@ -6,6 +6,7 @@ import {
   Separator,
   Text,
   TextField,
+  Tooltip,
 } from "@radix-ui/themes";
 import "@mdxeditor/editor/style.css";
 import {
@@ -31,7 +32,6 @@ import {
   markdownShortcutPlugin,
   linkPlugin,
 } from "@mdxeditor/editor";
-import SlidingPane from "react-sliding-pane";
 import "react-sliding-pane/dist/react-sliding-pane.css";
 import { useCallback, useState } from "react";
 import SlidingPanel from "react-sliding-side-panel";
@@ -42,7 +42,8 @@ import { toast } from "sonner";
 import debounce from "lodash.debounce";
 import usePostPrescription from "../../hooks/usePutPrescription";
 import usePostAppointmentStatus from "../../hooks/usePostAppointmentStatus";
-function SeeDetails({ data, refetch }) {
+
+function SeeDetails({ data, refetch, otpVerified }) {
   const {
     patientName,
     age,
@@ -60,9 +61,11 @@ function SeeDetails({ data, refetch }) {
   const [doctorRemarks, setDoctorRemarks] = useState(""); // can either debounce or use a normal variable to store the doctorRemarks to avoid unnecessary re-renders
   const [doctorPrescription, setDoctorPrescription] = useState("");
 
-  const [savePrescriptionSuccess , setSavePrescriptionSuccess] = useState(false);
-  const {mutate: savePrescription } = usePostPrescription(setSavePrescriptionSuccess);
-  const {mutate: saveAppointmentStatus} = usePostAppointmentStatus();
+  const [savePrescriptionSuccess, setSavePrescriptionSuccess] = useState(false);
+  const { mutate: savePrescription } = usePostPrescription(
+    setSavePrescriptionSuccess,
+  );
+  const { mutate: saveAppointmentStatus } = usePostAppointmentStatus();
   async function saveDetails() {
     // Save the doctorRemarks and doctorPrescription to the database
     // Refetch the data
@@ -70,14 +73,19 @@ function SeeDetails({ data, refetch }) {
   }
 
   async function saveAndMarkAsDone() {
-    savePrescription.mutate({doctorRemarks , doctorPrescription});
-    saveAppointmentStatus.mutate({appointmentId: data.appointmentId , status: "completed"});
+    savePrescription.mutate({ doctorRemarks, doctorPrescription });
+    saveAppointmentStatus.mutate({
+      appointmentId: data.appointmentId,
+      status: "completed",
+    });
     // Save the doctorRemarks and doctorPrescription to the database
-    
   }
 
   async function skipAppointment() {
-    saveAppointmentStatus.mutate({appointmentId: data.appointmentId , status: "missed"});
+    saveAppointmentStatus.mutate({
+      appointmentId: data.appointmentId,
+      status: "missed",
+    });
   }
 
   const debouncedSetDoctorRemarks = useCallback(
@@ -94,13 +102,26 @@ function SeeDetails({ data, refetch }) {
   );
   console.log(doctorRemarks, doctorPrescription);
 
-  // debounce and change
-
   return (
     <div className="">
-      <Button color="iris" onClick={() => setIsPaneOpen(true)}>
-        Details
-      </Button>
+      <Tooltip
+        className={otpVerified ? "hidden" : ""}
+        disableHoverableContent={true}
+        content="Verify OTP to see details"
+        side="top"
+      >
+        <div className="w-full">
+          <Button
+            className="w-max"
+            disabled={!otpVerified}
+            color="iris"
+            onClick={() => setIsPaneOpen(true)}
+            size={{ initial: "1", md: "2" }}
+          >
+            Details
+          </Button>
+        </div>
+      </Tooltip>
       <SlidingPanel
         backdropClicked={() => setIsPaneOpen(false)}
         className="prose max-w-none font-inter text-sm"

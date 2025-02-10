@@ -116,3 +116,24 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #969696;
 }
 
+.inputStyle,
+.inputStyleWrong,
+.inputStyleVerfied {
+  width: 2rem !important;
+  height: 2rem;
+  margin: 0 0.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+}
+
+.inputStyle {
+  border: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+.inputStyleWrong {
+  border: 3px solid #d33c3c;
+}
+
+.inputStyleVerfied {
+  border: 3px solid #10b981;
+}

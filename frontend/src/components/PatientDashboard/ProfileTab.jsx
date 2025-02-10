@@ -147,7 +147,7 @@ function ProfileTab() {
 
   return (
     <div className="flex flex-col gap-y-6">
-      {isLoading && <Loader />}
+      {(isLoading || isFetchingDetails) && <Loader />}
       <div className="flex flex-col justify-start gap-x-4 rounded-md border px-8 py-4 text-xs sm:gap-x-12 md:flex-row md:text-sm">
         <div className="flex flex-col items-center justify-center p-4">
           <Flex gap="2" className="relative">

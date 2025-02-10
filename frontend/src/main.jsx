@@ -26,7 +26,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Toaster richColors closeButton />
     <CureitProvider>
       <AuthContextProvider>
-      <App />
+        <App />
       </AuthContextProvider>
     </CureitProvider>
   </>,

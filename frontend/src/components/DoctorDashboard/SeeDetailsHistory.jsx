@@ -42,8 +42,7 @@ import { toast } from "sonner";
 import debounce from "lodash.debounce";
 import { useEffect } from "react";
 
-
-function SeeDetailsHistory({ data, refetch, prescriptionData}) {
+function SeeDetailsHistory({ data, refetch, prescriptionData }) {
   const {
     patientName,
     age,
@@ -57,30 +56,34 @@ function SeeDetailsHistory({ data, refetch, prescriptionData}) {
     queuePosition,
   } = data;
   const [isPaneOpen, setIsPaneOpen] = useState(false);
-  
-  const [doctorRemarks, setDoctorRemarks] = useState(""); 
+
+  const [doctorRemarks, setDoctorRemarks] = useState("");
   const [doctorPrescription, setDoctorPrescription] = useState("");
   useEffect(() => {
-      if (!prescriptionData || prescriptionData.length === 0) {
-        setDoctorRemarks("No remarks provided");
-        setDoctorPrescription("No prescription provided"); 
-        return;
-      }
-    
-      setDoctorRemarks(prescriptionData[0]?.doctor_notes || "No remarks provided");
-    
-      // let markdown = "### Prescription Details\n\n";
-      // markdown += "| Medicine Name  | Dosage  | Frequency    | Duration  |\n";
-      // markdown += "|---------------|--------|------------|----------|\n";
-    
-      // if (Array.isArray(prescriptionData[0]?.medicines)) {
-      //   prescriptionData[0].medicines.forEach((med) => {
-      //     markdown += `| ${med.medicine_name}  | ${med.dosage}  | ${med.frequency} | ${med.duration}  |\n`;
-      //   });
-      // }
-    
-      setDoctorPrescription(prescriptionData[0]?.medicines || "No prescription provided");
-    }, [prescriptionData]);
+    if (!prescriptionData || prescriptionData.length === 0) {
+      setDoctorRemarks("No remarks provided");
+      setDoctorPrescription("No prescription provided");
+      return;
+    }
+
+    setDoctorRemarks(
+      prescriptionData[0]?.doctor_notes || "No remarks provided",
+    );
+
+    // let markdown = "### Prescription Details\n\n";
+    // markdown += "| Medicine Name  | Dosage  | Frequency    | Duration  |\n";
+    // markdown += "|---------------|--------|------------|----------|\n";
+
+    // if (Array.isArray(prescriptionData[0]?.medicines)) {
+    //   prescriptionData[0].medicines.forEach((med) => {
+    //     markdown += `| ${med.medicine_name}  | ${med.dosage}  | ${med.frequency} | ${med.duration}  |\n`;
+    //   });
+    // }
+
+    setDoctorPrescription(
+      prescriptionData[0]?.medicines || "No prescription provided",
+    );
+  }, [prescriptionData]);
   // async function saveDetails() {
   //   // Save the doctorRemarks and doctorPrescription to the database
   //   // Refetch the data
@@ -111,7 +114,11 @@ function SeeDetailsHistory({ data, refetch, prescriptionData}) {
 
   return (
     <div className="">
-      <Button color="iris" onClick={() => setIsPaneOpen(true)}>
+      <Button
+        color="iris"
+        onClick={() => setIsPaneOpen(true)}
+        size={{ initial: "1", md: "2" }}
+      >
         Details
       </Button>
       <SlidingPanel
