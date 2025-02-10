@@ -3,11 +3,14 @@ import DoctorProfileTab from "./DoctorProfileTab";
 import DoctorQueue from "./DoctorQueue";
 import DoctorHistory from "./DoctorHistory";
 import HistoryAppointments from "../PatientDashboard/HistoryAppointments";
+import { useLocation } from "react-router-dom";
 
 function DoctorDashboard() {
+  const location = useLocation();
+  const tab = location?.state?.tab || "profile";
   return (
     <div className="text-sm font-medium">
-      <Tabs.Root defaultValue="profile">
+      <Tabs.Root defaultValue={tab}>
         <Tabs.List
           size={{
             initial: "1",

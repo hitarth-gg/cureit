@@ -14,14 +14,18 @@ export function useCureitContext() {
 
 export function useAuthContext() {
   const context = useContext(AuthContext);
+
   if (!context) {
-    throw new Error("useAuthContext must be used within an AuthContextProvider");
+    throw new Error(
+      "useAuthContext must be used within an AuthContextProvider",
+    );
   }
   return context;
 }
 
 export default function CureitProvider({ children }) {
   const [theme, setTheme] = useState("light");
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     const theme = localStorage.getItem("theme");
@@ -30,10 +34,15 @@ export default function CureitProvider({ children }) {
     }
   }, []);
 
-
-
   return (
-    <CureitContext.Provider value={{ theme, setTheme }}>
+    <CureitContext.Provider
+      value={{
+        theme,
+        setTheme,
+        profile,
+        setProfile,
+      }}
+    >
       {children}
     </CureitContext.Provider>
   );
@@ -63,9 +72,11 @@ export function AuthContextProvider({ children }) {
     fetchUser();
 
     // Optionally, listen for auth state changes
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setCurrentUser(session?.user || null);
-    });
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setCurrentUser(session?.user || null);
+      },
+    );
 
     return () => {
       authListener.subscription.unsubscribe();

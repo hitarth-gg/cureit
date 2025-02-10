@@ -40,9 +40,9 @@ function Dashboard() {
   useEffect(() => {
     if (token && dataUser) {
       console.log(dataUser);
-      setUserId(dataUser.user.id);
+      setUserId(dataUser?.user?.id);
     }
-  }, [dataUser]);
+  }, [dataUser, token]);
 
   useEffect(() => {
     if (dataRole?.data && dataRole.data.length > 0) {
