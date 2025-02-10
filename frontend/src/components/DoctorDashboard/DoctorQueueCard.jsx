@@ -1,6 +1,8 @@
 import { Badge, Button, Code, DataList } from "@radix-ui/themes";
 import SeeDetails from "./SeeDetails";
 import { useState, useEffect } from "react";
+import OtpModal from "./OtpModal";
+
 function DoctorQueueCard({ data, refetch }) {
   const {
     patientName,
@@ -14,40 +16,71 @@ function DoctorQueueCard({ data, refetch }) {
     queuePosition,
     available_from,
   } = data;
+  const [otpVerified, setOtpVerified] = useState(false);
+
   const appointmentTypes = ["orange", "blue"]; // green for today's appointment, blue for future appointment
   const appointmentType =
     appointment_date ===
-      new Date().toLocaleDateString("en-IN").replace(/\//g, "-")
+    new Date().toLocaleDateString("en-IN").replace(/\//g, "-")
       ? appointmentTypes[0]
       : appointmentTypes[1];
-  
+
   const [expectedTime, setExpectedTime] = useState("");
 
   useEffect(() => {
     // console.log("DoctorQueueCard data: ", data);
 
-    if (available_from === "N/A" || queuePosition === "N/A" || isNaN(queuePosition) || appointment_date === "N/A") {
+    if (
+      available_from === "N/A" ||
+      queuePosition === "N/A" ||
+      isNaN(queuePosition) ||
+      appointment_date === "N/A"
+    ) {
       setExpectedTime("N/A");
     } else {
       let availableTime = available_from;
-      if (availableTime && !availableTime.includes('T')) {
+      if (availableTime && !availableTime.includes("T")) {
         availableTime = `${appointment_date}T${availableTime}`;
       }
 
       const availableDate = new Date(availableTime);
       const currentTime = new Date();
-      const availableTimeWithQueue = new Date(availableDate.getTime() + (Number(queuePosition) - 1) * 15 * 60000);
-      const currentTimeWithQueue = new Date(currentTime.getTime() + (Number(queuePosition) - 1) * 15 * 60000);
-      if (currentTime.toISOString().split('T')[0] < appointment_date) {
-        setExpectedTime(availableTimeWithQueue.toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }));
-      } else if (currentTime.toISOString().split('T')[0] === appointment_date) {
+      const availableTimeWithQueue = new Date(
+        availableDate.getTime() + (Number(queuePosition) - 1) * 15 * 60000,
+      );
+      const currentTimeWithQueue = new Date(
+        currentTime.getTime() + (Number(queuePosition) - 1) * 15 * 60000,
+      );
+      if (currentTime.toISOString().split("T")[0] < appointment_date) {
+        setExpectedTime(
+          availableTimeWithQueue.toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        );
+      } else if (currentTime.toISOString().split("T")[0] === appointment_date) {
         if (currentTime > availableDate) {
-          setExpectedTime(currentTimeWithQueue.toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }));
+          setExpectedTime(
+            currentTimeWithQueue.toLocaleTimeString("en-IN", {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+          );
         } else {
-          setExpectedTime(availableTimeWithQueue.toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }));
+          setExpectedTime(
+            availableTimeWithQueue.toLocaleTimeString("en-IN", {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+          );
         }
       } else {
-        setExpectedTime(availableTimeWithQueue.toLocaleTimeString("en-IN", { hour: '2-digit', minute: '2-digit' }));
+        setExpectedTime(
+          availableTimeWithQueue.toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        );
       }
     }
   }, [available_from, queuePosition, appointment_date]);
@@ -90,7 +123,9 @@ function DoctorQueueCard({ data, refetch }) {
             </DataList.Value>
           </DataList.Item>
           <DataList.Item>
-            <DataList.Label minWidth="88px">Expected Appointment Time</DataList.Label>
+            <DataList.Label minWidth="88px">
+              Expected Appointment Time
+            </DataList.Label>
             <DataList.Value>
               <Badge variant="ghost" color={appointmentType}>
                 {expectedTime}
@@ -114,9 +149,10 @@ function DoctorQueueCard({ data, refetch }) {
             </DataList.Value>
           </DataList.Item>
         </DataList.Root>
-        <div className="ml-4 flex items-center justify-center">
+        <div className="ml-4 flex items-center justify-center gap-x-2">
           {/* <CancelDialog data={data} refetch={refetch} /> */}
-          <SeeDetails data={data} refetch={refetch} />
+          <OtpModal otpVerified={otpVerified} setOtpVerified={setOtpVerified} />
+          <SeeDetails data={data} refetch={refetch} otpVerified={otpVerified} />
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import {
   Separator,
   Text,
   TextField,
+  Tooltip,
 } from "@radix-ui/themes";
 import "@mdxeditor/editor/style.css";
 import {
@@ -31,7 +32,6 @@ import {
   markdownShortcutPlugin,
   linkPlugin,
 } from "@mdxeditor/editor";
-import SlidingPane from "react-sliding-pane";
 import "react-sliding-pane/dist/react-sliding-pane.css";
 import { useCallback, useState } from "react";
 import SlidingPanel from "react-sliding-side-panel";
@@ -41,7 +41,7 @@ import HBorder from "../HBorder";
 import { toast } from "sonner";
 import debounce from "lodash.debounce";
 
-function SeeDetails({ data, refetch }) {
+function SeeDetails({ data, refetch, otpVerified }) {
   const {
     patientName,
     age,
@@ -85,13 +85,22 @@ function SeeDetails({ data, refetch }) {
   );
   console.log(doctorRemarks, doctorPrescription);
 
-  // debounce and change
-
   return (
     <div className="">
-      <Button color="iris" onClick={() => setIsPaneOpen(true)}>
-        Details
-      </Button>
+      <Tooltip
+        className={otpVerified ? "hidden" : ""}
+        disableHoverableContent={true}
+        content="Verify OTP to see details"
+        side="top"
+      >
+        <Button
+          disabled={!otpVerified}
+          color="iris"
+          onClick={() => setIsPaneOpen(true)}
+        >
+          Details
+        </Button>
+      </Tooltip>
       <SlidingPanel
         backdropClicked={() => setIsPaneOpen(false)}
         className="prose max-w-none font-inter text-sm"
