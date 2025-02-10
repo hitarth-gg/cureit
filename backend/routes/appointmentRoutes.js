@@ -49,7 +49,74 @@ router.post("/book", async (req, res) => {
   }
   const patientEmail = patientData.email; //"mailaryam1000@gmail.com" //
   const patientName = patientData.name;
-  sendEmail(patientEmail, "Appointment Booked", `Hello ${patientName}, Your appointment has been successfully booked with the doctor. Please check your dashboard for more details.`);
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .logo {
+            width: 120px;
+            margin-bottom: 20px;
+        }
+        .message {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #007BFF;
+            color: #ffffff;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .footer {
+            font-size: 14px;
+            color: #777;
+            margin-top: 20px;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Appointment Confirmed!</h2>
+        <p class="message">Hello <strong>${patientName}</strong>,</p>
+        <p class="message">Your appointment has been successfully booked with the doctor. Please check your dashboard for more details.</p>
+        <div class="footer">
+            <p>If you have any questions, feel free to <a href="mailto:cureitwell@gmail.com">contact us</a>.</p>
+            <p>&copy; 2025 CureIt. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
+`;
+
+sendEmail(patientEmail, "Appointment Confirmed - CureIt", html);
+
 
   return res.status(201).json(data); 
 });

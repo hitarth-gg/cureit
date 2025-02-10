@@ -27,7 +27,75 @@ const sendOtp  = async (Id)=> {
     if (error) {
         return { error: error.message };
     }
-    sendEmail(email, "OTP for CureIt", `Hello, Your OTP for CureIt is ${otp}. It will expire in 5 minutes.`);
+    const html = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CureIt OTP Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .logo {
+            width: 120px;
+            margin-bottom: 20px;
+        }
+        .otp {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007BFF;
+            letter-spacing: 2px;
+            margin: 10px 0;
+        }
+        .message {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .footer {
+            font-size: 14px;
+            color: #777;
+            margin-top: 20px;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+        .highlight {
+            color: #d9534f;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <h2>CureIt OTP Verification</h2>
+        <p class="message">Hello,</p>
+        <p class="message">Use the OTP below to verify your email. This OTP will expire in <span class="highlight">5 minutes</span>.</p>
+        <p class="otp">${otp}</p>
+        <p class="message">If you did not request this, please ignore this email.</p>
+        <div class="footer">
+            <p>Need help? <a href="mailto:cureitwell@gmail.com">Mail Us</a></p>
+            <p>&copy; 2025 CureIt. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
+`;
+sendEmail(email, "OTP for Verification" ,  html);
     return {data};
 }
 module.exports = sendOtp;
