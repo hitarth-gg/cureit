@@ -1,7 +1,8 @@
 const supabase = require("../config/supabaseClient");
 const sendEmail = require("../services/emailService");
 const generateOtp = ()=> {
-    return Math.floor(1000 + Math.random() * 9000);
+
+    return Math.floor(100000 + Math.random() * 900000);
 }
 
 const  ExpirationTime = 1000 * 60 * 5; // 5 minutes
@@ -29,5 +30,4 @@ const sendOtp  = async (Id)=> {
     sendEmail(email, "OTP for CureIt", `Hello, Your OTP for CureIt is ${otp}. It will expire in 5 minutes.`);
     return {data};
 }
-
 module.exports = sendOtp;

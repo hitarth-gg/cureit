@@ -58,27 +58,27 @@ function SeeDetails({ data, refetch , prescriptionData}) {
   const [isPaneOpen, setIsPaneOpen] = useState(false);
 
 const [doctoRemarks , setDoctorRemarks]=useState("");
-const [medicines , setMedcines]=useState("");
+const [doctorPrescription , setDoctorPrescription]=useState("");
 useEffect(() => {
   if (!prescriptionData || prescriptionData.length === 0) {
-    setDoctorRemarks("No prescription available.");
-    setMedcines(""); 
+    setDoctorRemarks("No remarks provided");
+    setDoctorPrescription("No prescription provided"); 
     return;
   }
 
   setDoctorRemarks(prescriptionData[0]?.doctor_notes || "No remarks provided");
 
-  let markdown = "### Prescription Details\n\n";
-  markdown += "| Medicine Name  | Dosage  | Frequency    | Duration  |\n";
-  markdown += "|---------------|--------|------------|----------|\n";
+  // let markdown = "### Prescription Details\n\n";
+  // markdown += "| Medicine Name  | Dosage  | Frequency    | Duration  |\n";
+  // markdown += "|---------------|--------|------------|----------|\n";
 
-  if (Array.isArray(prescriptionData[0]?.medicines)) {
-    prescriptionData[0].medicines.forEach((med) => {
-      markdown += `| ${med.medicine_name}  | ${med.dosage}  | ${med.frequency} | ${med.duration}  |\n`;
-    });
-  }
+  // if (Array.isArray(prescriptionData[0]?.medicines)) {
+  //   prescriptionData[0].medicines.forEach((med) => {
+  //     markdown += `| ${med.medicine_name}  | ${med.dosage}  | ${med.frequency} | ${med.duration}  |\n`;
+  //   });
+  // }
 
-  setMedcines(markdown);
+  setDoctorPrescription(prescriptionData[0]?.medicines || "No prescription provided");
 }, [prescriptionData]);
 //   const [doctorRemarks, setDoctorRemarks] = useState(`
 // ## Doctor's Remarks  
@@ -241,7 +241,7 @@ console.log("patient details: ", prescriptionData);
               <MDXEditor
                 readOnly={true}
                 contentEditableClassName="prose max-w-none mb-4 h-full border-2 "
-                markdown={ medicines || ""}
+                markdown={ doctorPrescription || ""}
                 placeholder="Nothing to show here..."
                 plugins={[
                   toolbarPlugin({

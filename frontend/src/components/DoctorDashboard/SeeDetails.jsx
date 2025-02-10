@@ -40,6 +40,8 @@ import { Cross1Icon } from "@radix-ui/react-icons";
 import HBorder from "../HBorder";
 import { toast } from "sonner";
 import debounce from "lodash.debounce";
+import usePostPrescription from "../../hooks/usePutPrescription";
+import usePostAppointmentStatus from "../../hooks/usePostAppointmentStatus";
 
 function SeeDetails({ data, refetch, otpVerified }) {
   const {
@@ -59,16 +61,31 @@ function SeeDetails({ data, refetch, otpVerified }) {
   const [doctorRemarks, setDoctorRemarks] = useState(""); // can either debounce or use a normal variable to store the doctorRemarks to avoid unnecessary re-renders
   const [doctorPrescription, setDoctorPrescription] = useState("");
 
+  const [savePrescriptionSuccess, setSavePrescriptionSuccess] = useState(false);
+  const { mutate: savePrescription } = usePostPrescription(
+    setSavePrescriptionSuccess,
+  );
+  const { mutate: saveAppointmentStatus } = usePostAppointmentStatus();
   async function saveDetails() {
     // Save the doctorRemarks and doctorPrescription to the database
     // Refetch the data
     toast.success("Details saved successfully");
   }
+
   async function saveAndMarkAsDone() {
-    // Refetch the data
-    toast.success(
-      "Details saved successfully and patient is marked as visited",
-    );
+    savePrescription.mutate({ doctorRemarks, doctorPrescription });
+    saveAppointmentStatus.mutate({
+      appointmentId: data.appointmentId,
+      status: "completed",
+    });
+    // Save the doctorRemarks and doctorPrescription to the database
+  }
+
+  async function skipAppointment() {
+    saveAppointmentStatus.mutate({
+      appointmentId: data.appointmentId,
+      status: "missed",
+    });
   }
 
   const debouncedSetDoctorRemarks = useCallback(
@@ -93,13 +110,17 @@ function SeeDetails({ data, refetch, otpVerified }) {
         content="Verify OTP to see details"
         side="top"
       >
-        <Button
-          disabled={!otpVerified}
-          color="iris"
-          onClick={() => setIsPaneOpen(true)}
-        >
-          Details
-        </Button>
+        <div className="w-full">
+          <Button
+            className="w-max"
+            disabled={!otpVerified}
+            color="iris"
+            onClick={() => setIsPaneOpen(true)}
+            size={{ initial: "1", md: "2" }}
+          >
+            Details
+          </Button>
+        </div>
       </Tooltip>
       <SlidingPanel
         backdropClicked={() => setIsPaneOpen(false)}

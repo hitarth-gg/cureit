@@ -70,8 +70,13 @@ function OtpModal({ otpVerified, setOtpVerified }) {
     <div>
       <Dialog.Root>
         <Dialog.Trigger>
-          <Button color={otpVerified ? "green" : "iris"}>
-            {otpVerified ? "OTP Verified" : "OTP Verification"}
+          <Button
+            color={otpVerified ? "green" : "iris"}
+            size={{ initial: "1", md: "2" }}
+          >
+            <div className="w-28">
+              {otpVerified ? "OTP Verified" : "OTP Verification"}
+            </div>
           </Button>
         </Dialog.Trigger>
 
@@ -82,7 +87,7 @@ function OtpModal({ otpVerified, setOtpVerified }) {
           </Dialog.Description>
 
           <Flex direction="column" gap="3">
-            <div className="flex justify-center mt-4">
+            <div className="mt-4 flex justify-center">
               <OTPInput
                 inputStyle={`inputStyle ${otpStyle}`}
                 onPaste={(e) => e.preventDefault()}

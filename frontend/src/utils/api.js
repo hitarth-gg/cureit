@@ -448,9 +448,9 @@ export async function getPrescription(appointmentId) {
     throw new Error("Failed to fetch prescription.");
   }
 }
-export async function putPrescription(prescriptionData) {
+export async function postPrescription(prescriptionData) {
   const response = await fetch(`${API_URL}/api/prescriptions/generate`, {
-    method: "PUT",
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
@@ -461,6 +461,24 @@ export async function putPrescription(prescriptionData) {
   }
   const data = await response.json();
   console.log(data);
+  return data;
+}
+
+export async function postAppointmentStatus({appointmentId , status})
+{
+  const response = await fetch(`${API_URL}/api/appointments/updateStatus/${appointmentId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({status}),
+  });
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} ${response.statusText}`);
+  }
+  const data = await response.json();
+  console.log(data);
+  return data;
 }
 export async function postBookAppointment(bookingData) {
   const formData = bookingData.formData;

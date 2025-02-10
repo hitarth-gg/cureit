@@ -1,7 +1,8 @@
-import { Badge, Button, Code, DataList } from "@radix-ui/themes";
+import { Badge, Button, Code, DataList, DropdownMenu } from "@radix-ui/themes";
 import SeeDetails from "./SeeDetails";
 import { useState, useEffect } from "react";
 import OtpModal from "./OtpModal";
+import { DoubleArrowDownIcon } from "@radix-ui/react-icons";
 
 function DoctorQueueCard({ data, refetch }) {
   const {
@@ -87,9 +88,12 @@ function DoctorQueueCard({ data, refetch }) {
 
   return (
     <div>
-      <div className="flex justify-between gap-y-1 rounded-md border-2 px-4 py-2 font-noto">
+      <div className="flex justify-between gap-1 rounded-md border-2 px-4 py-2 font-noto">
         <DataList.Root
-          orientation={"horizontal"}
+          orientation={{
+            initial: "vertical",
+            sm: "horizontal",
+          }}
           style={{ gap: ".65rem" }}
           size={{
             initial: "1",
@@ -148,8 +152,27 @@ function DoctorQueueCard({ data, refetch }) {
               </Badge>
             </DataList.Value>
           </DataList.Item>
+          <DataList.Item>
+            <div className={`flex flex-row justify-start gap-2 md:hidden`}>
+              <div className="flex gap-2">
+                {
+                  <OtpModal
+                    otpVerified={otpVerified}
+                    setOtpVerified={setOtpVerified}
+                  />
+                }
+                {
+                  <SeeDetails
+                    data={data}
+                    refetch={refetch}
+                    otpVerified={otpVerified}
+                  />
+                }
+              </div>
+            </div>
+          </DataList.Item>
         </DataList.Root>
-        <div className="ml-4 flex items-center justify-center gap-x-2">
+        <div className="ml-4 hidden flex-col items-center justify-center gap-2 md:flex md:flex-row">
           {/* <CancelDialog data={data} refetch={refetch} /> */}
           <OtpModal otpVerified={otpVerified} setOtpVerified={setOtpVerified} />
           <SeeDetails data={data} refetch={refetch} otpVerified={otpVerified} />
