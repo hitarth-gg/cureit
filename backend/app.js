@@ -1,7 +1,9 @@
 const express = require("express");
 const dotenv = require("dotenv");
 dotenv.config();
-require("./services/cronJob.js"); 
+require("./services/cronJob.js");
+const { redis, setCache, getCache } = require("./config/redisClient.js");
+
 const userRoutes = require("./routes/userRoutes");
 const doctorRoutes = require("./routes/doctorRoutes");
 const appointmentRoutes = require("./routes/appointmentRoutes");
@@ -29,6 +31,12 @@ app.use("/api/prescriptions", prescriptionRoutes);
 app.use("/api/testReports", testReportsRoutes);
 app.use("/api/uploadProfiles", profileRoutes);
 app.use("/api/doctorProfileRoutes", doctorProfileRoutes);
+
+(async () => {
+  await setCache("go", "goa");
+  const value = await getCache("go");
+  console.log("Cached value:", value);
+})();
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
