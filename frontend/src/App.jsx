@@ -15,6 +15,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import UserDashboard from "./pages/UserDashboard.jsx";
 import ResetPasswordEmailSent from "./pages/ResetPasswordEmailSent";
 import ResetPassword from "./pages/ResetPassword";
+import { ToastContainer } from "react-toastify";
 
 const router = createBrowserRouter([
   {
@@ -98,6 +99,7 @@ function App() {
   });
   return (
     <QueryClientProvider client={queryClient}>
+      <ToastContainer />
       <div data-lenis-prevent="true">
         <ReactQueryDevtools initialIsOpen={false} />
       </div>

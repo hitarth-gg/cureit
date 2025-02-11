@@ -146,8 +146,9 @@ function EditProfile({ id, profile, setProfile, fetchUserProfile }) {
                 </Text>
                 <TextField.Root
                   value={age}
-                  placeholder="Enter your address"
+                  placeholder="Enter your age"
                   type="number"
+                  pattern="[0-9]*"
                   onChange={(e) =>
                     setEditedProfile({
                       ...editedProfile,
@@ -158,7 +159,7 @@ function EditProfile({ id, profile, setProfile, fetchUserProfile }) {
               </label>
               <label>
                 <Text as="div" size="2" mb="1" weight="bold">
-                  Age
+                  Gender
                 </Text>
                 <DropdownMenu.Root modal={false}>
                   <DropdownMenu.Trigger>

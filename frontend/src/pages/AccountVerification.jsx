@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabaseClient";
 
 import { useGetCurrentUser } from "../hooks/useGetCurrentUser";
+// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function AccountVerification() {
   const navigate = useNavigate();
@@ -101,7 +104,11 @@ function AccountVerification() {
     console.log("in useeffect:", dataUser);
     if (dataUser?.user) {
       if (token?.user?.email === email) {
-        navigate("/verified");
+        toast.success("Email verified proceed to LogIn");
+        setTimeout(() => {
+          // navigate("/verification", { state: { email } });
+          navigate("/verified");
+        }, 500);
       }
     }
   }, [dataUser, token, email, navigate]);

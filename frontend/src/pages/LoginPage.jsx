@@ -6,6 +6,8 @@ import { supabase } from "../utils/supabaseClient";
 import { AuthApiError } from "@supabase/supabase-js";
 import { useCheckLogin } from "../hooks/useCheckLogin";
 import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function LoginPage() {
   const [loginData, setLoginData] = useState({
@@ -25,9 +27,16 @@ function LoginPage() {
       onSuccess: (data) => {
         console.log("Login Success:", data);
         // if (data.user) {
+        toast.success("LogIn successful! Redirecting to dashboard....", {
+          position: "top-right",
+        });
         setSuccessMessage("Logging in....");
+        setTimeout(() => {
+          window.location.href = "/user/dashboard";
+        }, 500);
+
         // navigate("/user/dashboard"); // Redirect on success
-        window.location.href = "/user/dashboard";
+        // window.location.href = "/user/dashboard";
         queryClient.invalidateQueries("userDetails");
         // } else {
         //   setErrorMessage("Wrong credentials. Please Try Again.");
@@ -37,6 +46,10 @@ function LoginPage() {
         console.error("Login Error:", error);
         setErrorMessage("Wrong credentials. Please Try Again.");
         window.alert("Wrong credentials. Please Try Again.");
+        toast.error("Wrong Credentials. Try again.", {
+          position: "top-right",
+        });
+
         // setErrorMessage("Wrong credentials. Please Try Again.");
       },
     });
