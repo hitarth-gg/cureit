@@ -2,7 +2,7 @@ import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { Box, Button, Container, TextField } from "@radix-ui/themes";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-
+import { toast } from "react-toastify";
 import { supabase } from "../utils/supabaseClient";
 import useHandleSignUp from "../hooks/useHandleSignUp";
 
@@ -70,10 +70,18 @@ function SignUpPage() {
               setSuccessMessage(
                 "Sign-up successful! Please check your email to verify your account.",
               );
-              navigate("/verification", { state: { email } });
+              toast.success("Verification Email sent", {
+                position: "top-right",
+              });
+              setTimeout(() => {
+                navigate("/verification", { state: { email } });
+              }, 500);
             },
             onError: (error) => {
               setErrorMessage("Email already exists");
+              toast.error("Email aready exists.", {
+                position: "top-right",
+              });
             },
           });
         };

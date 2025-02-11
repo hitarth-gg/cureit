@@ -42,7 +42,7 @@ function ResetPasswordEmailSent() {
           <br />
           <p
             className="w-fit cursor-pointer select-none border-b border-white text-indigo-700 transition-all duration-200 hover:border-b hover:border-indigo-700"
-            onClick={() => navigate("/login.")}
+            onClick={() => navigate("/login")}
           >
             Login
           </p>

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabaseClient";
 import { AuthApiError } from "@supabase/supabase-js";
 import { useCheckLogin } from "../hooks/useCheckLogin";
-
+import { toast } from "react-toastify";
 function ResetPassword() {
   const [loginData, setLoginData] = useState({
     email: "",
@@ -36,11 +36,18 @@ function ResetPassword() {
       }
       setSuccessMessage("Reset password email sent successfully");
       console.log("Reset password email sent successfully:", data);
+      toast.success("Reset Password Email sent", {
+        position: "top-right",
+      });
+
       navigate("/user/resetPasswordEmailSent", {
         state: { email: loginData.email },
       });
     } catch (error) {
       setErrorMessage("Error sending reset password email");
+      toast.error("Error sending reset password email", {
+        position: "top-right",
+      });
       console.error("Error sending reset password email:", error.message);
     }
   };

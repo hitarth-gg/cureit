@@ -4,12 +4,15 @@ import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
 import useUserRoleById from "../hooks/useUserRoleById";
 import { useGetCurrentUser } from "../hooks/useGetCurrentUser";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const [role, setRole] = useState(null);
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState(null);
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const navigate = useNavigate();
   // var accessToken = null;
 
   // useEffect(() => {
@@ -17,6 +20,10 @@ function Dashboard() {
   const tokenString = localStorage.getItem(
     "sb-vakmfwtcbdeaigysjgch-auth-token",
   );
+  if (tokenString == null) {
+    toast.error("Session Expired Please Login Again.");
+    navigate("/login");
+  }
   const token = JSON.parse(tokenString);
   const accessToken = token.access_token;
   console.log(accessToken);
@@ -47,6 +54,10 @@ function Dashboard() {
   useEffect(() => {
     if (dataRole?.data && dataRole.data.length > 0) {
       setRole(dataRole.data[0].role);
+      if (role === "PATIENT") {
+      } else if (role === "doctor") {
+        toast.success("Welcome Doctor");
+      }
     }
   }, [userId, dataRole]);
 
