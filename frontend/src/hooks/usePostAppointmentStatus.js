@@ -8,13 +8,14 @@ export default function usePostAppointmentStatus(setUpdateAppointmentStatusSucce
         onSuccess: (data) => {
             setUpdateAppointmentStatusSuccess(true);
             console.log("Appointment status updated successfully");
-            // toast.success("Appointment marked as done successfully");
+            // toast.success("Details saved successfully");
             queryClient.invalidateQueries({ queryKey: ['patient_appointment_history'] });
             queryClient.invalidateQueries({ queryKey: ['doctor_queue_history'] });
             queryClient.invalidateQueries({ queryKey: ['doctor_queue'] });
         },
         onError: (error) => {
             console.log("Error updating appointment status", error);
+            // toast.error("Error saving details");
         }
     }
     )
