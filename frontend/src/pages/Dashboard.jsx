@@ -66,7 +66,7 @@ function Dashboard() {
   }, [userId, dataRole]);
 
   return (
-    <div className="flex flex-col overflow-hidden p-4 font-noto md:px-12 md:py-8">
+    <div className="mt-12 mb-24 flex flex-col overflow-hidden p-4 font-noto md:px-12 md:py-8">
       {role &&
         (role === "PATIENT" ? <PatientDashboard /> : <DoctorDashboard />)}
     </div>

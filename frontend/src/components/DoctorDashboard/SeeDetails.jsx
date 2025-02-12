@@ -75,6 +75,7 @@ function SeeDetails({ data, refetch, otpVerified }) {
   }
   const appointmentId = data.appointmentId;
   async function saveAndMarkAsDone() {
+
     try {
       setSavePrescriptionSuccess(false);
       setUpdateAppointmentStatusSuccess(false);
@@ -87,12 +88,11 @@ function SeeDetails({ data, refetch, otpVerified }) {
       ])
       
         toast.success("Details saved successfully");
+
     }
     catch (error) {
-      {
         console.log("Error saving details", error);
         toast.error("Error saving details");
-      }
     }
   }
 
