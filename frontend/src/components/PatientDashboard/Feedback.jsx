@@ -1,17 +1,31 @@
 import { Button, Dialog, Flex, Spinner, TextArea } from "@radix-ui/themes";
 import { useState } from "react";
 import { toast } from "sonner";
-
+import { postFeedback } from "../../utils/api";
 function Feedback({ data }) {
+  console.log("in FeedBack data: " , data)
   const [feedbackText, setFeedbackText] = useState("");
   const [loading, setLoading] = useState(false);
   async function sendFeedback() {
     // await for 2s
     setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try{
+    const id=data.appointmentId
+    const response = await postFeedback(id, feedbackText);
+    // if (response.status !== 200) {
+    //   toast.error("Error sending feedback");
+    //   setLoading(false);
+    //   return;
+    // }
     toast.success("Feedback sent successfully");
     setLoading(false);
     setFeedbackText("");
+  }
+  catch(error){
+    console.log("Error sending feedback", error);
+    toast.error("Error sending feedback");
+    setLoading(false);
+  }
   }
 
   return (

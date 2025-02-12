@@ -504,7 +504,22 @@ export async function postPrescription(prescriptionData) {
   console.log(data);
   return data;
 }
-
+export async function postFeedback(appointmentId , feedback)
+{
+  const response = await fetch(`${API_URL}/api/feedback/add/${appointmentId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({feedback}),
+  });
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} ${response.statusText}`);
+  }
+  const data = await response.json();
+  console.log(data);
+  return data;
+}
 export async function postAppointmentStatus({appointmentId , status})
 {
   const response = await fetch(`${API_URL}/api/appointments/updateStatus/${appointmentId}?status=${status}`, {

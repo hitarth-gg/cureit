@@ -10,6 +10,7 @@ const appointmentRoutes = require("./routes/appointmentRoutes");
 const prescriptionRoutes = require("./routes/prescriptionRoutes");
 const testReportsRoutes = require("./routes/testReportsRoutes");
 const doctorProfileRoutes = require("./routes/doctorProfileRoutes");
+const feedbackRoutes = require("./routes/feedbackRoutes");
 // connectDB();
 const profileRoutes = require("./routes/profileRoutes");
 
@@ -31,7 +32,7 @@ app.use("/api/prescriptions", prescriptionRoutes);
 app.use("/api/testReports", testReportsRoutes);
 app.use("/api/uploadProfiles", profileRoutes);
 app.use("/api/doctorProfileRoutes", doctorProfileRoutes);
-
+app.use("/api/feedback", feedbackRoutes);
 (async () => {
   await setCache("go", "goa");
   const value = await getCache("go");
