@@ -6,6 +6,7 @@ import EditDoctorProfile from "./EditDoctorProfile";
 import { supabase } from "../../utils/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import { data } from "autoprefixer";
+import { toast } from "sonner";
 
 function DoctorProfileTab() {
   const [profile, setProfile] = useState({
@@ -29,9 +30,16 @@ function DoctorProfileTab() {
     "sb-vakmfwtcbdeaigysjgch-auth-token",
   );
 
-  const token = JSON.parse(tokenString);
+  const token = JSON?.parse(tokenString);
+  useEffect(() => {
+    // console.log("ggggg", token);
+    if (!token) {
+      toast.error("Session Expired Please Login Again.");
+      navigate("/login", { state: { sessionExpiration: true } }); // Redirect to login page
+    }
+  }, [token]);
 
-  const accessToken = token.access_token;
+  const accessToken = token?.access_token;
 
   // const MyComponent = () => {
   const [profileImage, setProfileImage] = useState(null);
@@ -52,7 +60,8 @@ function DoctorProfileTab() {
       console.log("Session Data:", data);
       if (error) {
         console.error("Session Error:", error);
-        navigate("/login");
+        // navigate("/login");
+        navigate("/login", { state: { sessionExpiration: true } }); // Redirect to login page
       }
     };
     //can enter a toast here user not authenticated to view this page

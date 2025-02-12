@@ -28,7 +28,6 @@ const getCache = async (key) => {
     return null;
   }
 };
-
 // Using an async IIFE to await our async calls
 // (async () => {
 //   await setCache("go", "goa");

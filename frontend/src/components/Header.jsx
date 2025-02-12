@@ -63,7 +63,7 @@ function Header() {
     setTokenString(tokenStringTemp);
     const token = JSON.parse(tokenStringTemp);
     if (token) {
-      setAccessToken(token.access_token);
+      setAccessToken(token?.access_token);
     }
 
     const fetchUser = async () => {
@@ -86,7 +86,7 @@ function Header() {
   } = useGetUserDetails(userId, accessToken);
 
   useEffect(() => {
-    console.log("xxxxxx", dataDetails);
+    // console.log("xxxxxx", dataDetails);
 
     if (dataDetails) {
       setProfile(dataDetails.profile);
@@ -197,18 +197,14 @@ function Header() {
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 shortcut=""
-                onClick={() =>
-                  navigate(
-                    `/user/dashboard?tab=history`,
-                  )
-                }
+                onClick={() => navigate(`/user/dashboard?tab=history`)}
               >
-               History
+                History
               </DropdownMenu.Item>
               <DropdownMenu.Separator />
 
               <DropdownMenu.Item color="red" onClick={handleLogout}>
-                <div className="flex w-full items-center gap-x-3 justify-between">
+                <div className="flex w-full items-center justify-between gap-x-3">
                   Sign Out <ExitIcon />
                 </div>
               </DropdownMenu.Item>

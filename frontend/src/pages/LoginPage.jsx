@@ -1,15 +1,19 @@
 import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { Button, TextField } from "@radix-ui/themes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabaseClient";
 import { AuthApiError } from "@supabase/supabase-js";
 import { useCheckLogin } from "../hooks/useCheckLogin";
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "sonner";
+import { useLocation } from "react-router-dom";
+
+// import "react-toastify/dist/ReactToastify.css";
 
 function LoginPage() {
+  const location = useLocation();
+
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
@@ -27,9 +31,7 @@ function LoginPage() {
       onSuccess: (data) => {
         console.log("Login Success:", data);
         // if (data.user) {
-        toast.success("Login successful! Redirecting to dashboard....", {
-          position: "top-right",
-        });
+        toast.success("Login successful! Redirecting to dashboard....");
         setSuccessMessage("Logging in....");
         setTimeout(() => {
           window.location.href = "/user/dashboard";
@@ -46,14 +48,24 @@ function LoginPage() {
         console.error("Login Error:", error);
         setErrorMessage("Wrong credentials. Please Try Again.");
         window.alert("Wrong credentials. Please Try Again.");
-        toast.error("Wrong Credentials. Try again.", {
-          position: "top-right",
-        });
+        toast.error("Wrong Credentials. Try again.");
 
         // setErrorMessage("Wrong credentials. Please Try Again.");
       },
     });
   };
+
+  useEffect(() => {
+    // console.log("ggggg", token);
+    console.log("uuuuusssseeeefffeeecccctttt", location.state);
+    if (location.state?.sessionExpired) {
+      toast.error("Session Expired. Please Login Again.");
+      navigate("./login", { replace: true }); // Reset state
+    } else if (location.state?.loggedOut) {
+      toast.success("Signed Out Successfully");
+      navigate("./login", { replace: true }); // Reset state
+    }
+  }, [location]);
 
   return (
     <div className="dotted flex h-screen items-center justify-center">

@@ -2,6 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabaseClient";
+import { toast } from "sonner";
 
 const Logout = () => {
   const navigate = useNavigate();
@@ -13,7 +14,8 @@ const Logout = () => {
         console.error("Error signing out:", error.message);
       } else {
         console.log("User signed out successfully");
-        navigate("/login"); // Redirect to login page
+        toast.success("Signed Out Successfully");
+        navigate("/login", { state: { loggedOut: true } }); // Redirect to login page
       }
     } catch (err) {
       console.error("Unexpected error during logout:", err);
