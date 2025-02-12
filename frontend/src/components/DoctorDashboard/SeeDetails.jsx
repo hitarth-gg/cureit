@@ -42,6 +42,7 @@ import { toast } from "sonner";
 import debounce from "lodash.debounce";
 import usePostPrescription from "../../hooks/usePutPrescription";
 import usePostAppointmentStatus from "../../hooks/usePostAppointmentStatus";
+import { set } from "lodash";
 
 function SeeDetails({ data, refetch, otpVerified }) {
   const {
@@ -62,31 +63,36 @@ function SeeDetails({ data, refetch, otpVerified }) {
   const [doctorPrescription, setDoctorPrescription] = useState("");
 
   const [savePrescriptionSuccess, setSavePrescriptionSuccess] = useState(false);
+  const [updateAppointmetnStatusSuccess , setUpdateAppointmentStatusSuccess] = useState(false);
   const { mutate: savePrescription } = usePostPrescription(
     setSavePrescriptionSuccess,
   );
-  const { mutate: saveAppointmentStatus } = usePostAppointmentStatus();
+  const { mutate: saveAppointmentStatus } = usePostAppointmentStatus(setUpdateAppointmentStatusSuccess);
   async function saveDetails() {
     // Save the doctorRemarks and doctorPrescription to the database
     // Refetch the data
     toast.success("Details saved successfully");
   }
-
+  const appointmentId = data.appointmentId;
   async function saveAndMarkAsDone() {
-    savePrescription.mutate({ doctorRemarks, doctorPrescription });
+    setSavePrescriptionSuccess(false);
+    setUpdateAppointmentStatusSuccess(false);
+    savePrescription.mutate({appointmentId , doctorRemarks, doctorPrescription });
     saveAppointmentStatus.mutate({
       appointmentId: data.appointmentId,
       status: "completed",
     });
+    if(savePrescriptionSuccess && updateAppointmetnStatusSuccess){
+      toast.success("Details saved successfully");
+    }
+    else
+    {
+      toast.error("Error saving details");
+    }
     // Save the doctorRemarks and doctorPrescription to the database
   }
 
-  async function skipAppointment() {
-    saveAppointmentStatus.mutate({
-      appointmentId: data.appointmentId,
-      status: "missed",
-    });
-  }
+ 
 
   const debouncedSetDoctorRemarks = useCallback(
     debounce((newContent) => {
@@ -308,7 +314,9 @@ function SeeDetails({ data, refetch, otpVerified }) {
             </Flex>
             <div className="flex w-full gap-x-4 py-4">
               <Button>Save</Button>
-              <Button>Save & Mark as Done</Button>
+              <Button 
+              onClick={saveAndMarkAsDone}
+              >Save & Mark as Done</Button>
             </div>
           </div>
         </div>

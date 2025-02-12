@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import OtpModal from "./OtpModal";
 import { DoubleArrowDownIcon } from "@radix-ui/react-icons";
 import SkipAppointment from "./SkipAppointment";
-
+import usePostAppointmentStatus from "../../hooks/usePostAppointmentStatus";
+import { toast } from "sonner";
+import { set } from "lodash";
 function DoctorQueueCard({ data, refetch }) {
   const {
     patientName,
@@ -20,11 +22,29 @@ function DoctorQueueCard({ data, refetch }) {
     available_from,
   } = data;
   const [otpVerified, setOtpVerified] = useState(false);
-
+  const [updateAppointmentStatusSuccess, setUpdateAppointmentStatusSuccess] =
+    useState(false);
+  const { mutate: saveAppointmentStatus } = usePostAppointmentStatus(setUpdateAppointmentStatusSuccess);
+  async function skipAppointment() {
+    console.log("in skip appointment func")
+    setUpdateAppointmentStatusSuccess(false);
+    saveAppointmentStatus.mutate({
+      appointmentId: data.appointmentId,
+      status: "missed",
+    });
+    if(updateAppointmentStatusSuccess) {
+      toast.success("Appointment skipped successfully");
+    }
+      else
+      {
+        toast.error("Error skipping appointment");
+      }
+    
+  }
   const appointmentTypes = ["orange", "blue"]; // green for today's appointment, blue for future appointment
   const appointmentType =
     appointment_date ===
-    new Date().toLocaleDateString("en-IN").replace(/\//g, "-")
+      new Date().toLocaleDateString("en-IN").replace(/\//g, "-")
       ? appointmentTypes[0]
       : appointmentTypes[1];
 
@@ -177,7 +197,7 @@ function DoctorQueueCard({ data, refetch }) {
 
         <div className="ml-4 hidden flex-col items-center justify-center gap-2 md:flex md:flex-row">
           {/* <CancelDialog data={data} refetch={refetch} /> */}
-          <SkipAppointment />
+          <SkipAppointment skipAppointment={skipAppointment} />
           {!otpVerified && (
             <OtpModal
               otpVerified={otpVerified}

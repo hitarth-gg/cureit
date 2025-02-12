@@ -1,6 +1,6 @@
 import { Button, Code, DataList, Dialog, Flex, Text } from "@radix-ui/themes";
 
-function SkipAppointment() {
+function SkipAppointment({skipAppointment}) {
   return (
     <div className="font-noto">
       <Dialog.Root>
@@ -21,7 +21,7 @@ function SkipAppointment() {
               <Button>No, Go Back</Button>
             </Dialog.Close>
             <Dialog.Close>
-              <Button color="red">Yes, Skip</Button>
+              <Button color="red" onClick={skipAppointment}>Yes, Skip</Button>
             </Dialog.Close>
           </Flex>
         </Dialog.Content>

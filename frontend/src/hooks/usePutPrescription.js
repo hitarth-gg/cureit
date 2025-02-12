@@ -9,7 +9,7 @@ export default function usePostPrescription(setSavePrescriptionSuccess) {
         onSuccess: (data) => {
             setSavePrescriptionSuccess(true);
             console.log("Prescription updated successfully");
-            toast.success("Prescription updated successfully");
+            // toast.success("Prescription added successfully");
             queryClient.invalidateQueries({ queryKey: ['prescription'] });
         },
         onError: (error) => {

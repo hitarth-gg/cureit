@@ -144,7 +144,7 @@ router.get("/doctor/:doctorId", async (req, res) => {
   if (error) {
     return res.status(400).json({ error: error.message });
   }
-  res.json(data);
+  return res.json(data);
 });
 router.post("/updateStatus/:appointmentId", async (req, res) => {
   const { appointmentId } = req.params;
@@ -154,8 +154,8 @@ router.post("/updateStatus/:appointmentId", async (req, res) => {
   if (error) {
     return res.status(400).json({ error: error.message });
   }
-  res.json(data);
   console.log("Appointment status updated successfully");
+  return res.json(data);
 });
 //fetching upcoming appointments by patient Id
 router.get("/upcomingAppointments/:patientId" , async (req, res) => {
@@ -174,7 +174,7 @@ router.get("/upcomingAppointments/:patientId" , async (req, res) => {
       return {...appointment, queuePosition: queuePosition};
     }
   }))
-  res.json(updatedAppointments);
+  return  res.json(updatedAppointments);
   
 })
 //fetching completed appointments by patient Id
@@ -204,7 +204,7 @@ router.get("/doctorUpcomingAppointments/:doctorId" , async (req, res) => {
       return {...appointment, queuePosition: queuePosition};
     }
   }))
-  res.json(updatedAppointments);
+  return res.json(updatedAppointments);
 })
 //fetching completed appointments by doctor Id
 router.get("/doctorCompletedAppointments/:doctorId" , async (req , res)=> {
@@ -214,7 +214,7 @@ router.get("/doctorCompletedAppointments/:doctorId" , async (req , res)=> {
     return res.status(400).json({ error: error.message });
   }
   console.log(appointments);
-  res.json(appointments);
+  return res.json(appointments);
 })
 //deleteAppointment
 router.delete("/delete/:appointmentId", async (req, res) => {
@@ -223,7 +223,7 @@ router.delete("/delete/:appointmentId", async (req, res) => {
   if (error) {
     return res.status(400).json({ error: error.message });
   }
-  res.json(data);
   console.log("Appointment deleted successfully");
+  return res.json(data);
 });
 module.exports = router;

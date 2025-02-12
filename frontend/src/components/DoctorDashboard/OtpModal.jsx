@@ -61,12 +61,14 @@ function OtpModal({ otpVerified, setOtpVerified , id }) {
       setOtpVerified(true);
       setModalMessage("OTP Verified Successfully!"); // or "Wrong OTP entered!"
       setVerifyingOtp(false);
+      toast.success("OTP Verified Successfully!");
     }
     else
     {
       setOtpMatchStatus("wrong");
       setModalMessage("Wrong OTP entered!");
       setVerifyingOtp(false);
+      toast.error("Wrong OTP entered");
     }
     
   }

@@ -484,12 +484,18 @@ export async function validateOtp(patientId , otp)
   return data.info.check;
 }
 export async function postPrescription(prescriptionData) {
+  console.log("Prescription-data:" , prescriptionData);
+  const val= {
+    appointmentId: prescriptionData.appointmentId,
+    medicines: prescriptionData.doctorPrescription,
+    doctorNotes: prescriptionData.doctorRemarks,
+  }
   const response = await fetch(`${API_URL}/api/prescriptions/generate`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(prescriptionData),
+    body: JSON.stringify(val),
   });
   if (!response.ok) {
     throw new Error(`Error: ${response.status} ${response.statusText}`);
@@ -501,12 +507,12 @@ export async function postPrescription(prescriptionData) {
 
 export async function postAppointmentStatus({appointmentId , status})
 {
-  const response = await fetch(`${API_URL}/api/appointments/updateStatus/${appointmentId}`, {
+  const response = await fetch(`${API_URL}/api/appointments/updateStatus/${appointmentId}?status=${status}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({status}),
+    // body: JSON.stringify({status}),
   });
   if (!response.ok) {
     throw new Error(`Error: ${response.status} ${response.statusText}`);

@@ -13,8 +13,8 @@ router.post('/generate', async (req, res) => {
   if (error) {
     return res.status(400).json({ error: error.message });
   }
-  res.status(201).json(data[0]);
   console.log('Prescription generated successfully');
+  return res.status(201).json(data);
 });
 // Fetch prescriptions by appointment ID
 router.get('/:appointmentId', async (req, res) => {
@@ -25,9 +25,9 @@ router.get('/:appointmentId', async (req, res) => {
     if (!prescription) {
       return res.status(404).json({ message: 'Prescription not found.' });
     }
-    res.json(prescription);
+    return res.json(prescription);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 });
 
