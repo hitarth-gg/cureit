@@ -2,12 +2,20 @@ import {
   BellIcon,
   ExitIcon,
   GearIcon,
+  HomeIcon,
   MoonIcon,
   SunIcon,
 } from "@radix-ui/react-icons";
 import CureitLogo from "../assets/CureitLogo";
 import { useCureitContext } from "../utils/ContextProvider";
-import { Avatar, Box, Button, DropdownMenu, Tooltip } from "@radix-ui/themes";
+import {
+  Avatar,
+  Box,
+  Button,
+  DropdownMenu,
+  Separator,
+  Tooltip,
+} from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Logout from "./logout";
@@ -113,24 +121,26 @@ function Header() {
         <CureitLogo fillColor={theme === "dark" ? "#ffffff" : "#000000"} />
       </div>
 
-      <div className="flexmy-auto mx-3 flex items-center justify-center gap-x-5">
-        {/* <Tooltip content="Toggle Theme" side="bottom">
-          <Button
-            color="gray"
-            size={"2"}
-            variant="ghost"
-            onClick={() => {
-              setTheme(theme === "dark" ? "light" : "dark");
-            }}
-          >
-            {theme === "dark" ? (
-              <MoonIcon className="my-1" />
-            ) : (
-              <SunIcon className="my-1" />
-            )}
-          </Button>
-        </Tooltip> */}
-
+      <div className="mx-3 my-auto flex items-center justify-center gap-x-5">
+        <div className="flex w-fit gap-x-3">
+          <Tooltip content="Home" side="bottom">
+            <Button
+              onClick={() => navigate("/")}
+              color="iris"
+              size={"1"}
+              variant="ghost"
+            >
+              <HomeIcon />
+            </Button>
+          </Tooltip>
+          <Separator orientation="vertical" />
+          <Tooltip content="Notifications" side="bottom">
+            <Button color="iris" size={"1"} variant="ghost">
+              <BellIcon />
+            </Button>
+          </Tooltip>
+          <Separator orientation="vertical" />
+        </div>
         {!profile ? (
           <Button
             color="iris"
@@ -144,8 +154,6 @@ function Header() {
             Login
           </Button>
         ) : (
-          // <Logout />
-
           <DropdownMenu.Root modal={false}>
             <DropdownMenu.Trigger>
               <Button variant="ghost" color="gray">
@@ -211,50 +219,6 @@ function Header() {
             </DropdownMenu.Content>
           </DropdownMenu.Root>
         )}
-
-        <Tooltip content="Notifications" side="bottom">
-          <Button color="iris" size={"2"} variant="ghost">
-            <BellIcon />
-          </Button>
-        </Tooltip>
-
-        {/* <DropdownMenu.Root modal={false}>
-          <DropdownMenu.Trigger>
-            <Button variant="ghost" color="iris">
-              <GearIcon />
-              <DropdownMenu.TriggerIcon />
-            </Button>
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Content className="bg-black">
-            <DropdownMenu.Item shortcut="⌘ E">Edit</DropdownMenu.Item>
-            <DropdownMenu.Item shortcut="⌘ D">Duplicate</DropdownMenu.Item>
-            <DropdownMenu.Separator />
-            <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
-
-            <DropdownMenu.Sub>
-              <DropdownMenu.SubTrigger>More</DropdownMenu.SubTrigger>
-              <DropdownMenu.SubContent>
-                <DropdownMenu.Item>Move to project…</DropdownMenu.Item>
-                <DropdownMenu.Item>Move to folder…</DropdownMenu.Item>
-
-                <DropdownMenu.Separator />
-                <DropdownMenu.Item>Advanced options…</DropdownMenu.Item>
-              </DropdownMenu.SubContent>
-            </DropdownMenu.Sub>
-
-            <DropdownMenu.Separator />
-            <DropdownMenu.Item>Share</DropdownMenu.Item>
-            <DropdownMenu.Item>Add to favorites</DropdownMenu.Item>
-            <DropdownMenu.Separator />
-            <DropdownMenu.Item
-              shortcut="⌘ ⌫"
-              color="red"
-              onClick={handleLogout}
-            >
-              Logout
-            </DropdownMenu.Item>
-          </DropdownMenu.Content>
-        </DropdownMenu.Root> */}
       </div>
     </div>
   );

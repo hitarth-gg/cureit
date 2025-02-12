@@ -24,27 +24,26 @@ function DoctorQueueCard({ data, refetch }) {
   const [otpVerified, setOtpVerified] = useState(false);
   const [updateAppointmentStatusSuccess, setUpdateAppointmentStatusSuccess] =
     useState(false);
-  const { mutate: saveAppointmentStatus } = usePostAppointmentStatus(setUpdateAppointmentStatusSuccess);
+  const { mutate: saveAppointmentStatus } = usePostAppointmentStatus(
+    setUpdateAppointmentStatusSuccess,
+  );
   async function skipAppointment() {
-    console.log("in skip appointment func")
+    console.log("in skip appointment func");
     setUpdateAppointmentStatusSuccess(false);
     saveAppointmentStatus.mutate({
       appointmentId: data.appointmentId,
       status: "missed",
     });
-    if(updateAppointmentStatusSuccess) {
+    if (updateAppointmentStatusSuccess) {
       toast.success("Appointment skipped successfully");
+    } else {
+      toast.error("Error skipping appointment");
     }
-      else
-      {
-        toast.error("Error skipping appointment");
-      }
-    
   }
   const appointmentTypes = ["orange", "blue"]; // green for today's appointment, blue for future appointment
   const appointmentType =
     appointment_date ===
-      new Date().toLocaleDateString("en-IN").replace(/\//g, "-")
+    new Date().toLocaleDateString("en-IN").replace(/\//g, "-")
       ? appointmentTypes[0]
       : appointmentTypes[1];
 
@@ -197,13 +196,15 @@ function DoctorQueueCard({ data, refetch }) {
 
         <div className="ml-4 hidden flex-col items-center justify-center gap-2 md:flex md:flex-row">
           {/* <CancelDialog data={data} refetch={refetch} /> */}
-          <SkipAppointment skipAppointment={skipAppointment} />
           {!otpVerified && (
-            <OtpModal
-              otpVerified={otpVerified}
-              setOtpVerified={setOtpVerified}
-              id={patientId}
-            />
+            <>
+              <SkipAppointment skipAppointment={skipAppointment} />
+              <OtpModal
+                otpVerified={otpVerified}
+                setOtpVerified={setOtpVerified}
+                id={patientId}
+              />
+            </>
           )}
           <SeeDetails data={data} refetch={refetch} otpVerified={otpVerified} />
         </div>

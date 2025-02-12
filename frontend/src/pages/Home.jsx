@@ -17,7 +17,8 @@ import ChatBot from "../components/ChatBot/ChatBot";
 // imprt useState
 
 function Home() {
-  const { theme } = useCureitContext();
+  const { theme, profile } = useCureitContext();
+
   const navigate = useNavigate();
   const token = localStorage.getItem("sb-vakmfwtcbdeaigysjgch-auth-token");
   const userData = token;
@@ -381,15 +382,24 @@ function Home() {
                 Sign Up
               </Button>
             )}
-            <Button
-              color="iris"
-              size="3"
-              variant=""
-              className="my-4"
-              onClick={() => navigate("/bookappointment")}
-            >
-              Book Appointment
-            </Button>
+            {profile?.role !== "doctor" && (
+              <Button
+                color="iris"
+                size="3"
+                variant=""
+                className="my-4"
+                onClick={() => {
+                  if(token){
+                    navigate("/bookappointment")
+                  }
+                  else{
+                    navigate("/login")
+                  }
+                }}
+              >
+                Book Appointment
+              </Button>
+            )}
           </div>
         </div>
         <div className="relative">

@@ -2,7 +2,12 @@ import { Button } from "@radix-ui/themes";
 import DoctorSlotCard from "./DoctorSlotCard";
 // import "rsuite/dist/rsuite.min.css";
 import { useState, useEffect } from "react";
-function BookingFormSelectSlots({doctors, formData, setFormData, refetchSlots }) {
+function BookingFormSelectSlots({
+  doctors,
+  formData,
+  setFormData,
+  refetchSlots,
+}) {
   //  const base =import.meta.env.VITE_API_BASE_URL;
   //  //make api call to get doctors
   //  const getDoctors = async () => {
@@ -25,6 +30,20 @@ function BookingFormSelectSlots({doctors, formData, setFormData, refetchSlots })
   //   getDoctors().then((data) => setDoctors(data));
   // }, [formData.selectedDate]);
 
+  useEffect(() => {
+    if (!formData.selectedDate) {
+      // fill with zero if single digit
+      const today = new Date().toLocaleDateString("en-IN").replace(/\//g, "-").split("-").map((x) => x.length === 1 ? `0${x}` : x).join("-");
+      console.log("today", today);
+      
+      setFormData({
+        ...formData,
+        selectedDate: today,
+      });
+    }
+  }, []);
+  console.log(formData.selectedDate);
+  
 
   return (
     <div>
@@ -55,7 +74,10 @@ function BookingFormSelectSlots({doctors, formData, setFormData, refetchSlots })
           <Button
             // onClick={() => getDoctors().then((data) => setDoctors(data))}
             onClick={() => refetchSlots()}
-          > Refresh Slots</Button>
+          >
+            {" "}
+            Refresh Slots
+          </Button>
         </div>
         <div className="flex flex-col gap-y-4">
           {doctors?.map((doctor, ix) => (

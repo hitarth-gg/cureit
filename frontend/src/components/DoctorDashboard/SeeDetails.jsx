@@ -83,6 +83,7 @@ function SeeDetails({ data, refetch, otpVerified }) {
       status: "completed",
     });
     if(savePrescriptionSuccess && updateAppointmetnStatusSuccess){
+      setIsPaneOpen(false);
       toast.success("Details saved successfully");
     }
     else
