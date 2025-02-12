@@ -1,6 +1,7 @@
 export default function Card1({ title, text, link, linkName }) {
   return (
-    <div className="card flex select-none items-center justify-start  space-x-7 rounded-lg border-2 border-[#dee8ef] px-2 py-2 md:px-5 md:py-3 transition-all duration-150 ease-in-out hover:border-[#55a6f6] hover:bg-[#ebf5fe]">
+    <div className="card bg-[#ffffff90] z-10  flex select-none items-center justify-start space-x-7 rounded-lg border-2 border-[#dee8ef] px-2 py-2 md:px-5 md:py-3 transition-all duration-150 ease-in-out hover:border-[#55a6f6] hover:bg-[#ebf5fe50] backdrop-blur-md"
+    >
       <div className="left">
         <svg
           xmlns="http://www.w3.org/2000/svg"

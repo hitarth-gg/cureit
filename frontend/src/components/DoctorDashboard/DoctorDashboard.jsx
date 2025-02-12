@@ -3,23 +3,44 @@ import DoctorProfileTab from "./DoctorProfileTab";
 import DoctorQueue from "./DoctorQueue";
 import DoctorHistory from "./DoctorHistory";
 import HistoryAppointments from "../PatientDashboard/HistoryAppointments";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function DoctorDashboard() {
-  const location = useLocation();
-  const tab = location?.state?.tab || "profile";
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [tab, setTab] = useState(searchParams.get("tab") || "profile");
+
+  useEffect(() => {
+    setTab(searchParams.get("tab") || "profile");
+  }, [searchParams]);
+
   return (
     <div className="text-sm font-medium">
-      <Tabs.Root defaultValue={tab}>
+      <Tabs.Root value={tab}>
         <Tabs.List
           size={{
             initial: "1",
             sm: "2",
           }}
         >
-          <Tabs.Trigger value="profile">Profile</Tabs.Trigger>
-          <Tabs.Trigger value="queue">Queue</Tabs.Trigger>
-          <Tabs.Trigger value="history">History</Tabs.Trigger>
+          <Tabs.Trigger
+            value="profile"
+            onClick={() => setSearchParams({ tab: "profile" })}
+          >
+            Profile
+          </Tabs.Trigger>
+          <Tabs.Trigger
+            onClick={() => setSearchParams({ tab: "queue" })}
+            value="queue"
+          >
+            Queue
+          </Tabs.Trigger>
+          <Tabs.Trigger
+            onClick={() => setSearchParams({ tab: "history" })}
+            value="history"
+          >
+            History
+          </Tabs.Trigger>
         </Tabs.List>
 
         <Box pt="3">

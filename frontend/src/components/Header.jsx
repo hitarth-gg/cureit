@@ -99,10 +99,11 @@ function Header() {
   return (
     <div
       // border-b-[1px]
-      className={`sticky top-0 z-50 flex h-11 w-full justify-between border-b-[#55555550] bg-[#ffffff50] px-3 backdrop-blur-md transition-all duration-500`}
+      className={`fixed top-0 z-50 flex h-11 w-full justify-between border-b-[#55555550] bg-[#ffffff00] px-3 backdrop-blur-md transition-all duration-300`}
       style={{
         // boxShadow bottom outline
         boxShadow: scrollPosition > 0 ? "0px 0px 2px 0px #00000050" : "none",
+        backgroundColor: scrollPosition > 0 ? "#ffffff50" : "#ffffff00",
       }}
     >
       <div
@@ -177,31 +178,37 @@ function Header() {
               <DropdownMenu.Separator />
               <DropdownMenu.Item
                 shortcut=""
-                onClick={() =>
-                  navigate("/user/dashboard", {
-                    state: { tab: "profile" },
-                  })
-                }
+                onClick={() => navigate("/user/dashboard?tab=profile")}
               >
                 Profile
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 shortcut=""
                 onClick={() =>
-                  navigate("/user/dashboard", {
-                    // state: { tab: "queue" },
-                    state: {
-                      tab: `${profile?.role === "doctor" ? "queue" : "appointments"}`,
-                    },
-                  })
+                  navigate(
+                    `/user/dashboard?tab=${
+                      profile?.role === "doctor" ? "queue" : "appointments"
+                    }`,
+                    {},
+                  )
                 }
               >
                 {profile?.role === "doctor" ? "Queue" : "Appointments"}
               </DropdownMenu.Item>
+              <DropdownMenu.Item
+                shortcut=""
+                onClick={() =>
+                  navigate(
+                    `/user/dashboard?tab=history`,
+                  )
+                }
+              >
+               History
+              </DropdownMenu.Item>
               <DropdownMenu.Separator />
 
               <DropdownMenu.Item color="red" onClick={handleLogout}>
-                <div className="flex w-full items-center justify-between">
+                <div className="flex w-full items-center gap-x-3 justify-between">
                   Sign Out <ExitIcon />
                 </div>
               </DropdownMenu.Item>

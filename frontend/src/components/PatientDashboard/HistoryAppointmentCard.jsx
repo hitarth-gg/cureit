@@ -2,7 +2,8 @@ import { Badge, Button, Code, DataList } from "@radix-ui/themes";
 import SeeDetails from "./SeeDetails";
 import useGetPrescription from "../../hooks/useGetPrescription";
 import { useEffect } from "react";
-function HistoryAppointmentCard({ data, refetch , setShowLoader }) {
+import Feedback from "./Feedback";
+function HistoryAppointmentCard({ data, refetch, setShowLoader }) {
   console.log("HistoryAppointmentCard data: ", data);
   const {
     doctor,
@@ -14,24 +15,29 @@ function HistoryAppointmentCard({ data, refetch , setShowLoader }) {
     address,
   } = data;
 
-  const { isLoading, data: prescriptionData, error, status, refetchPrescriptions, isFetching } =
-      useGetPrescription(data.appointmentId);
-  
-    useEffect(()=>{
-      if(isLoading || isFetching){
-        setShowLoader(true);
-      }
-        else
-        setShowLoader(false);
-    } , [isLoading, isFetching]);
+  const {
+    isLoading,
+    data: prescriptionData,
+    error,
+    status,
+    refetchPrescriptions,
+    isFetching,
+  } = useGetPrescription(data.appointmentId);
 
-    
-  
+  useEffect(() => {
+    if (isLoading || isFetching) {
+      setShowLoader(true);
+    } else setShowLoader(false);
+  }, [isLoading, isFetching]);
+
   return (
     <div>
       <div className="flex justify-between gap-y-1 rounded-md border-2 px-4 py-2 font-noto">
         <DataList.Root
-          orientation={"horizontal"}
+          orientation={{
+            initial: "vertical",
+            sm: "horizontal",
+          }}
           style={{ gap: ".65rem" }}
           size={{
             initial: "1",
@@ -44,7 +50,7 @@ function HistoryAppointmentCard({ data, refetch , setShowLoader }) {
               <Code variant="ghost">{doctor}</Code>
             </DataList.Value>
           </DataList.Item>
-          <DataList.Item align="center">
+          <DataList.Item align="">
             <DataList.Label minWidth="88px">Specialization</DataList.Label>
             <DataList.Value>
               <Badge color="indigo" variant="soft" radius="small">
@@ -61,22 +67,32 @@ function HistoryAppointmentCard({ data, refetch , setShowLoader }) {
           <DataList.Item>
             <DataList.Label minWidth="88px">Address</DataList.Label>
             <DataList.Value>
-              <Code variant="ghost">{address}</Code>
-              <Button
-                color="iris"
-                size="1"
-                onClick={() =>
-                  window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(plus_code)}`, '_blank')
-                }
-              >
-                Get Directions
-              </Button>
+              <div className="flex items-center gap-x-2">
+                <Code variant="ghost">{address}</Code>
+                <Button
+                  color="iris"
+                  size="1"
+                  onClick={() =>
+                    window.open(
+                      `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(plus_code)}`,
+                      "_blank",
+                    )
+                  }
+                >
+                  Get Directions
+                </Button>
+              </div>
             </DataList.Value>
-         </DataList.Item>
+          </DataList.Item>
           <DataList.Item>
             <DataList.Label minWidth="88px">Appointment Time</DataList.Label>
             <DataList.Value>
-              <Badge variant="ghost">{new Date(appointment_time).toLocaleTimeString([] , { hour: '2-digit', minute: '2-digit' })}</Badge>
+              <Badge variant="ghost">
+                {new Date(appointment_time).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </Badge>
             </DataList.Value>
           </DataList.Item>
           <DataList.Item>
@@ -85,9 +101,25 @@ function HistoryAppointmentCard({ data, refetch , setShowLoader }) {
               <Badge variant="">{appointment_date}</Badge>
             </DataList.Value>
           </DataList.Item>
+          <DataList.Item>
+            <div className="flex items-center justify-start md:hidden gap-x-2">
+              <Feedback />
+
+              <SeeDetails
+                data={data}
+                refetch={refetch}
+                prescriptionData={prescriptionData}
+              />
+            </div>
+          </DataList.Item>
         </DataList.Root>
-        <div className="ml-4 flex items-center justify-center">
-          <SeeDetails data={data} refetch={refetch} prescriptionData={prescriptionData} />
+        <div className="ml-4 hidden items-center justify-center gap-x-2 md:flex">
+          <Feedback data={data} />
+          <SeeDetails
+            data={data}
+            refetch={refetch}
+            prescriptionData={prescriptionData}
+          />
         </div>
       </div>
     </div>

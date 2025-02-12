@@ -3,6 +3,7 @@ import SeeDetails from "./SeeDetails";
 import { useState, useEffect } from "react";
 import OtpModal from "./OtpModal";
 import { DoubleArrowDownIcon } from "@radix-ui/react-icons";
+import SkipAppointment from "./SkipAppointment";
 
 function DoctorQueueCard({ data, refetch }) {
   const {
@@ -173,9 +174,17 @@ function DoctorQueueCard({ data, refetch }) {
             </div>
           </DataList.Item>
         </DataList.Root>
+
         <div className="ml-4 hidden flex-col items-center justify-center gap-2 md:flex md:flex-row">
           {/* <CancelDialog data={data} refetch={refetch} /> */}
-          <OtpModal otpVerified={otpVerified} setOtpVerified={setOtpVerified} id={patientId} />
+          <SkipAppointment />
+          {!otpVerified && (
+            <OtpModal
+              otpVerified={otpVerified}
+              setOtpVerified={setOtpVerified}
+              id={patientId}
+            />
+          )}
           <SeeDetails data={data} refetch={refetch} otpVerified={otpVerified} />
         </div>
       </div>

@@ -16,7 +16,7 @@ function AppLayout() {
           <main className="layout relative flex flex-col font-inter">
             <Outlet />
           </main>
-          <div className="fixed bottom-0 w-full left-0 pointer-events-none">
+          <div className="pointer-events-none fixed bottom-0 left-0 w-full">
             <ChatBot />
           </div>
         </div>

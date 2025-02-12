@@ -27,7 +27,7 @@ function LoginPage() {
       onSuccess: (data) => {
         console.log("Login Success:", data);
         // if (data.user) {
-        toast.success("LogIn successful! Redirecting to dashboard....", {
+        toast.success("Login successful! Redirecting to dashboard....", {
           position: "top-right",
         });
         setSuccessMessage("Logging in....");
