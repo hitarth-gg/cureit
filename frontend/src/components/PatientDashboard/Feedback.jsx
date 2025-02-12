@@ -43,7 +43,6 @@ function Feedback({ data }) {
               <Button color="red">Cancel</Button>
             </Dialog.Close>
             <Button
-              disabled={loading}
               onClick={() => sendFeedback()}
               disabled={feedbackText.length === 0 || loading}
             >
