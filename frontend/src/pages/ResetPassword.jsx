@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabaseClient";
 import { AuthApiError } from "@supabase/supabase-js";
 import { useCheckLogin } from "../hooks/useCheckLogin";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 function ResetPassword() {
   const [loginData, setLoginData] = useState({
     email: "",
@@ -36,9 +36,7 @@ function ResetPassword() {
       }
       setSuccessMessage("Reset password email sent successfully");
       console.log("Reset password email sent successfully:", data);
-      toast.success("Reset Password Email sent", {
-        position: "top-right",
-      });
+      toast.success("Reset Password Email sent");
 
       navigate("/user/resetPasswordEmailSent", {
         state: { email: loginData.email },

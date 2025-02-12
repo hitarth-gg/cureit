@@ -12,9 +12,13 @@ import { stringify } from "postcss";
 import { useState } from "react";
 import { useEffect } from "react";
 import useHandleEditProfile from "../../hooks/useHandleEditProfile";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+
 function EditProfile({ id, profile, setProfile, fetchUserProfile }) {
   //   const editedProfile = profile;
   console.log("in edit profile", id);
+  const navigate = useNavigate();
   // console.log(profile);
   const [editedProfile, setEditedProfile] = useState(profile);
   const { mutate, onSuccess, onError } = useHandleEditProfile();
@@ -30,8 +34,16 @@ function EditProfile({ id, profile, setProfile, fetchUserProfile }) {
   const tokenString = localStorage.getItem(
     "sb-vakmfwtcbdeaigysjgch-auth-token",
   );
-  const token = JSON.parse(tokenString);
-  const accessToken = token.access_token;
+  const token = JSON?.parse(tokenString);
+  useEffect(() => {
+    // console.log("ggggg", token);
+    if (!token) {
+      toast.error("Session Expired Please Login Again.");
+      navigate("/login", { state: { sessionExpiration: true } }); // Redirect to login page
+    }
+  }, [token]);
+
+  const accessToken = token?.access_token;
 
   function onSave() {
     const user_id = String(id);

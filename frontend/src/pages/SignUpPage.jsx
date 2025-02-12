@@ -2,7 +2,7 @@ import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 import { Box, Button, Container, TextField } from "@radix-ui/themes";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { supabase } from "../utils/supabaseClient";
 import useHandleSignUp from "../hooks/useHandleSignUp";
 
@@ -17,16 +17,6 @@ function SignUpPage() {
     createdAt: "",
     emailVerified: "",
   });
-  // const [signupData2, setSignupData2] = useState({
-  //   id: "",
-  //   name: "",
-  //   email: "",
-  //   password: "",
-  //   phoneNumber: "",
-  //   aadhaarNumber: "",
-  //   createdAt: "",
-  //   emailVerified: "",
-  // });
   const { mutate, error, success } = useHandleSignUp();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -70,9 +60,7 @@ function SignUpPage() {
               setSuccessMessage(
                 "Sign-up successful! Please check your email to verify your account.",
               );
-              toast.success("Verification Email sent", {
-                position: "top-right",
-              });
+              toast.success("Verification Email sent");
               setTimeout(() => {
                 navigate("/verification", { state: { email } });
               }, 500);

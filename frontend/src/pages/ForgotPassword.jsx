@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useResetPassword } from "../hooks/useResetPassword";
 import { supabase } from "../utils/supabaseClient";
 import { isValid } from "date-fns";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 function ResetPage() {
   const [resetData, setResetData] = useState({
@@ -43,9 +43,7 @@ function ResetPage() {
       setErrorMessage(error.message);
     } else {
       setSuccessMessage("successful password update");
-      toast.success("Password Update Successfu.Redirecting to login.....", {
-        position: "top-right",
-      });
+      toast.success("Password Update Successfu.Redirecting to login.....");
       setTimeout(() => {
         navigate("/login");
       }, 500);

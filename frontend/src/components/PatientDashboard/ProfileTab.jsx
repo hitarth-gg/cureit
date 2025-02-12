@@ -9,6 +9,7 @@ import { supabase } from "../../utils/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import { useGetUserDetails } from "../../hooks/useGetUserDetails";
 import useUpdateUserProfilePicture from "../../hooks/useUpdateUserProfilePicture";
+import { toast } from "sonner";
 
 function ProfileTab() {
   const [userId, setUserId] = useState(null);
@@ -17,9 +18,15 @@ function ProfileTab() {
   const tokenString = localStorage.getItem(
     "sb-vakmfwtcbdeaigysjgch-auth-token",
   );
-  const token = JSON.parse(tokenString);
-
-  const accessToken = token.access_token;
+  const token = JSON?.parse(tokenString);
+  useEffect(() => {
+    // console.log("ggggg", token);
+    if (!token) {
+      toast.error("Session Expired Please Login Again.");
+      navigate("/login", { state: { sessionExpiration: true } }); // Redirect to login page
+    }
+  }, [token]);
+  const accessToken = token?.access_token;
 
   // const MyComponent = () => {
   const [profileImage, setProfileImage] = useState(null);

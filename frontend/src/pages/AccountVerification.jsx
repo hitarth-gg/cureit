@@ -7,8 +7,8 @@ import { supabase } from "../utils/supabaseClient";
 
 import { useGetCurrentUser } from "../hooks/useGetCurrentUser";
 // import { toast } from "react-toastify";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "sonner";
+// import "react-toastify/dist/ReactToastify.css";
 
 function AccountVerification() {
   const navigate = useNavigate();
