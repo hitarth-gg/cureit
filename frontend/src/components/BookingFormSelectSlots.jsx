@@ -94,7 +94,7 @@ function BookingFormSelectSlots({
             />
           ))}
           {doctors.length === 0 && (
-            <div className={"text-center my-12"}>
+            <div className={"my-12 text-center"}>
               No doctors available for this date!
             </div>
           )}

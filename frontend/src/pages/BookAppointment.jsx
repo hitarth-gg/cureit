@@ -194,7 +194,7 @@ function BookAppointment() {
                 color="iris"
                 size="2"
                 onClick={() =>
-                  navigate("/user/dashboard", { state: { tab: "appointments" } })
+                  navigate("user/dashboard?tab=appointments")
                 }
               >
                 Check out your appointments
