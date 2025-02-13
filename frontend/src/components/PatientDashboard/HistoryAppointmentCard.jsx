@@ -89,6 +89,7 @@ function HistoryAppointmentCard({ data, refetch, setShowLoader }) {
             <DataList.Value>
               <Badge variant="ghost">
                 {new Date(appointment_time).toLocaleTimeString([], {
+                  // timeZone: "Asia/Kolkata",
                   hour: "2-digit",
                   minute: "2-digit",
                 })}
