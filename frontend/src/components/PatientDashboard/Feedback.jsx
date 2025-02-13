@@ -11,7 +11,8 @@ function Feedback({ data }) {
     setLoading(true);
     try{
     const id=data.appointmentId
-    const response = await postFeedback(id, feedbackText);
+    const id2 = data.doctorId
+    const response = await postFeedback(id, feedbackText, id2);
     // if (response.status !== 200) {
     //   toast.error("Error sending feedback");
     //   setLoading(false);
