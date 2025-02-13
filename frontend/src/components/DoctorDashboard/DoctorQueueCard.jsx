@@ -33,12 +33,13 @@ function DoctorQueueCard({ data, refetch }) {
     saveAppointmentStatus.mutate({
       appointmentId: data.appointmentId,
       status: "missed",
-    });
-    if (updateAppointmentStatusSuccess) {
-      toast.success("Appointment skipped successfully");
-    } else {
-      toast.error("Error skipping appointment");
-    }
+    } , {
+      onSuccess: () => {
+        toast.success("Appointment Skipped");},
+      onError: () => {
+        toast.error("Error skipping appointment");
+      }}
+      );
   }
   const appointmentTypes = ["orange", "blue"]; // green for today's appointment, blue for future appointment
   const appointmentType =
