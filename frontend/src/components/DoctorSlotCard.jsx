@@ -1,4 +1,6 @@
 import { Badge, Checkbox, Code, DataList, Flex, Text } from "@radix-ui/themes";
+import { format, parseISO } from "date-fns";
+import moment from "moment";
 
 function DoctorSlotCard({ data, formData, setFormData }) {
   return (
@@ -34,7 +36,11 @@ function DoctorSlotCard({ data, formData, setFormData }) {
         <DataList.Item>
           <DataList.Label minWidth="88px">Available Time</DataList.Label>
           <DataList.Value>
-            <Code variant="ghost">{data?.available_from}</Code>
+            {data?.available_from && data?.available_to && (
+              <Code variant="ghost">
+                {moment(data?.available_from, "HH:mm:ss").format("hh:mm A")} - {moment(data?.available_to, "HH:mm:ss").format("hh:mm A")}
+              </Code>
+            )}
           </DataList.Value>
         </DataList.Item>
         {/* Available date is not required as users selects the date */}

@@ -33,9 +33,14 @@ function BookingFormSelectSlots({
   useEffect(() => {
     if (!formData.selectedDate) {
       // fill with zero if single digit
-      const today = new Date().toLocaleDateString("en-IN").replace(/\//g, "-").split("-").map((x) => x.length === 1 ? `0${x}` : x).join("-");
+      const today = new Date()
+        .toLocaleDateString("en-IN")
+        .replace(/\//g, "-")
+        .split("-")
+        .map((x) => (x.length === 1 ? `0${x}` : x))
+        .join("-");
       console.log("today", today);
-      
+
       setFormData({
         ...formData,
         selectedDate: today,
@@ -43,7 +48,6 @@ function BookingFormSelectSlots({
     }
   }, []);
   console.log(formData.selectedDate);
-  
 
   return (
     <div>
@@ -56,6 +60,7 @@ function BookingFormSelectSlots({
           <input
             className="w-40 rounded-md border border-gray-300 p-2"
             type="date"
+            min={new Date().toISOString().split("T")[0]} // Set min date to today
             value={
               formData.selectedDate
                 ? formData.selectedDate.split("-").reverse().join("-") // Convert back to dd/MM/yyyy for display
@@ -88,6 +93,11 @@ function BookingFormSelectSlots({
               setFormData={setFormData}
             />
           ))}
+          {doctors.length === 0 && (
+            <div className={"text-center my-12"}>
+              No doctors available for this date!
+            </div>
+          )}
         </div>
       </div>
     </div>

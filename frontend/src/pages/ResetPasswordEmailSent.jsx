@@ -24,7 +24,7 @@ function ResetPasswordEmailSent() {
   });
 
   return (
-    <div className="flex h-[94svh] w-full items-center justify-center bg-[#f7f8fa] font-noto font-medium">
+    <div className="flex h-[100svh] w-full items-center justify-center bg-[#f7f8fa] font-noto font-medium">
       <div className="m-4 flex flex-col items-center justify-center gap-y-4 rounded-lg bg-white p-8 drop-shadow-lg">
         <div className="mb-4 rounded-sm border border-green-400 bg-green-200 px-3 py-1 text-center text-lg font-semibold text-green-900">
           Please see your mail
@@ -37,15 +37,16 @@ function ResetPasswordEmailSent() {
           If you don't see it, you may need to check your spam folder.
         </div>
 
-        <div className="mt-4 text-sm">
-          After resetting password proceed to login,
+        <div className="mt-4 flex flex-col items-center text-sm">
+          <span>After resetting password proceed to login.</span>
           <br />
-          <p
+          <Button
+            color="iris"
             className="w-fit cursor-pointer select-none border-b border-white text-indigo-700 transition-all duration-200 hover:border-b hover:border-indigo-700"
             onClick={() => navigate("/login")}
           >
             Login
-          </p>
+          </Button>
         </div>
 
         <div className="flex gap-x-1 text-sm">
