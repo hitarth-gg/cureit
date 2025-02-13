@@ -180,12 +180,12 @@ router.get("/upcomingAppointments/:patientId" , async (req, res) => {
 //fetching completed appointments by patient Id
 router.get("/completedAppointments/:patientId" , async (req , res)=> {
   const {patientId} = req.params;
-  const {data: appointments, error} = await supabase.from('appointments').select('*').eq('patient_id', patientId).eq("status" , "completed")
+  const {data: appointments, error} = await supabase.from('appointments').select('*').eq('patient_id', patientId).in("status" , ["completed","missed"])
   if (error) {
     return res.status(400).json({ error: error.message });
   }
   console.log(appointments);
-  res.json(appointments);
+  return res.json(appointments);
 })
 //fetching upcoming appointments by doctor Id
 router.get("/doctorUpcomingAppointments/:doctorId" , async (req, res) => {
