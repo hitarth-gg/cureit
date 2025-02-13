@@ -150,7 +150,7 @@ router.post("/updateStatus/:appointmentId", async (req, res) => {
   const { appointmentId } = req.params;
   const { status } = req.query;
   console.log(req);
-  const {data , error} = await supabase.from('appointments').update({status: status}).eq('id', appointmentId).select('*').single();
+  const {data , error} = await supabase.from('appointments').update({status: status, updated_at: new Date().toISOString()}).eq('id', appointmentId).select('*').single();
   if (error) {
     return res.status(400).json({ error: error.message });
   }

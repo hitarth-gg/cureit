@@ -211,6 +211,7 @@ export async function getPatientAppointmentHistory(patientId) {
 
     const finalAppointments = updatedData.map((appointment) => ({
       appointmentId: appointment.id,
+      doctorId: appointment.doctor_id,
       patientId: appointment.patient_id,
       patientName: appointment.personal_details.name,
       status: appointment.status,
@@ -505,14 +506,16 @@ export async function postPrescription(prescriptionData) {
   console.log(data);
   return data;
 }
-export async function postFeedback(appointmentId , feedback)
+export async function postFeedback(appointmentId , feedback , doctorId)
 {
+  // console.log("in post Feedback")
+  // console.log("doctorId: " , doctorId)
   const response = await fetch(`${API_URL}/api/feedback/add/${appointmentId}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({feedback}),
+    body: JSON.stringify({feedback: feedback, doctorId: doctorId}),
   });
   if (!response.ok) {
     throw new Error(`Error: ${response.status} ${response.statusText}`);
