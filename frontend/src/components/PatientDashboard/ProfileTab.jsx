@@ -101,7 +101,7 @@ function ProfileTab() {
     console.log("hello", " data details/userId changed ", userId);
     if (dataDetails) fetchUserProfile();
   }, [userId, dataDetails]);
-  const patientId = "00bb0259-6a09-4151-9a86-29d475b28a7f";
+  const patientId = userId;
 
   const { isLoading, data, error, status, refetch, isFetching } =
     useGetUpcomingAppointments(patientId);

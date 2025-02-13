@@ -213,6 +213,7 @@ export async function getPatientAppointmentHistory(patientId) {
       appointmentId: appointment.id,
       patientId: appointment.patient_id,
       patientName: appointment.personal_details.name,
+      status: appointment.status,
       age: appointment.personal_details.age,
       gender: appointment.personal_details.gender,
       hospital: appointment.doctorDetails.hospital_name,
