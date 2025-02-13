@@ -19,89 +19,91 @@ import { ToastContainer } from "react-toastify";
 import { useCureitContext } from "./utils/ContextProvider";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 
-const router = createBrowserRouter([
-  {
-    element: <AppLayout />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-        errorElement: <ErrorPage />,
-      },
-      {
-        path: "/signup",
-        element: <SignUpPage />,
-        errorElement: <ErrorPage />,
-      },
-      {
-        path: "/login",
-        element: <LoginPage />,
-        errorElement: <ErrorPage />,
-      },
-      {
-        path: "/verification",
-        element: <AccountVerification />,
-        errorElement: <ErrorPage />,
-      },
-      {
-        path: "/verified",
-        element: <AccountVerified />,
-        errorElement: <ErrorPage />,
-      },
-      // {
-      //   path: "/bookappointment",
-      //   element: <BookAppointment />,
-      //   // path: "/user/dashboard",
-      //   // element: <UserDashboard />,
-      //   errorElement: <ErrorPage />,
-      // },
-      {
-        element: <ProtectedRoutes />,
-        children: [
-          {
-            path: "/bookappointment",
-            element: <BookAppointment />,
-            errorElement: <ErrorPage />,
-          },
-          {
-            path: "/user/dashboard/",
-            element: <Dashboard />,
-            errorElement: <ErrorPage />,
-          },
-        ],
-      },
-      // {
-      //   path: "/user/dashboard",
-      //   element: <UserDashboard />,
-      //   errorElement: <ErrorPage />,
-      // },
-      // {
-      //   path: "/user/dashboard",
-      //   element: <UserDashboard />,
-      //   errorElement: <ErrorPage />,
-      // },
-      {
-        path: "/user/resetPassword",
-        element: <ForgotPassword />,
-        errorElement: <ErrorPage />,
-      },
-      {
-        path: "/user/resetPasswordEmailSent",
-        element: <ResetPasswordEmailSent />,
-        errorElement: <ErrorPage />,
-      },
-      {
-        path: "user/resetPassEnterEmail",
-        element: <ResetPassword />,
-        errorElement: <ErrorPage />,
-      },
-    ],
-  },
+const router = createBrowserRouter(
+  [
+    {
+      element: <AppLayout />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+          errorElement: <ErrorPage />,
+        },
+        {
+          path: "/signup",
+          element: <SignUpPage />,
+          errorElement: <ErrorPage />,
+        },
+        {
+          path: "/login",
+          element: <LoginPage />,
+          errorElement: <ErrorPage />,
+        },
+        {
+          path: "/verification",
+          element: <AccountVerification />,
+          errorElement: <ErrorPage />,
+        },
+        {
+          path: "/verified",
+          element: <AccountVerified />,
+          errorElement: <ErrorPage />,
+        },
+        // {
+        //   path: "/bookappointment",
+        //   element: <BookAppointment />,
+        //   // path: "/user/dashboard",
+        //   // element: <UserDashboard />,
+        //   errorElement: <ErrorPage />,
+        // },
+        {
+          element: <ProtectedRoutes />,
+          children: [
+            {
+              path: "/bookappointment",
+              element: <BookAppointment />,
+              errorElement: <ErrorPage />,
+            },
+            {
+              path: "/user/dashboard/",
+              element: <Dashboard />,
+              errorElement: <ErrorPage />,
+            },
+          ],
+        },
+        // {
+        //   path: "/user/dashboard",
+        //   element: <UserDashboard />,
+        //   errorElement: <ErrorPage />,
+        // },
+        // {
+        //   path: "/user/dashboard",
+        //   element: <UserDashboard />,
+        //   errorElement: <ErrorPage />,
+        // },
+        {
+          path: "/user/resetPassword",
+          element: <ForgotPassword />,
+          errorElement: <ErrorPage />,
+        },
+        {
+          path: "/user/resetPasswordEmailSent",
+          element: <ResetPasswordEmailSent />,
+          errorElement: <ErrorPage />,
+        },
+        {
+          path: "user/resetPassEnterEmail",
+          element: <ResetPassword />,
+          errorElement: <ErrorPage />,
+        },
+      ],
+    },
+  ],
   {
     basename: "/cureit",
   },
-]);
+);
 
 function App() {
   const queryClient = new QueryClient({
