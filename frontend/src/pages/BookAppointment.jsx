@@ -130,7 +130,7 @@ function BookAppointment() {
           width: formState === 0 ? "0%" : `${(formState / 3) * 100}%`,
           position: "fixed",
           top: "45px",
-          zIndex: "100",
+          zIndex: "10",
         }}
       ></div>
 

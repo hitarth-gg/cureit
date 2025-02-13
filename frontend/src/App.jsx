@@ -16,6 +16,8 @@ import UserDashboard from "./pages/UserDashboard.jsx";
 import ResetPasswordEmailSent from "./pages/ResetPasswordEmailSent";
 import ResetPassword from "./pages/ResetPassword";
 import { ToastContainer } from "react-toastify";
+import { useCureitContext } from "./utils/ContextProvider";
+import ProtectedRoutes from "./utils/ProtectedRoutes";
 
 const router = createBrowserRouter([
   {
@@ -47,12 +49,27 @@ const router = createBrowserRouter([
         element: <AccountVerified />,
         errorElement: <ErrorPage />,
       },
+      // {
+      //   path: "/bookappointment",
+      //   element: <BookAppointment />,
+      //   // path: "/user/dashboard",
+      //   // element: <UserDashboard />,
+      //   errorElement: <ErrorPage />,
+      // },
       {
-        path: "/bookappointment",
-        element: <BookAppointment />,
-        // path: "/user/dashboard",
-        // element: <UserDashboard />,
-        errorElement: <ErrorPage />,
+        element: <ProtectedRoutes />,
+        children: [
+          {
+            path: "/bookappointment",
+            element: <BookAppointment />,
+            errorElement: <ErrorPage />,
+          },
+          {
+            path: "/user/dashboard/",
+            element: <Dashboard />,
+            errorElement: <ErrorPage />,
+          },
+        ],
       },
       // {
       //   path: "/user/dashboard",
@@ -64,11 +81,6 @@ const router = createBrowserRouter([
       //   element: <UserDashboard />,
       //   errorElement: <ErrorPage />,
       // },
-      {
-        path: "/user/dashboard/",
-        element: <Dashboard />,
-        errorElement: <ErrorPage />,
-      },
       {
         path: "/user/resetPassword",
         element: <ForgotPassword />,
@@ -97,6 +109,7 @@ function App() {
       },
     },
   });
+
   return (
     <QueryClientProvider client={queryClient}>
       <ToastContainer />

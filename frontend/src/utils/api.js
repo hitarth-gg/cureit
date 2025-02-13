@@ -455,8 +455,7 @@ export async function getPrescription(appointmentId) {
   }
 }
 
-export async function sendOtp(patientId)
-{
+export async function sendOtp(patientId) {
   const response = await fetch(`${API_URL}/api/users/sendOtp/${patientId}`, {
     method: "GET",
     headers: {
@@ -470,14 +469,16 @@ export async function sendOtp(patientId)
   console.log(data);
   return response;
 }
-export async function validateOtp(patientId , otp)
-{
-  const response = await fetch(`${API_URL}/api/users/validateOtp/${patientId}?otp=${otp}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
+export async function validateOtp(patientId, otp) {
+  const response = await fetch(
+    `${API_URL}/api/users/validateOtp/${patientId}?otp=${otp}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     },
-  });
+  );
   if (!response.ok) {
     throw new Error(`Error: ${response.status} ${response.statusText}`);
   }
@@ -486,12 +487,12 @@ export async function validateOtp(patientId , otp)
   return data.info.check;
 }
 export async function postPrescription(prescriptionData) {
-  console.log("Prescription-data:" , prescriptionData);
-  const val= {
+  console.log("Prescription-data:", prescriptionData);
+  const val = {
     appointmentId: prescriptionData.appointmentId,
     medicines: prescriptionData.doctorPrescription,
     doctorNotes: prescriptionData.doctorRemarks,
-  }
+  };
   const response = await fetch(`${API_URL}/api/prescriptions/generate`, {
     method: "POST",
     headers: {
@@ -506,6 +507,7 @@ export async function postPrescription(prescriptionData) {
   console.log(data);
   return data;
 }
+
 export async function postFeedback(appointmentId , feedback , doctorId)
 {
   // console.log("in post Feedback")
@@ -524,15 +526,17 @@ export async function postFeedback(appointmentId , feedback , doctorId)
   console.log(data);
   return data;
 }
-export async function postAppointmentStatus({appointmentId , status})
-{
-  const response = await fetch(`${API_URL}/api/appointments/updateStatus/${appointmentId}?status=${status}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+export async function postAppointmentStatus({ appointmentId, status }) {
+  const response = await fetch(
+    `${API_URL}/api/appointments/updateStatus/${appointmentId}?status=${status}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      // body: JSON.stringify({status}),
     },
-    // body: JSON.stringify({status}),
-  });
+  );
   if (!response.ok) {
     throw new Error(`Error: ${response.status} ${response.statusText}`);
   }

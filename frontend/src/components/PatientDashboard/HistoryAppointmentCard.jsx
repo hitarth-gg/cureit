@@ -3,6 +3,7 @@ import SeeDetails from "./SeeDetails";
 import useGetPrescription from "../../hooks/useGetPrescription";
 import { useEffect } from "react";
 import Feedback from "./Feedback";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 function HistoryAppointmentCard({ data, refetch, setShowLoader }) {
   console.log("HistoryAppointmentCard data: ", data);
   const {
@@ -103,24 +104,40 @@ function HistoryAppointmentCard({ data, refetch, setShowLoader }) {
             </DataList.Value>
           </DataList.Item>
           <DataList.Item>
-            <div className="flex items-center justify-start md:hidden gap-x-2">
+            <div className="flex items-center justify-start gap-x-2 md:hidden">
               <Feedback />
-
-              <SeeDetails
-                data={data}
-                refetch={refetch}
-                prescriptionData={prescriptionData}
-              />
+              
+              {data?.status === "completed" && (
+                <SeeDetails
+                  data={data}
+                  refetch={refetch}
+                  prescriptionData={prescriptionData}
+                />
+              )}
+              {data?.status === "missed" && (
+                <div className="flex items-center justify-center gap-x-2 rounded-sm border-2 border-orange-500 px-3 py-[6px] text-orange-500">
+                  Missed
+                  <ExclamationTriangleIcon />
+                </div>
+              )}
             </div>
           </DataList.Item>
         </DataList.Root>
         <div className="ml-4 hidden items-center justify-center gap-x-2 md:flex">
           <Feedback data={data} />
-          <SeeDetails
-            data={data}
-            refetch={refetch}
-            prescriptionData={prescriptionData}
-          />
+          {data?.status === "completed" && (
+            <SeeDetails
+              data={data}
+              refetch={refetch}
+              prescriptionData={prescriptionData}
+            />
+          )}
+          {data?.status === "missed" && (
+            <div className="flex items-center justify-center gap-x-2 rounded-[4px] select-none border-2 border-orange-500 px-3 py-[5px] text-orange-500">
+              Missed
+              <ExclamationTriangleIcon />
+            </div>
+          )}
         </div>
       </div>
     </div>

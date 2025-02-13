@@ -7,17 +7,18 @@ import { useEffect, useState } from "react";
 function UpcomingAppointments() {
   const user = useAuthContext();
   const [patientId, setPatientId] = useState(null);
-  useEffect(()=>{
-    if(user.currentUser!=null){
-      setPatientId (user.currentUser.id);
-      console.log(user.currentUser.id)
-    } },[user])
+  useEffect(() => {
+    if (user.currentUser != null) {
+      setPatientId(user.currentUser.id);
+      console.log(user.currentUser.id);
+    }
+  }, [user]);
   const { isLoading, data, error, status, refetch, isFetching } =
     useGetUpcomingAppointments(patientId);
 
-    if (error) {
-        toast.error("Error fetching data");
-      }
+  if (error) {
+    toast.error("Error fetching data");
+  }
 
   return (
     <div className="">
@@ -26,6 +27,9 @@ function UpcomingAppointments() {
         {data?.map((appointment, ix) => (
           <AppointmentCard key={ix} data={appointment} refetch={refetch} />
         ))}
+        {data?.length === 0 && (
+          <div className="text-center">No upcoming appointments!</div>
+        )}
       </div>
     </div>
   );

@@ -7,11 +7,12 @@ import { useAuthContext } from "../../utils/ContextProvider";
 function DoctorQueue() {
   const user = useAuthContext();
   const [doctorId, setDoctorId] = useState(null);
-  useEffect(()=>{
-    if(user.currentUser!=null){
-      setDoctorId (user.currentUser.id);
-      console.log(user.currentUser.id)
-    } },[user])
+  useEffect(() => {
+    if (user.currentUser != null) {
+      setDoctorId(user.currentUser.id);
+      console.log(user.currentUser.id);
+    }
+  }, [user]);
   const { isLoading, data, error, status, refetch, isFetching } =
     useGetQueueForDoctor(doctorId);
 
@@ -26,6 +27,9 @@ function DoctorQueue() {
         {data?.map((queue, ix) => (
           <DoctorQueueCard key={ix} data={queue} refetch={refetch} />
         ))}
+        {data?.length === 0 && (
+          <div className="text-center">No appointments to show!</div>
+        )}
       </div>
     </div>
   );

@@ -141,7 +141,7 @@ function Header() {
           </Tooltip>
           <Separator orientation="vertical" />
         </div>
-        {!profile ? (
+        {!tokenString ? (
           <Button
             color="iris"
             size={"2"}
