@@ -23,16 +23,13 @@ jobs:
         run: |
           cd frontend
           npm run build # Ensure this generates the correct output folder
-
-      - name: Set Git user identity
-        run: |
-          git config --global user.email mailaryam1000@gmail.com
-          git config --global user.name aryamagarwal
-
+          
       - name: Deploy using npm script
         run: |
           cd frontend
           npm run deploy # This should push to gh-pages (configured in package.json)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish to GitHub Pages
         uses: rayluo/github-pages-overwriter@v1.3
