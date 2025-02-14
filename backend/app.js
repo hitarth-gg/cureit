@@ -33,6 +33,12 @@ app.use("/api/testReports", testReportsRoutes);
 app.use("/api/uploadProfiles", profileRoutes);
 app.use("/api/doctorProfileRoutes", doctorProfileRoutes);
 app.use("/api/feedback", feedbackRoutes);
+
+app.get("/keepalive", (req, res) => {
+  res.status(200).json({ message: "Server is running" });
+});
+
+
 (async () => {
   await setCache("go", "goa");
   const value = await getCache("go");
