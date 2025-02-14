@@ -7,6 +7,8 @@ import { supabase } from "../../utils/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import { data } from "autoprefixer";
 import { toast } from "sonner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Button } from "@radix-ui/themes";
 
 function DoctorProfileTab() {
   const [profile, setProfile] = useState({
@@ -20,6 +22,7 @@ function DoctorProfileTab() {
     specialization: "",
     uid: 234,
   });
+  const API_URL = import.meta.env.VITE_API_BASE_URL;
 
   const profileImagePlaceholder =
     "https://static.vecteezy.com/system/resources/thumbnails/003/337/584/small/default-avatar-photo-placeholder-profile-icon-vector.jpg";
@@ -92,7 +95,6 @@ function DoctorProfileTab() {
           profileImage: dataDetails.profiles.avatar_url,
           age: dataDetails.profile.age || null,
           gender: dataDetails.profiles.gender || "",
-          // phone_verified: data.profiles.phone_verified,
           specialization: dataDetails.profile.specialization || "",
         });
       }
@@ -109,7 +111,37 @@ function DoctorProfileTab() {
   useEffect(() => {
     console.log("profile ", profile);
   }, [profile]);
+  console.log("profile ", profile);
 
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(
+        `${API_URL}/api/doctorProfileRoutes/download/${userId}`,
+      );
+      if (!response.ok) {
+        console.log(response);
+        throw new Error(response.status);
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `appointments-${new Date().toISOString().split("T")[0]}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    },
+    onError: (error) => {
+      console.log(error);
+      if (error.message === "404") {
+        // console.log(error);
+        alert("No appointments scheduled for today");
+      } else {
+        console.log("Error downloading file:", error.message);
+        alert("Failed to download the appointments file.");
+      }
+    },
+  });
   return (
     <div className="flex flex-col gap-y-6">
       {isFetchingDetails && <Loader />}
@@ -147,17 +179,22 @@ function DoctorProfileTab() {
             <span className="font-semibold">Age & Gender:</span> {profile?.age}{" "}
             {profile.gender}
           </div>
-          <div>
-            {/* <EditDoctorProfile profile={profile} setProfile={setProfile} /> */}
+          <div className="mt-12 flex w-full justify-center gap-x-4">
+            <Button
+              color="iris"
+              size="3"
+              variant="soft"
+              className="download-btn my-4"
+              onClick={() => mutation.mutate()}
+              disabled={mutation.isLoading}
+            >
+              {mutation.isLoading
+                ? "Downloading..."
+                : "Download Today's Appointments"}
+            </Button>
           </div>
         </div>
       </div>
-
-      {/* <div className="mt-6 flex flex-col gap-y-3">
-        <div className="text-base font-semibold">
-          Appointments scheduled for today
-        </div>
-      </div> */}
     </div>
   );
 }
