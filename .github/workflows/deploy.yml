@@ -1,9 +1,9 @@
-name: Your github action
+name: Deploy Frontend to GitHub Pages
 
 on:
   push:
     branches:
-      - main # Change this if needed
+      - main
 
 jobs:
   publish:
@@ -11,41 +11,42 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-      - name: Check out
-        # You may use a newer version of https://github.com/actions/checkout
+      - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Clear and create .env file
+        run: |
+          cd frontend
+          echo "" > .env
+          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> .env
+          echo "VITE_SUPABASE_KEY=${{ secrets.VITE_SUPABASE_KEY }}" >> .env
+          echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}" >> .env
+
       - name: Install dependencies
-        run: npm install # Change to yarn install if using Yarn
+        run: |
+          cd frontend
+          npm install
 
       - name: Build project
-        run: npm run build # Ensure this generates the correct output folder
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Set Git identity
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions[bot]"
 
       - name: Deploy using npm script
-        run: npm run deploy # This should push to gh-pages (configured in package.json)
+        run: |
+          cd frontend
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          npm run deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate your content
-        run: echo "Optional placeholder. Put your project's static website generator command here."
-
-      - name: Publish current workdir (which contains generated content) to GitHub Pages
-        uses: rayluo/github-pages-overwriter@v1.3
-
+      - name: Publish to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-
-          # Optional.
-          #
-          # Default value "." means the root directory of your project will be published.
-          #
-          # You can use whatever directory your project uses,
-          # for example "wwwroot" (without leading "./").
-          # Such a directory does *not* have to already exist in your repo,
-          # it could be an output directory created dynamically
-          # by your static website builder.
-          source-directory: ./frontend
-
-          # Optional. Default value "gh-pages".
-          # It specifies the temporary branch which hosts the static website.
-          # Each build will REMOVE this branch and replace it with new content.
-          # (If you want to keep your old "gh-pages" branch,
-          # you should define a different target branch for this GPO action to work with.)
-          target-branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./frontend/dist
