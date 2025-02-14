@@ -32,7 +32,8 @@ jobs:
       - name: Deploy using npm script
         run: |
           cd frontend
-          npm run deploy # This should push to gh-pages (configured in package.json)
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          npm run deploy
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
