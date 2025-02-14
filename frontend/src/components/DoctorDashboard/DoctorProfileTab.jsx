@@ -35,7 +35,7 @@ function DoctorProfileTab() {
 
   const token = JSON?.parse(tokenString);
   useEffect(() => {
-    // console.log("ggggg", token);
+    // // console.log("ggggg", token);
     if (!token) {
       toast.error("Session Expired Please Login Again.");
       navigate("/login", { state: { sessionExpiration: true } }); // Redirect to login page
@@ -60,7 +60,7 @@ function DoctorProfileTab() {
   useEffect(() => {
     const checkUserSession = async () => {
       const { data, error } = await supabase.auth.getSession();
-      console.log("Session Data:", data);
+      // console.log("Session Data:", data);
       if (error) {
         console.error("Session Error:", error);
         // navigate("/login");
@@ -86,7 +86,7 @@ function DoctorProfileTab() {
   const fetchUserProfile = async () => {
     try {
       if (dataDetails) {
-        console.log(dataDetails);
+        // console.log(dataDetails);
         setProfile({
           name: dataDetails.profiles.name || "",
           email: dataDetails.profiles.email || "",
@@ -104,14 +104,14 @@ function DoctorProfileTab() {
   };
 
   useEffect(() => {
-    console.log("hello", " ", userId);
+    // console.log("hello", " ", userId);
     if (userId) fetchUserProfile();
   }, [userId, dataDetails]);
 
   useEffect(() => {
-    console.log("profile ", profile);
+    // console.log("profile ", profile);
   }, [profile]);
-  console.log("profile ", profile);
+  // console.log("profile ", profile);
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -126,7 +126,7 @@ function DoctorProfileTab() {
         },
       );
       if (!response.ok) {
-        console.log(response);
+        // console.log(response);
         throw new Error(response.status);
       }
       const blob = await response.blob();
@@ -139,12 +139,12 @@ function DoctorProfileTab() {
       document.body.removeChild(a);
     },
     onError: (error) => {
-      console.log(error);
+      // console.log(error);
       if (error.message === "404") {
-        // console.log(error);
+        // // console.log(error);
         alert("No appointments scheduled for today");
       } else {
-        console.log("Error downloading file:", error.message);
+        // console.log("Error downloading file:", error.message);
         alert("Failed to download the appointments file.");
       }
     },

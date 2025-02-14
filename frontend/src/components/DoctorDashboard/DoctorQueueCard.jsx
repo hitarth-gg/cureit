@@ -28,18 +28,22 @@ function DoctorQueueCard({ data, refetch }) {
     setUpdateAppointmentStatusSuccess,
   );
   async function skipAppointment() {
-    console.log("in skip appointment func");
+    // console.log("in skip appointment func");
     setUpdateAppointmentStatusSuccess(false);
-    saveAppointmentStatus.mutate({
-      appointmentId: data.appointmentId,
-      status: "missed",
-    } , {
-      onSuccess: () => {
-        toast.success("Appointment Skipped");},
-      onError: () => {
-        toast.error("Error skipping appointment");
-      }}
-      );
+    saveAppointmentStatus.mutate(
+      {
+        appointmentId: data.appointmentId,
+        status: "missed",
+      },
+      {
+        onSuccess: () => {
+          toast.success("Appointment Skipped");
+        },
+        onError: () => {
+          toast.error("Error skipping appointment");
+        },
+      },
+    );
   }
   const appointmentTypes = ["orange", "blue"]; // green for today's appointment, blue for future appointment
   const appointmentType =
@@ -51,7 +55,7 @@ function DoctorQueueCard({ data, refetch }) {
   const [expectedTime, setExpectedTime] = useState("");
 
   useEffect(() => {
-    // console.log("DoctorQueueCard data: ", data);
+    // // console.log("DoctorQueueCard data: ", data);
 
     if (
       available_from === "N/A" ||
@@ -177,12 +181,16 @@ function DoctorQueueCard({ data, refetch }) {
           <DataList.Item>
             <div className={`flex flex-row justify-start gap-2 md:hidden`}>
               <div className="flex gap-2">
-                {
-                  <OtpModal
-                    otpVerified={otpVerified}
-                    setOtpVerified={setOtpVerified}
-                  />
-                }
+                {!otpVerified && (
+                  <>
+                    <SkipAppointment skipAppointment={skipAppointment} />
+                    <OtpModal
+                      otpVerified={otpVerified}
+                      setOtpVerified={setOtpVerified}
+                      id={patientId}
+                    />
+                  </>
+                )}
                 {
                   <SeeDetails
                     data={data}

@@ -17,9 +17,9 @@ import { useNavigate } from "react-router-dom";
 
 function EditProfile({ id, profile, setProfile, fetchUserProfile }) {
   //   const editedProfile = profile;
-  console.log("in edit profile", id);
+  // console.log("in edit profile", id);
   const navigate = useNavigate();
-  // console.log(profile);
+  // // console.log(profile);
   const [editedProfile, setEditedProfile] = useState(profile);
   const { mutate, onSuccess, onError } = useHandleEditProfile();
 
@@ -27,7 +27,7 @@ function EditProfile({ id, profile, setProfile, fetchUserProfile }) {
     setEditedProfile(profile);
   }, [profile]);
 
-  // console.log("edited profile", editedProfile);
+  // // console.log("edited profile", editedProfile);
   const { name, address, email, profileImage, age, gender } = editedProfile;
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -36,7 +36,7 @@ function EditProfile({ id, profile, setProfile, fetchUserProfile }) {
   );
   const token = JSON?.parse(tokenString);
   useEffect(() => {
-    // console.log("ggggg", token);
+    // // console.log("ggggg", token);
     if (!token) {
       toast.error("Session Expired Please Login Again.");
       navigate("/login", { state: { sessionExpiration: true } }); // Redirect to login page
@@ -49,12 +49,12 @@ function EditProfile({ id, profile, setProfile, fetchUserProfile }) {
     const user_id = String(id);
     profile.userId = user_id;
     const updateUser = async (userId, accessToken, editedProfile) => {
-      console.log(editedProfile);
+      // console.log(editedProfile);
       mutate.mutate(
         { userId, accessToken, editedProfile },
         {
           onSuccess: (data) => {
-            console.log("Updated user info successfully :", data);
+            // console.log("Updated user info successfully :", data);
           },
           onError: (error) => {
             console.error(
@@ -65,7 +65,7 @@ function EditProfile({ id, profile, setProfile, fetchUserProfile }) {
         },
       );
     };
-    // console.log("Sending user data:", signUpData2);
+    // // console.log("Sending user data:", signUpData2);
     updateUser(user_id, accessToken, editedProfile);
     updateUser(id, editedProfile);
     setProfile(editedProfile);
@@ -78,7 +78,7 @@ function EditProfile({ id, profile, setProfile, fetchUserProfile }) {
       { userId: user_id, accessToken, editedProfile },
       {
         onSuccess: (data) => {
-          console.log("Updated user info successfully:", data);
+          // console.log("Updated user info successfully:", data);
         },
         onError: (error) => {
           console.error(

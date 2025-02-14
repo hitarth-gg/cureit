@@ -3,8 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 // import { getDoctorSlots } from "../utils/api";
 import { getUserRoleById } from "../utils/api";
 export default function useUserRoleById(userId, token) {
-  console.log(token);
-  console.log(userId);
+  // console.log(token);
+  // console.log(userId);
   const { isLoading, data, error, status, refetch, isFetching } = useQuery({
     queryKey: ["UserRole", userId],
     queryFn: () => {

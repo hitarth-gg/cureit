@@ -51,7 +51,7 @@ function Header() {
       if (error) {
         console.error("Error signing out:", error.message);
       } else {
-        console.log("User signed out successfully");
+        // console.log("User signed out successfully");
         // invalidate query client
         setTokenString(null);
         setProfile(null);
@@ -62,7 +62,7 @@ function Header() {
       console.error("Unexpected error during logout:", err);
     }
   };
-  console.log("accessToken", accessToken, "userId", userId);
+  // console.log("accessToken", accessToken, "userId", userId);
 
   useEffect(() => {
     const tokenStringTemp = localStorage.getItem(
@@ -94,7 +94,7 @@ function Header() {
   } = useGetUserDetails(userId, accessToken);
 
   useEffect(() => {
-    // console.log("xxxxxx", dataDetails);
+    // // console.log("xxxxxx", dataDetails);
 
     if (dataDetails) {
       setProfile(dataDetails.profile);

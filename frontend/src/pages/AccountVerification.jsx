@@ -40,7 +40,7 @@ function AccountVerification() {
 
   // const handleResend = () => {
   //   // Trigger email resend logic here
-  //   console.log("Resend email triggered!");
+  //   // console.log("Resend email triggered!");
 
   //   // Start timer
   //   setTimer(90);
@@ -51,7 +51,7 @@ function AccountVerification() {
   const [message, setMessage] = useState("");
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const handleResend = async () => {
-    console.log("sending resend email:");
+    // console.log("sending resend email:");
     try {
       const response = await fetch(
         `${API_BASE_URL}/api/users/resend-verification`,
@@ -101,7 +101,7 @@ function AccountVerification() {
   }, [dataUser]);
 
   useEffect(() => {
-    console.log("in useeffect:", dataUser);
+    // console.log("in useeffect:", dataUser);
     if (dataUser?.user) {
       if (token?.user?.email === email) {
         toast.success("Email verified proceed to LogIn");
