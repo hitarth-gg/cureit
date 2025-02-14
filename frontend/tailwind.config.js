@@ -1,9 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
-/** @type {import('tailwindcss').Config} */
-import animated from "tailwindcss-animated";
-import lineClamp from "@tailwindcss/line-clamp";
-import typography from "@tailwindcss/typography";
 
+/** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
@@ -14,5 +11,9 @@ export default {
     },
     extend: {},
   },
-  plugins: [animated, lineClamp, typography],
+  plugins: [
+    require("tailwindcss-animated"),
+    require("@tailwindcss/line-clamp"),
+    require("@tailwindcss/typography"),
+  ],
 };
