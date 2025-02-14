@@ -70,9 +70,7 @@ function SignUpPage() {
             onError: (error) => {
               console.log(error);
               setErrorMessage("Email already exists");
-              toast.error("Email aready exists.", {
-                position: "top-right",
-              });
+              toast.error("Email aready exists.");
             },
           });
         };
