@@ -71,7 +71,7 @@ router.get("/getDoctorDetailsById/:userId", verifyToken, async (req, res) => {
   }
 });
 
-router.get("/download/:doctorId", async (req, res) => {
+router.get("/download/:doctorId", verifyToken, async (req, res) => {
   try {
     const { doctorId } = req.params;
     const date = new Date().toISOString().split("T")[0];

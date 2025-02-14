@@ -117,6 +117,13 @@ function DoctorProfileTab() {
     mutationFn: async () => {
       const response = await fetch(
         `${API_URL}/api/doctorProfileRoutes/download/${userId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // Add your token here
+            "Content-Type": "application/json",
+          },
+        },
       );
       if (!response.ok) {
         console.log(response);
