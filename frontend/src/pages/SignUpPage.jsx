@@ -17,6 +17,7 @@ function SignUpPage() {
     createdAt: "",
     emailVerified: "",
   });
+
   const { mutate, error, success } = useHandleSignUp();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -66,10 +67,9 @@ function SignUpPage() {
               }, 500);
             },
             onError: (error) => {
+              console.log(error);
               setErrorMessage("Email already exists");
-              toast.error("Email aready exists.", {
-                position: "top-right",
-              });
+              toast.error("Email aready exists.");
             },
           });
         };

@@ -4,6 +4,8 @@ const supabase = require("../config/supabaseClient");
 const verifyToken = require("../config/verifyToken");
 const sendOtp = require("../services/OtpService");
 const validateOtp = require("../services/validateOtpService");
+
+const frontend_url = process.env.frontend_url;
 // const verifyToken = async (req, res, next) => {
 //   // console.log(req.headers.authorization);
 //   const token = req.headers.authorization?.split(" ")[1]; // Extract Bearer token
@@ -344,6 +346,7 @@ router.post("/addUserIfNotExist", async (req, res) => {
 
 router.post("/resend-verification", async (req, res) => {
   const { email } = req.body;
+  console.log("in rsend email");
 
   if (!email) {
     return res.status(400).json({ error: "Email is required" });
@@ -500,7 +503,7 @@ router.post("/sendResetPasswordEmail", async (req, res) => {
   }
   try {
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "http://localhost:5173/user/resetPassword",
+      redirectTo: `${frontend_url}cureit/user/resetPassword`,
     });
 
     if (error) {

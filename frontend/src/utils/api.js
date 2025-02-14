@@ -508,16 +508,18 @@ export async function postPrescription(prescriptionData) {
   return data;
 }
 
+
 export async function postFeedback(appointmentId , feedback , doctorId)
 {
   // // console.log("in post Feedback")
   // // console.log("doctorId: " , doctorId)
+
   const response = await fetch(`${API_URL}/api/feedback/add/${appointmentId}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({feedback: feedback, doctorId: doctorId}),
+    body: JSON.stringify({ feedback: feedback, doctorId: doctorId }),
   });
   if (!response.ok) {
     throw new Error(`Error: ${response.status} ${response.statusText}`);
@@ -647,16 +649,54 @@ export async function getCurrentActiveUser() {
 }
 
 export async function signUpNewUser(userData) {
-  const apiUrl = `${API_URL}/api/users/addUserIfNotExist`;
-  // console.log(apiUrl);
-  const response = await fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userData),
-  });
-  const result = await response.json();
+  try {
+    const apiUrl = `${API_URL}/api/users/addUserIfNotExist`;
+//     console.log("Requesting:", apiUrl);
+
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+
+    // Try to parse JSON response
+    let result;
+    try {
+      result = await response.json();
+    } catch (jsonError) {
+      throw new Error(
+        `Invalid JSON response from server. Status: ${response.status}`,
+      );
+    }
+
+    if (!response.ok) {
+      // Throw a detailed error message from the API response
+      throw new Error(result.error || `HTTP error! Status: ${response.status}`);
+    }
+
+    return result;
+  } catch (error) {
+    console.error("Error signing up user:", error);
+
+    return {
+      success: false,
+      message: error.message || "Something went wrong. Please try again.",
+    };
+  }
+// =======
+//   const apiUrl = `${API_URL}/api/users/addUserIfNotExist`;
+//   // console.log(apiUrl);
+//   const response = await fetch(apiUrl, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify(userData),
+//   });
+//   const result = await response.json();
+// >>>>>>> main
 }
 
 export async function getUserDetailsByID(userId, accessToken) {
