@@ -12,9 +12,12 @@
     "@supabase/supabase-js": "^2.48.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
+    "exceljs": "^4.4.0",
     "express": "^4.21.2",
+    "fs": "^0.0.1-security",
     "ioredis": "^5.5.0",
     "mongoose": "^8.9.5",
+    "process": "^0.11.10",
     "react-toastify": "^11.0.3"
   }
 }
