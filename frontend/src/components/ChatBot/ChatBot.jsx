@@ -9,7 +9,7 @@ function ChatBot() {
   const [message, setMessage] = useState(null);
   const { isLoading, isFetching, data, error, status, refetch } =
     useChatBot(message);
-  console.log(data);
+  // console.log(data);
 
   const [chatbotMessages2, setChatbotMessages2] = useState([
     {

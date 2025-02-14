@@ -18,7 +18,7 @@ function OtpModal({ otpVerified, setOtpVerified , id }) {
   const [sendingOtp, setSendingOtp] = useState(false); //loading state for sending otp
   const [verifyingOtp, setVerifyingOtp] = useState(false); //loading state for verifying otp
 
-  console.log(otpVerified);
+  // console.log(otpVerified);
 
   useEffect(() => {
     let interval = null;

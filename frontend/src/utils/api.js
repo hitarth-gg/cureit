@@ -12,7 +12,7 @@ export async function getAddressFromCoords(lat, lng) {
     }
 
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
 
     const address = data.display_name;
     if (!address) {
@@ -30,7 +30,7 @@ export async function getDoctorSlots(date, specialization, userId) {
   // const userId = appointmentData.userId;
   // const specialization = appointmentData.specialization;
   // const date = appointmentData.date;
-  console.log("Get Doctor Slots: ", date, specialization, userId);
+  // console.log("Get Doctor Slots: ", date, specialization, userId);
 
   const response = await fetch(
     `${API_URL}/api/doctors/availableSlots/${userId}?specialization=${specialization}&date=${date}`,
@@ -42,11 +42,11 @@ export async function getDoctorSlots(date, specialization, userId) {
     },
   );
   if (!response.ok) {
-    console.log("error in getDoctorSlots: ", response.status);
+    // console.log("error in getDoctorSlots: ", response.status);
     throw new Error(`Error: ${response.status} ${response.statusText}`);
   }
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
   return data;
   // const testData = [
   //   {
@@ -144,7 +144,7 @@ export async function getPatientAppointments(patientId) {
           const doctorProfileDetails = await getProfileDetails(
             appointment.doctor_id,
           );
-          console.log("Doctor Details:", doctorProfileDetails);
+          // console.log("Doctor Details:", doctorProfileDetails);
           return {
             ...appointment,
             doctorDetails: doctor,
@@ -195,7 +195,7 @@ export async function getPatientAppointmentHistory(patientId) {
           const doctorProfileDetails = await getProfileDetails(
             appointment.doctor_id,
           );
-          console.log("Doctor Details:", doctorProfileDetails);
+          // console.log("Doctor Details:", doctorProfileDetails);
           return {
             ...appointment,
             doctorDetails: doctor,
@@ -207,7 +207,7 @@ export async function getPatientAppointmentHistory(patientId) {
         }
       }),
     );
-    console.log("Appointment History:", updatedData);
+    // console.log("Appointment History:", updatedData);
 
     const finalAppointments = updatedData.map((appointment) => ({
       appointmentId: appointment.id,
@@ -466,7 +466,7 @@ export async function sendOtp(patientId) {
     throw new Error(`Error: ${response.status} ${response.statusText}`);
   }
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
   return response;
 }
 export async function validateOtp(patientId, otp) {
@@ -483,11 +483,11 @@ export async function validateOtp(patientId, otp) {
     throw new Error(`Error: ${response.status} ${response.statusText}`);
   }
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
   return data.info.check;
 }
 export async function postPrescription(prescriptionData) {
-  console.log("Prescription-data:", prescriptionData);
+  // console.log("Prescription-data:", prescriptionData);
   const val = {
     appointmentId: prescriptionData.appointmentId,
     medicines: prescriptionData.doctorPrescription,
@@ -504,14 +504,14 @@ export async function postPrescription(prescriptionData) {
     throw new Error(`Error: ${response.status} ${response.statusText}`);
   }
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
   return data;
 }
 
 export async function postFeedback(appointmentId , feedback , doctorId)
 {
-  // console.log("in post Feedback")
-  // console.log("doctorId: " , doctorId)
+  // // console.log("in post Feedback")
+  // // console.log("doctorId: " , doctorId)
   const response = await fetch(`${API_URL}/api/feedback/add/${appointmentId}`, {
     method: "POST",
     headers: {
@@ -523,7 +523,7 @@ export async function postFeedback(appointmentId , feedback , doctorId)
     throw new Error(`Error: ${response.status} ${response.statusText}`);
   }
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
   return data;
 }
 export async function postAppointmentStatus({ appointmentId, status }) {
@@ -541,7 +541,7 @@ export async function postAppointmentStatus({ appointmentId, status }) {
     throw new Error(`Error: ${response.status} ${response.statusText}`);
   }
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
   return data;
 }
 export async function postBookAppointment(bookingData) {
@@ -570,11 +570,11 @@ export async function postBookAppointment(bookingData) {
     throw new Error(`Error: ${response.status} ${response.statusText}`);
   }
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
 }
 export async function getDoctorType(healthIssue) {
-  console.log("in side ml");
-  console.log(healthIssue);
+  // console.log("in side ml");
+  // console.log(healthIssue);
   try {
     const response = await fetch(`https://hackofiesta.onrender.com/predict/`, {
       method: "POST",
@@ -586,11 +586,11 @@ export async function getDoctorType(healthIssue) {
       }),
     });
     if (!response.ok) {
-      console.log(response.status);
+      // console.log(response.status);
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
-    console.log("docotor type: ", data);
+    // console.log("docotor type: ", data);
     return data.predicted_specialist;
   } catch (error) {
     console.error("Failed to fetch doctor type:", error);
@@ -599,11 +599,11 @@ export async function getDoctorType(healthIssue) {
 }
 
 export async function logIn(loginData) {
-  console.log("Attempting log-in...");
-  console.log(loginData);
+  // console.log("Attempting log-in...");
+  // console.log(loginData);
   const { email, password } = loginData;
-  console.log("email :", email);
-  console.log("pasword :", password);
+  // console.log("email :", email);
+  // console.log("pasword :", password);
 
   // try {
   const { error, data } = await supabase.auth.signInWithPassword({
@@ -635,20 +635,20 @@ export async function getUserRoleById(userId, accessToken) {
   }
 
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
   return data;
 }
 
 export async function getCurrentActiveUser() {
-  console.log("Attempting log-in...");
+  // console.log("Attempting log-in...");
   const { error, data } = await supabase.auth.getUser();
-  // console.log("in api", data);
+  // // console.log("in api", data);
   return data;
 }
 
 export async function signUpNewUser(userData) {
   const apiUrl = `${API_URL}/api/users/addUserIfNotExist`;
-  console.log(apiUrl);
+  // console.log(apiUrl);
   const response = await fetch(apiUrl, {
     method: "POST",
     headers: {
@@ -688,16 +688,16 @@ export async function updateUserDetailsById(
     body: JSON.stringify(editedProfile),
   });
   const data = await response.json(); // Parse response JSON
-  // console.log("Updated User:", data);
+  // // console.log("Updated User:", data);
 
-  // console.log("User updated successfully:", data);
+  // // console.log("User updated successfully:", data);
   // fetchUserProfile();
 
   return data;
 }
 
 export async function updateUserProfilePicture(userId, accessToken, formData) {
-  console.log("in frontend3", formData);
+  // console.log("in frontend3", formData);
   const response = await fetch(`${API_URL}/api/uploadProfiles/upload`, {
     method: "POST",
     headers: {
@@ -729,8 +729,8 @@ export async function chatBot(message) {
 }
 
 export async function getDoctorProfileDetails(userId, accessToken) {
-  // console.log(accessToken);
-  console.log("in api:", userId);
+  // // console.log(accessToken);
+  // console.log("in api:", userId);
   const response = await fetch(
     `${API_URL}/api/doctorProfileRoutes/getDoctorDetailsById/${userId}`,
     {
@@ -745,14 +745,14 @@ export async function getDoctorProfileDetails(userId, accessToken) {
   if (!response.ok) return Error("Failed to fetch user data");
 
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
   return data;
 }
 
 export async function resetPassword(accessToken, new_password) {
-  // console.log(accessToken);
-  // console.log("in api:", userId);
-  console.log("4444444444444444444444", new_password);
+  // // console.log(accessToken);
+  // // console.log("in api:", userId);
+  // console.log("4444444444444444444444", new_password);
   const response = await fetch(`${API_URL}/api/users/updatePassword`, {
     method: "POST",
     headers: {
@@ -765,6 +765,6 @@ export async function resetPassword(accessToken, new_password) {
   if (!response.ok) return Error("Failed to fetch user data");
 
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
   return data;
 }

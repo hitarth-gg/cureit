@@ -9,11 +9,11 @@ export default function useHandleSignUp(signUpData) {
     },
 
     onSuccess: (data) => {
-      console.log("User signed up successfully");
+      // console.log("User signed up successfully");
       return data;
     },
     onError: (error) => {
-      console.log("Error signing up", error);
+      // console.log("Error signing up", error);
     },
   });
   return { mutate };

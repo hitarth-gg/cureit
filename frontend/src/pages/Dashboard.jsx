@@ -23,14 +23,14 @@ function Dashboard() {
 
   const token = JSON?.parse(tokenString);
   useEffect(() => {
-    // console.log("ggggg", token);
+    // // console.log("ggggg", token);
     if (!token) {
       toast.error("Session Expired Please Login Again.");
       navigate("/login", { state: { sessionExpiration: true } }); // Redirect to login page
     }
   }, [token]);
   const accessToken = token?.access_token;
-  console.log(accessToken);
+  // console.log(accessToken);
   const {
     isLoading: isLoadingRole,
     data: dataRole,
@@ -50,7 +50,7 @@ function Dashboard() {
 
   useEffect(() => {
     if (token && dataUser) {
-      console.log(dataUser);
+      // console.log(dataUser);
       setUserId(dataUser?.user?.id);
     }
   }, [dataUser, token]);

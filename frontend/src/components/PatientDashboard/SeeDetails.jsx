@@ -54,7 +54,7 @@ function SeeDetails({ data, refetch , prescriptionData}) {
     appointment_date,
     queuePosition,
   } = data;
-  console.log("see details data: " , data);
+  // console.log("see details data: " , data);
   const [isPaneOpen, setIsPaneOpen] = useState(false);
 
 const [doctoRemarks , setDoctorRemarks]=useState("");
@@ -105,7 +105,7 @@ useEffect(() => {
 // **Specialization**: Internal Medicine  
 // `); // can either debounce or use a normal variable to store the doctorRemarks to avoid unnecessary re-renders
 
-console.log("patient details: ", prescriptionData);
+// console.log("patient details: ", prescriptionData);
 
   return (
     <div className="">

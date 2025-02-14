@@ -70,7 +70,7 @@ function ResetPage() {
       // isValid = true;
       return;
     } else if (name === "confirmPassword") {
-      console.log("in confirmPassword", " ", value, " ", resetData.password);
+      // console.log("in confirmPassword", " ", value, " ", resetData.password);
       // isValid = true;
       if (resetData.password === value) {
         // return true;
@@ -84,7 +84,7 @@ function ResetPage() {
 
   const handleBlur = (e) => {
     const { name, value } = e.target;
-    console.log(name, " ", value);
+    // console.log(name, " ", value);
     validateField(name, value);
   };
 
@@ -94,15 +94,15 @@ function ResetPage() {
   });
 
   const handleResetPassword = () => {
-    console.log("in rese pasword 0,", resetData);
-    console.log(resetData.token, resetData.password);
+    // console.log("in rese pasword 0,", resetData);
+    // console.log(resetData.token, resetData.password);
     handleResetPasswordRequest(resetData.token, resetData.password);
   };
   const [isFormValid, setIsFormValid] = useState(false);
   useEffect(() => {
-    console.log(validation);
+    // console.log(validation);
     setIsFormValid(Object.values(validation).every(Boolean));
-    console.log(validation);
+    // console.log(validation);
   }, [validation]);
 
   const handleChange = (e) => {

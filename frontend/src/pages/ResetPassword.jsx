@@ -35,7 +35,7 @@ function ResetPassword() {
         throw new Error(data.error || "Failed to send reset email");
       }
       setSuccessMessage("Reset password email sent successfully");
-      console.log("Reset password email sent successfully:", data);
+      // console.log("Reset password email sent successfully:", data);
       toast.success("Reset Password Email sent");
 
       navigate("/user/resetPasswordEmailSent", {
@@ -50,7 +50,7 @@ function ResetPassword() {
     }
   };
   const handlereset = () => {
-    console.log("in handle reset");
+    // console.log("in handle reset");
     sendResetPasswordEmail(loginData.email);
     // const email = loginData.email;
     // if (successMessage)

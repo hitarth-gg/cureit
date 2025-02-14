@@ -10,7 +10,7 @@ function HistoryAppointments() {
   useEffect(() => {
     if (user.currentUser != null) {
       setPatientId(user.currentUser.id);
-      console.log(user.currentUser.id);
+      // console.log(user.currentUser.id);
     }
   }, [user]);
 

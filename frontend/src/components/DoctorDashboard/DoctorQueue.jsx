@@ -10,7 +10,7 @@ function DoctorQueue() {
   useEffect(() => {
     if (user.currentUser != null) {
       setDoctorId(user.currentUser.id);
-      console.log(user.currentUser.id);
+      // console.log(user.currentUser.id);
     }
   }, [user]);
   const { isLoading, data, error, status, refetch, isFetching } =

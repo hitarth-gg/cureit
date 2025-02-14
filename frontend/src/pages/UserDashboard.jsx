@@ -17,12 +17,12 @@ const DashboardPage = () => {
       if (error || !session.session || session.session === null) {
         // If no session or error occurs, redirect to login
         setErrorMessage("Session expired. Please log in again.");
-        console.log("Session expired", session);
+        // console.log("Session expired", session);
         navigate("/login"); // Redirect to login page
       } else {
         // Proceed with the dashboard page logic if the session is valid
         setLoading(false);
-        console.log("User is authenticated", session);
+        // console.log("User is authenticated", session);
       }
     };
 

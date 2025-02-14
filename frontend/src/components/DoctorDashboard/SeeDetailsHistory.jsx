@@ -108,7 +108,7 @@ function SeeDetailsHistory({ data, refetch, prescriptionData }) {
   //   }, 300),
   //   [],
   // );
-  // console.log(doctorRemarks, doctorPrescription);
+  // // console.log(doctorRemarks, doctorPrescription);
 
   // debounce and change
 
@@ -268,7 +268,7 @@ function SeeDetailsHistory({ data, refetch, prescriptionData }) {
               <MDXEditor
                 readOnly={true}
                 // onChange={(newContent) => {
-                //   console.log(newContent);
+                //   // console.log(newContent);
                 //   debouncedSetDoctorPrescription(newContent);
                 // }}
                 contentEditableClassName="prose max-w-none mb-4 h-full border-2 "

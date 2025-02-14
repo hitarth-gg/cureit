@@ -3,7 +3,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { postFeedback } from "../../utils/api";
 function Feedback({ data }) {
-  console.log("in FeedBack data: " , data)
+  // console.log("in FeedBack data: " , data)
   const [feedbackText, setFeedbackText] = useState("");
   const [loading, setLoading] = useState(false);
   async function sendFeedback() {
@@ -23,7 +23,7 @@ function Feedback({ data }) {
     setFeedbackText("");
   }
   catch(error){
-    console.log("Error sending feedback", error);
+    // console.log("Error sending feedback", error);
     toast.error("Error sending feedback");
     setLoading(false);
   }

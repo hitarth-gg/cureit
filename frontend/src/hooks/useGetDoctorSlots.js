@@ -7,7 +7,7 @@ export default function useGetDoctorSlots(doctorType) {
     // if(doctorType.formData.selectedDate==null || doctorType.dataDoctorType==null || doctorType.patientId==null )
     if(doctorType==null)
     {
-      console.log("Null returned slots");
+      // console.log("Null returned slots");
       return null;
     }
     else

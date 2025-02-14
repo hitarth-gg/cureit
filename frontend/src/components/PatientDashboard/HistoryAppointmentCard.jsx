@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import Feedback from "./Feedback";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 function HistoryAppointmentCard({ data, refetch, setShowLoader }) {
-  console.log("HistoryAppointmentCard data: ", data);
+  // console.log("HistoryAppointmentCard data: ", data);
   const {
     doctor,
     specialization,
