@@ -23,7 +23,12 @@ jobs:
         run: |
           cd frontend
           npm run build # Ensure this generates the correct output folder
-          
+
+      - name: Set Git identity
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions[bot]"
+
       - name: Deploy using npm script
         run: |
           cd frontend
