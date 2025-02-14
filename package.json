@@ -17,7 +17,7 @@
     "fs": "^0.0.1-security",
     "ioredis": "^5.5.0",
     "mongoose": "^8.9.5",
-    "path": "^0.12.7",
+    "process": "^0.11.10",
     "react-toastify": "^11.0.3"
   }
 }
