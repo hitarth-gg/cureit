@@ -3,7 +3,7 @@ name: Deploy Frontend to GitHub Pages
 on:
   push:
     branches:
-      - main # Change this if needed
+      - main
 
 jobs:
   publish:
@@ -17,12 +17,12 @@ jobs:
       - name: Install dependencies
         run: |
           cd frontend
-          npm install # Change to yarn install if using Yarn
+          npm install
 
       - name: Build project
         run: |
           cd frontend
-          npm run build # Ensure this generates the correct output folder
+          npm run build
 
       - name: Set Git identity
         run: |
@@ -35,10 +35,10 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           npm run deploy
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish to GitHub Pages
-        uses: rayluo/github-pages-overwriter@v1.3
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          source-directory: frontend/dist  # Ensure this matches your build output
-          target-branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./frontend/dist
