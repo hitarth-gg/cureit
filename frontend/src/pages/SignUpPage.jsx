@@ -17,6 +17,7 @@ function SignUpPage() {
     createdAt: "",
     emailVerified: "",
   });
+
   const { mutate, error, success } = useHandleSignUp();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -55,6 +56,7 @@ function SignUpPage() {
           console.log(signupData);
           mutate.mutate(signUpData2, {
             onSuccess: (data) => {
+              console.log("data", data);
               console.log("User info successfully sent to backend:");
               setErrorMessage("");
               setSuccessMessage(
@@ -66,6 +68,7 @@ function SignUpPage() {
               }, 500);
             },
             onError: (error) => {
+              console.log(error);
               setErrorMessage("Email already exists");
               toast.error("Email aready exists.", {
                 position: "top-right",
