@@ -21,7 +21,7 @@ function BookingFormSelectSlots({
   //     },
   //   });
   //   const data = await response.json();
-  //   console.log(data);
+  //   // console.log(data);
   //   return data;
   //  }
 
@@ -39,7 +39,7 @@ function BookingFormSelectSlots({
         .split("-")
         .map((x) => (x.length === 1 ? `0${x}` : x))
         .join("-");
-      console.log("today", today);
+      // console.log("today", today);
 
       setFormData({
         ...formData,
@@ -47,7 +47,7 @@ function BookingFormSelectSlots({
       });
     }
   }, []);
-  console.log(formData.selectedDate);
+  // console.log(formData.selectedDate);
 
   return (
     <div>

@@ -6,7 +6,7 @@ import { getDoctorProfileDetails, getDoctorSlots } from "../utils/api";
 //     queryFn: () => {
 //       // if(doctorType.formData.selectedDate==null || doctorType.dataDoctorType==null || doctorType.patientId==null )
 //       if (doctorId == null) {
-//         console.log("DoctorId is NULL");
+//         // console.log("DoctorId is NULL");
 //         return null;
 //       } else {
 //         const date = doctorType.formData.selectedDate
@@ -27,7 +27,7 @@ import { getDoctorProfileDetails, getDoctorSlots } from "../utils/api";
 // }
 
 export default function useGetDoctorDetails(doctorId, accessToken) {
-  console.log("ingetdoctordetails");
+  // console.log("ingetdoctordetails");
   const { isLoading, data, error, status, refetch, isFetching } = useQuery({
     queryKey: ["DoctorDetails", doctorId],
     queryFn: () => {

@@ -24,13 +24,13 @@ function BookAppointment() {
   useEffect(() => {
     if (user.currentUser != null) {
       setPatientId(user.currentUser.id);
-      console.log(user.currentUser.id);
+      // console.log(user.currentUser.id);
     }
   }, [user]);
   // if(user.currentUser.id)
   // {
   //   // patientId =user.currentUser.id;
-  // console.log(user.currentUser.id);
+  // // console.log(user.currentUser.id);
   // patientId = user.currentUser.id;
   // }
   const [formData, setFormData] = useState({
@@ -68,7 +68,7 @@ function BookAppointment() {
     formState === 2 ? { formData, patientId, dataDoctorType } : null,
   ); // Fetch doctor slots based on selected doctor type
 
-  console.log(isLoadingDoctorType, isLoadingSlots);
+  // console.log(isLoadingDoctorType, isLoadingSlots);
 
   const [doctorSlots, setDoctorSlots] = useState([]);
   const [bookingSuccessful, setBookingSuccessful] = useState(false);
@@ -107,18 +107,18 @@ function BookAppointment() {
     if (formState === 3) return true;
   };
 
-  // console.log(formData);
+  // // console.log(formData);
   // const base =import.meta.env.VITE_API_BASE_URL;
   const { mutate: bookAppointment } =
     usePostBookAppointment(setBookingSuccessful);
   const onBookAppointment = () => {
     bookAppointment.mutate({ formData, patientId });
   };
-  // console.log(isFetchingSlots);
-  console.log(isLoadingDoctorType, isLoadingSlots, isFetchingSlots);
-  console.log("isLoadingDoctorType", isLoadingDoctorType);
-  console.log("isLoadingSlots", isLoadingSlots);
-  console.log("isFetchingSlots", isFetchingSlots);
+  // // console.log(isFetchingSlots);
+  // console.log(isLoadingDoctorType, isLoadingSlots, isFetchingSlots);
+  // console.log("isLoadingDoctorType", isLoadingDoctorType);
+  // console.log("isLoadingSlots", isLoadingSlots);
+  // console.log("isFetchingSlots", isFetchingSlots);
 
   return (
     <>

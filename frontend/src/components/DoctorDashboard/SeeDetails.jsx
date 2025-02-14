@@ -95,7 +95,7 @@ function SeeDetails({ data, refetch, otpVerified }) {
       setIsPaneOpen(false);
       toast.success("Details saved successfully");
     } catch (error) {
-      console.log("Error saving details", error);
+      // console.log("Error saving details", error);
       toast.error("Error saving details");
     }
   }
@@ -111,7 +111,7 @@ function SeeDetails({ data, refetch, otpVerified }) {
     }, 300),
     [],
   );
-  console.log(doctorRemarks, doctorPrescription);
+  // console.log(doctorRemarks, doctorPrescription);
 
   return (
     <div className="">
@@ -278,7 +278,7 @@ function SeeDetails({ data, refetch, otpVerified }) {
               </label>
               <MDXEditor
                 onChange={(newContent) => {
-                  console.log(newContent);
+                  // console.log(newContent);
 
                   debouncedSetDoctorPrescription(newContent);
                 }}

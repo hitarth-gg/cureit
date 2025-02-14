@@ -29,7 +29,7 @@ function LoginPage() {
   const handleSignIn = () => {
     mutate.mutate(loginData, {
       onSuccess: (data) => {
-        console.log("Login Success:", data);
+        // console.log("Login Success:", data);
         // if (data.user) {
         toast.success("Login successful! Redirecting to dashboard....");
         setSuccessMessage("Logging in....");
@@ -56,8 +56,8 @@ function LoginPage() {
   };
 
   useEffect(() => {
-    // console.log("ggggg", token);
-    console.log("uuuuusssseeeefffeeecccctttt", location.state);
+    // // console.log("ggggg", token);
+    // console.log("uuuuusssseeeefffeeecccctttt", location.state);
     if (location.state?.sessionExpired) {
       toast.error("Session Expired. Please Login Again.");
       navigate("./login", { replace: true }); // Reset state

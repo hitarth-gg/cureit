@@ -1,11 +1,11 @@
 import { Button, Code, DataList, Dialog, Flex, Text } from "@radix-ui/themes";
 
-function SkipAppointment({skipAppointment}) {
+function SkipAppointment({ skipAppointment }) {
   return (
     <div className="font-noto">
       <Dialog.Root>
         <Dialog.Trigger>
-          <Button variant="soft" color="red">
+          <Button size={{ initial: "1", md: "2" }} variant="soft" color="red">
             Skip
           </Button>
         </Dialog.Trigger>
@@ -21,7 +21,9 @@ function SkipAppointment({skipAppointment}) {
               <Button>No, Go Back</Button>
             </Dialog.Close>
             <Dialog.Close>
-              <Button color="red" onClick={skipAppointment}>Yes, Skip</Button>
+              <Button color="red" onClick={skipAppointment}>
+                Yes, Skip
+              </Button>
             </Dialog.Close>
           </Flex>
         </Dialog.Content>

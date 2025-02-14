@@ -27,7 +27,7 @@ function SignUpPage() {
   const handleSignUp = async () => {
     const { email, password, name, phoneNumber } = signupData;
     const signUpData2 = { ...signupData };
-    console.log(signUpData2);
+    // console.log(signUpData2);
 
     // Supabase requires only email and password for authentication
 
@@ -41,23 +41,22 @@ function SignUpPage() {
     });
 
     if (error) {
-      console.log(error);
+      // console.log(error);
       setErrorMessage(error.message);
       setSuccessMessage("");
     } else {
       const userId = data?.user?.id; // Get the user ID from auth response
-      console.log("User ID:", userId);
+      // console.log("User ID:", userId);
       signUpData2.id = userId;
-      console.log(data?.user);
-      console.log(data?.user?.user_metadata?.email_confirmed_at);
+      // console.log(data?.user);
+      // console.log(data?.user?.user_metadata?.email_confirmed_at);
 
       if (userId != null) {
         const sendUserInfoToBackend = async (signUpData2) => {
-          console.log(signupData);
+          // console.log(signupData);
           mutate.mutate(signUpData2, {
             onSuccess: (data) => {
-              console.log("data", data);
-              console.log("User info successfully sent to backend:");
+              // console.log("User info successfully sent to backend:");
               setErrorMessage("");
               setSuccessMessage(
                 "Sign-up successful! Please check your email to verify your account.",
@@ -74,7 +73,7 @@ function SignUpPage() {
             },
           });
         };
-        console.log("Sending user data:", signUpData2);
+        // console.log("Sending user data:", signUpData2);
         sendUserInfoToBackend(signUpData2);
       }
     }
@@ -112,7 +111,7 @@ function SignUpPage() {
 
   const handleBlur = (e) => {
     const { name, value } = e.target;
-    console.log(name, " ", value);
+    // console.log(name, " ", value);
     validateField(name, value);
   };
 
@@ -138,7 +137,7 @@ function SignUpPage() {
 
   useEffect(() => {
     setIsFormValid(Object.values(validation).every(Boolean));
-    console.log(validation);
+    // console.log(validation);
   }, [validation]);
 
   return (

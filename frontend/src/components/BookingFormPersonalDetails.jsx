@@ -23,9 +23,9 @@ function BookingFormPersonalDetails({ data }) {
       const address = await getAddressFromCoords(lat, lng);
       toast.success("Address fetched successfully");
       setFormData({ ...formData, address });
-      console.log(address);
+      // console.log(address);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast.error(error.message);
     }
   }

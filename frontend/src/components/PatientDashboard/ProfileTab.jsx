@@ -20,7 +20,7 @@ function ProfileTab() {
   );
   const token = JSON?.parse(tokenString);
   useEffect(() => {
-    // console.log("ggggg", token);
+    // // console.log("ggggg", token);
     if (!token) {
       toast.error("Session Expired Please Login Again.");
       navigate("/login", { state: { sessionExpiration: true } }); // Redirect to login page
@@ -58,7 +58,7 @@ function ProfileTab() {
   useEffect(() => {
     const checkUserSession = async () => {
       const { data, error } = await supabase.auth.getSession();
-      console.log("Session Data:", data);
+      // console.log("Session Data:", data);
       if (error) {
         console.error("Session Error:", error);
         navigate("/login");
@@ -98,7 +98,7 @@ function ProfileTab() {
   };
 
   useEffect(() => {
-    console.log("hello", " data details/userId changed ", userId);
+    // console.log("hello", " data details/userId changed ", userId);
     if (dataDetails) fetchUserProfile();
   }, [userId, dataDetails]);
   const patientId = userId;
@@ -109,7 +109,7 @@ function ProfileTab() {
   const [appointmentsToday, setAppointmentsToday] = useState([]);
   useEffect(() => {
     if (data) {
-      console.log("Data:", data);
+      // console.log("Data:", data);
       const today = new Date().toISOString().split("T")[0];
       const appointments = data.filter(
         (appointment) => appointment.appointment_date === today,
@@ -117,29 +117,29 @@ function ProfileTab() {
       setAppointmentsToday(appointments);
     }
   }, [data]);
-  console.log(profile);
+  // console.log(profile);
 
   const handleUpload = async (event) => {
     const file = event.target.files[0];
-    console.log("in handle upload", file);
+    // console.log("in handle upload", file);
 
     if (!file) {
       console.error("No file selected");
       return;
     }
-    console.log("file: ", file);
+    // console.log("file: ", file);
 
     const formData = new FormData();
     formData.append("file", file);
     formData.append("userId", userId);
-    console.log(" formdata in frontend1", formData);
+    // console.log(" formdata in frontend1", formData);
     mutate.mutate(
       { userId: userId, accessToken, formData },
       {
         onSuccess: (data) => {
-          console.log("ProfilePicture Uploaded sucessfully:", data);
+          // console.log("ProfilePicture Uploaded sucessfully:", data);
           refetchDetails();
-          // console.log("2222");
+          // // console.log("2222");
           // fetchUserProfile();
         },
         onError: (error) => {
