@@ -40,7 +40,7 @@ function SignUpPage() {
       phone: phoneNumber,
       options: {
         data: { display_name: name, phone: phoneNumber }, // Store display_name in metadata
-        emailRedirectTo: `${frontend_base_url}cureit/user/dashboard/`, // Redirect URL after confirmation
+        emailRedirectTo: `${frontend_base_url}cureit/login/`, // Redirect URL after confirmation
       },
     });
 
