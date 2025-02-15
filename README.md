@@ -32,6 +32,9 @@ Booking an appointment follows a structured **multi-step process** ensuring accu
 #### **AI-Powered Doctor Specialization Suggestion**
 
 - **AI-driven model** dynamically determines the **most suitable doctor specialization** based on user symptoms.
+- Uses **TF-IDF** vectorization and a **Random Forest classifier** to analyze user input.
+- Preprocessing techniques like emoji removal, spell correction (TextBlob), and stopword removal (NLTK) enhance input quality.
+- If confidence is low, the ML model predicts the specialist with probability-based classification.
 
 #### **Slot Selection**
 
@@ -102,7 +105,9 @@ The **Doctor Dashboard** provides an intelligent scheduling system for healthcar
 ### 6. AI-Powered Chatbot
 
 - **Retrieval-Augmented Generation (RAG)-based chatbot** for dynamic retrieval of medical knowledge.
+- Uses **Faiss** with **Sentence Transformers** for fast and accurate FAQ retrieval based on user queries.
 - Ensures **precise and personalized medical guidance**.
+- Supports real-time interaction via a **FastAPI**-powered backend.
 
 ### 7. Machine Learning Integration
 
@@ -121,7 +126,9 @@ The **Doctor Dashboard** provides an intelligent scheduling system for healthcar
 ### 10. Feedback System
 
 - Patients can **submit structured feedback** for doctors.
-- **AI-driven sentiment analysis** extracts **meaningful insights from patient feedback** and dynamically generates **relevant expertise tags** for doctor profiles.
+- **AI-driven sentiment analysis** extracts **meaningful insights from patient feedback** using **DistilBERT** and **Sentence Transformers**.
+- Uses precomputed embeddings for efficient similarity matching and tagging.
+- Dynamically generates relevant expertise tags for doctor profiles based on **semantic similarity (Faiss)** and **keyword-based classification**.
 - Enhances **user experience and service optimization**.
 
 ---
@@ -129,8 +136,8 @@ The **Doctor Dashboard** provides an intelligent scheduling system for healthcar
 ## Technology Stack
 
 - **Frontend:** React, Vite, Tailwind CSS
-- **Backend:** Supabase (**PostgreSQL, Authentication, Real-time Database**), Node.js, Express.js
-- **Machine Learning:** Python, TensorFlow
+- **Backend:** Supabase (**PostgreSQL, Authentication, Real-time Database**), Node.js, Express.js, FastAPI
+- **Machine Learning:** Python, Faiss, Sentence Transformers, Scikit-learn, Hugging Face Transformers, NLTK, TextBlob
 - **Authentication:** Supabase Auth
 - **Caching & Performance:** Redis for **high-speed data retrieval and scalability**
 - **Data Fetching & State Management:** **TanStack React Query** for optimized client-server synchronization
