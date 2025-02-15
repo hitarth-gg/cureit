@@ -20,7 +20,7 @@ export default function useHandleSignUp(signUpData) {
       console.log("Error signing up", error);
       // return error;
       // console.log("User signed up successfully");
-      return data;
+      // return data;
     },
   });
   return { mutate };

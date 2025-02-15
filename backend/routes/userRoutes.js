@@ -502,8 +502,10 @@ router.post("/sendResetPasswordEmail", async (req, res) => {
     return "Email not found";
   }
   try {
+    const url = `${frontend_url}cureit/user/resetPassword/`;
+    console.log(url);
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${frontend_url}cureit/user/resetPassword`,
+      redirectTo: `${frontend_url}cureit/user/resetPassword/`,
     });
 
     if (error) {
