@@ -154,6 +154,38 @@ The **Doctor Dashboard** provides an intelligent scheduling system for healthcar
   <img src="https://github.com/user-attachments/assets/b55d10b5-1a72-4a66-be3d-71d0c39c8ca1" alt="My Image">
 </picture>
 
+---
+## Continuous Improvement
+
+### 1) Reception Dashboard
+- Patients check in by scanning a dynamic QR code.
+- QR code updates periodically for security.
+- Streamlined queue management for efficiency.
+
+### 2) Managing Doctor Absences
+- Each doctor has 5 buffer slots for emergencies.
+- Patients can:
+  - Choose another available doctor.
+  - Reschedule their appointment.
+
+### 3) Online Video Consultation
+- Enable virtual appointments for remote consultations.
+- Simple and user-friendly booking.
+
+### 4) MBBS Intern Contributions
+- Interns assist with minor cases via online consultations.
+- Provides hands-on experience under supervision.
+
+### 5) Secure Payment System
+- Integrate payment gateway for smooth transactions and overall application robustness.
+
+### 6) Real-Time Monitoring Dashboard
+- Displays ongoing consultations at reception.
+- Shows doctor and patient queue details.
+- Helps manage waiting times efficiently.
+
+These upgrades enhance efficiency, patient experience, and overall system effectiveness.
+
 
 
 ---
