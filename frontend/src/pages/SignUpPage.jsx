@@ -28,8 +28,11 @@ function SignUpPage() {
     const { email, password, name, phoneNumber } = signupData;
     const signUpData2 = { ...signupData };
     // console.log(signUpData2);
+    const frontend_base_url = import.meta.env.VITE_frontend_base_url;
 
     // Supabase requires only email and password for authentication
+    const url = `${frontend_base_url}/cureit/login/`;
+    // console.log(url);
 
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -37,6 +40,7 @@ function SignUpPage() {
       phone: phoneNumber,
       options: {
         data: { display_name: name, phone: phoneNumber }, // Store display_name in metadata
+        emailRedirectTo: `${frontend_base_url}cureit/login/`, // Redirect URL after confirmation
       },
     });
 
