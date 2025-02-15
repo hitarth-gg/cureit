@@ -139,6 +139,13 @@ The **Doctor Dashboard** provides an intelligent scheduling system for healthcar
 
 ---
 
+## Implementation Flowchart
+
+![Idea_User_Diagram_final_darkkk drawio](https://github.com/user-attachments/assets/a7756791-e7e1-4c55-9de3-f2d22ff1e47e)
+
+
+
+---
 ## Conclusion
 
 Cureit **transforms the doctor appointment booking experience** by delivering a **high-performance, AI-integrated, and real-time platform** for **patients and doctors** alike. By leveraging **Supabase for real-time updates, authentication, and secure data management**, the platform ensures **uncompromised reliability and ease of use**. Features like **ML-based doctor recommendations, dynamic queue management, Redis caching for performance scaling, and digital prescriptions** position Cureit as a **cutting-edge solution enhancing healthcare accessibility and efficiency**.
