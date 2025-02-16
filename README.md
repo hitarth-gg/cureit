@@ -7,7 +7,25 @@ Cureit is an **intuitive and robust** doctor appointment booking platform design
 📽 **Demo Video**
 🌐 **Deployed Project Link** -  [https://aryamagarwal.github.io/cureit](https://aryamagarwal.github.io/cureit)
 
----
+## Index
+- [Introduction](#introduction)
+- [Features and Functions](#features-and-functions)
+  - [Sign-Up and Login](#1-sign-up-and-login)
+  - [Booking Appointment](#2-booking-appointment)
+  - [Patient Dashboard](#3-patient-dashboard)
+  - [Doctor Dashboard](#4-doctor-dashboard)
+  - [Dynamic Queue Updates](#5-dynamic-queue-updates)
+  - [AI-Powered Chatbot](#6-ai-powered-chatbot)
+  - [Machine Learning Integration](#7-machine-learning-integration)
+  - [Reminder System](#8-reminder-system)
+  - [Online Prescriptions](#9-online-prescriptions)
+  - [Feedback System](#10-feedback-system)
+- [Tech Stack](#Technology-Stack)
+- [Implementation Flowchart](#Implementation-Flowchart)
+- [Continuous Improvement](#Continuous-Improvement)
+- [Conclusion](#Conclusion)
+- [Application Testing Guide](#application-testing-guide)
+
 
 ## Features and Functions
 
@@ -160,7 +178,6 @@ The **Doctor Dashboard** provides an intelligent scheduling system for healthcar
 ### 1) Reception Dashboard
 - Patients check in by scanning a dynamic QR code.
 - QR code updates periodically for security.
-- Streamlined queue management for efficiency.
 
 ### 2) Managing Doctor Absences
 - Each doctor has 5 buffer slots for emergencies.
@@ -186,10 +203,49 @@ The **Doctor Dashboard** provides an intelligent scheduling system for healthcar
 
 These upgrades enhance efficiency, patient experience, and overall system effectiveness.
 
-
-
 ---
 ## Conclusion
 
 Cureit **transforms the doctor appointment booking experience** by delivering a **high-performance, AI-integrated, and real-time platform** for **patients and doctors** alike. By leveraging **Supabase for real-time updates, authentication, and secure data management**, the platform ensures **uncompromised reliability and ease of use**. Features like **ML-based doctor recommendations, dynamic queue management, Redis caching for performance scaling, and digital prescriptions** position Cureit as a **cutting-edge solution enhancing healthcare accessibility and efficiency**.
 
+---
+
+# Application Testing Guide
+
+## Login Credentials for Testing
+Use the following doctor accounts to log in and test the application:
+
+| Doctor Email               | Password      |
+|----------------------------|--------------|
+| doctor1@example.com       | password123  |
+| doctor2@example.com       | password123  |
+| doctor3@example.com       | password123  |
+| doctor4@example.com       | password123  |
+| doctor5@example.com       | password123  |
+| doctor6@example.com       | password123  |
+| doctor7@example.com       | password123  |
+| doctor8@example.com       | password123  |
+| doctor9@example.com       | password123  |
+| doctor10@example.com      | password123  |
+
+
+
+## Specializations Available in Database
+Currently, the following doctor specializations are available in the database:
+
+- Dermatologist
+- Pediatrician
+- Cardiologist
+- Psychiatrist
+- Orthopedic
+- Neurologist
+- Gynecologist
+- Urologist
+- ENT (Ear, Nose, Throat Specialist)
+- General Physician
+
+## Notes:
+- The doctor data in the database is for **testing purposes only**.
+- The **ML model** can map doctors to a **variety of other specializations** beyond those currently available in the database.
+
+---
