@@ -212,7 +212,7 @@ Cureit **transforms the doctor appointment booking experience** by delivering a 
 
 # Application Testing Guide
 
-## Login Credentials for Testing
+## Login Credentials for Testing Doctor Dashboard
 Use the following doctor accounts to log in and test the application:
 
 | Doctor Email               | Password      |
@@ -247,5 +247,16 @@ Currently, the following doctor specializations are available in the database:
 ## Notes:
 - The doctor data in the database is for **testing purposes only**.
 - The **ML model** can map doctors to a **variety of other specializations** beyond those currently available in the database.
+
+
+## Patient Dashboard Testing Guide
+
+- Patients can sign up using their email ID.
+- After email verification, they can log in and follow the booking workflow.
+- Patients can edit their profile details, including name, age, and contact information.
+- They can book, view and cancel appointments from their dashboard.
+- Patients can access their medical history and view prescriptions and doctor's remarks (if any).
+
+
 
 ---
