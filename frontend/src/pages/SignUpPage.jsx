@@ -17,6 +17,19 @@ function SignUpPage() {
     createdAt: "",
     emailVerified: "",
   });
+  const [token, setToken] = useState(
+    localStorage.getItem("sb-vakmfwtcbdeaigysjgch-auth-token"),
+  );
+
+  useEffect(() => {
+    if (token) {
+      toast.success("Login successful! Redirecting to dashboard....");
+      setSuccessMessage("Logging in....");
+      setTimeout(() => {
+        window.location.href = "/cureit/user/dashboard";
+      }, 500);
+    }
+  }, [token]);
 
   const { mutate, error, success } = useHandleSignUp();
   const [showPassword, setShowPassword] = useState(false);
@@ -40,7 +53,7 @@ function SignUpPage() {
       phone: phoneNumber,
       options: {
         data: { display_name: name, phone: phoneNumber }, // Store display_name in metadata
-        emailRedirectTo: `${frontend_base_url}/cureit/login/`, // Redirect URL after confirmation
+        emailRedirectTo: `${frontend_base_url}/cureit/login`, // Redirect URL after confirmation
       },
     });
 

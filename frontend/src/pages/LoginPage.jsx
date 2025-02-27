@@ -22,6 +22,19 @@ function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const { mutate, onSuccess, onError } = useCheckLogin();
+  const [token, setToken] = useState(
+    localStorage.getItem("sb-vakmfwtcbdeaigysjgch-auth-token"),
+  );
+
+  useEffect(() => {
+    if (token) {
+      toast.success("Login successful! Redirecting to dashboard....");
+      setSuccessMessage("Logging in....");
+      setTimeout(() => {
+        window.location.href = "/cureit/user/dashboard";
+      }, 500);
+    }
+  }, [token]);
 
   const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
