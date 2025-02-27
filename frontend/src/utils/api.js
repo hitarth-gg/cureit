@@ -508,9 +508,7 @@ export async function postPrescription(prescriptionData) {
   return data;
 }
 
-
-export async function postFeedback(appointmentId , feedback , doctorId)
-{
+export async function postFeedback(appointmentId, feedback, doctorId) {
   // // console.log("in post Feedback")
   // // console.log("doctorId: " , doctorId)
 
@@ -578,15 +576,18 @@ export async function getDoctorType(healthIssue) {
   // console.log("in side ml");
   // console.log(healthIssue);
   try {
-    const response = await fetch(`https://hackofiesta.onrender.com/predict/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `https://hackofiesta-qckb.onrender.com/predict/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          comment: healthIssue,
+        }),
       },
-      body: JSON.stringify({
-        comment: healthIssue,
-      }),
-    });
+    );
     if (!response.ok) {
       // console.log(response.status);
       throw new Error(`Error: ${response.status} ${response.statusText}`);
@@ -651,7 +652,7 @@ export async function getCurrentActiveUser() {
 export async function signUpNewUser(userData) {
   try {
     const apiUrl = `${API_URL}/api/users/addUserIfNotExist`;
-//     console.log("Requesting:", apiUrl);
+    //     console.log("Requesting:", apiUrl);
 
     const response = await fetch(apiUrl, {
       method: "POST",
@@ -685,18 +686,18 @@ export async function signUpNewUser(userData) {
       message: error.message || "Something went wrong. Please try again.",
     };
   }
-// =======
-//   const apiUrl = `${API_URL}/api/users/addUserIfNotExist`;
-//   // console.log(apiUrl);
-//   const response = await fetch(apiUrl, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(userData),
-//   });
-//   const result = await response.json();
-// >>>>>>> main
+  // =======
+  //   const apiUrl = `${API_URL}/api/users/addUserIfNotExist`;
+  //   // console.log(apiUrl);
+  //   const response = await fetch(apiUrl, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(userData),
+  //   });
+  //   const result = await response.json();
+  // >>>>>>> main
 }
 
 export async function getUserDetailsByID(userId, accessToken) {
@@ -757,7 +758,7 @@ export async function updateUserProfilePicture(userId, accessToken, formData) {
 
 export async function chatBot(message) {
   const response = await fetch(
-    `https://hackofiesta-1.onrender.com/faq/?query="${message}"`,
+    ` https://hackofiesta-k905.onrender.com/faq/?query="${message}"`,
   );
 
   if (!response.ok) {
