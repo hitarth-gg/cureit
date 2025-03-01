@@ -1,4 +1,4 @@
-import { Button } from "@radix-ui/themes";
+import { Button, Badge} from "@radix-ui/themes";
 import DoctorSlotCard from "./DoctorSlotCard";
 // import "rsuite/dist/rsuite.min.css";
 import { useState, useEffect } from "react";
@@ -7,6 +7,7 @@ function BookingFormSelectSlots({
   formData,
   setFormData,
   refetchSlots,
+  dataDoctorType,
 }) {
   //  const base =import.meta.env.VITE_API_BASE_URL;
   //  //make api call to get doctors
@@ -83,6 +84,12 @@ function BookingFormSelectSlots({
             {" "}
             Refresh Slots
           </Button>
+        </div>
+        <div className="mb-4 flex items-center gap-x-2">
+          <div className="flex font-noto text-xs font-semibold">Recommended Doctor Type:</div>
+          <Badge color="jade" variant="soft" radius="full">
+              {dataDoctorType}
+            </Badge>
         </div>
         <div className="flex flex-col gap-y-4">
           {doctors?.map((doctor, ix) => (

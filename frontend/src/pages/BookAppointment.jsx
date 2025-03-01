@@ -150,6 +150,7 @@ function BookAppointment() {
               formData={formData}
               setFormData={setFormData}
               refetchSlots={refetchSlots}
+              dataDoctorType={dataDoctorType}
             />
           )}
           {formState === 3 && (
