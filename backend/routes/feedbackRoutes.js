@@ -8,7 +8,7 @@ router.post("/add/:id", async (req, res) => {
   let tag = null;
   try {
     const response = await fetch(
-      " https://hackofiesta-jpmh.onrender.com/classify/",
+      "https://hackofiesta-jpmh.onrender.com/classify/",
       {
         method: "POST",
         headers: {
