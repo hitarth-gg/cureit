@@ -1,8 +1,12 @@
 import { Badge, Button, Code, DataList } from "@radix-ui/themes";
 import CancelDialog from "./CancelDialog";
 import { useState, useEffect } from "react";
+import QRScanner from "./QRscanner.jsx";
+import { toast } from "sonner";
+
 function AppointmentCard({ data, refetch }) {
   const {
+    appointmentId,
     doctor,
     specialization,
     hospital,
@@ -20,6 +24,7 @@ function AppointmentCard({ data, refetch }) {
       : appointmentTypes[1];
 
   const [expectedTime, setExpectedTime] = useState(null);
+  const [showScanner, setShowScanner] = useState(false);
 
   useEffect(() => {
     if (
@@ -76,6 +81,21 @@ function AppointmentCard({ data, refetch }) {
       }
     }
   }, [available_from, queuePosition, appointment_date]);
+  const handleScanSuccess = (scanData) => {
+    console.log(scanData);
+
+    // Play a sound on successful scan.
+    if (scanData != "fail") {
+      const audio = new Audio("/cureit/sound/Check_In_Successful.mp3"); // Ensure this file exists in your public folder
+      audio.play().catch((err) => console.error("Audio play error:", err));
+    }
+
+    console.log("Scanned data:", scanData);
+    // Process scanData further (e.g., send to backend)
+
+    // Automatically close the scanner.
+    setShowScanner(false);
+  };
 
   return (
     <div>
@@ -163,6 +183,50 @@ function AppointmentCard({ data, refetch }) {
         </DataList.Root>
         <div className="ml-4 hidden items-center justify-center md:flex">
           <CancelDialog data={data} refetch={refetch} />
+        </div>
+        <div style={{ textAlign: "center", marginTop: "2rem" }}>
+          <h1>QR Code Check-In</h1>
+
+          {!showScanner ? (
+            <Button onClick={() => setShowScanner(true)}>Scan QR Code</Button>
+          ) : (
+            <div
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                backgroundColor: "rgba(0, 0, 0, 0.7)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 1000,
+              }}
+            >
+              <div
+                style={{
+                  backgroundColor: "#fff",
+                  padding: "2rem",
+                  borderRadius: "8px",
+                  maxWidth: "90%",
+                  maxHeight: "90%",
+                  overflow: "auto",
+                  textAlign: "center",
+                }}
+              >
+                <QRScanner
+                  appointmentId={appointmentId}
+                  onScanSuccess={(data) => {
+                    handleScanSuccess(data);
+                    setShowScanner(false);
+                  }}
+                />
+                <br />
+                <Button onClick={() => setShowScanner(false)}>Cancel</Button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -809,3 +809,23 @@ export async function resetPassword(accessToken, new_password) {
   // console.log(data);
   return data;
 }
+export async function getReceptionProfileDetails(userId, accessToken) {
+  // // console.log(accessToken);
+  // console.log("in api:", userId);
+  const response = await fetch(
+    `${API_URL}/api/receptionProfileRoutes/getReceptionDetailsById/${userId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`, // Include token
+      },
+    },
+  );
+
+  if (!response.ok) return Error("Failed to fetch user data");
+
+  const data = await response.json();
+  // console.log(data);
+  return data;
+}
