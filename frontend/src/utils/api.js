@@ -156,7 +156,7 @@ export async function getPatientAppointments(patientId) {
         }
       }),
     );
-
+    // console.log(updatedData);
     // Return an array of appointments with doctor details
     const finalAppointments = updatedData.map((appointment) => ({
       appointmentId: appointment.id,
@@ -169,6 +169,7 @@ export async function getPatientAppointments(patientId) {
       address: appointment.doctorDetails?.address || "N/A",
       plus_code: appointment.doctorDetails?.plus_code || "N/A",
       available_from: appointment.doctorDetails?.available_from || null,
+      checked_in_status: appointment.checked_in_status || null,
     }));
 
     return finalAppointments; // Return the array
