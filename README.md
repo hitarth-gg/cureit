@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Cureit is an **intuitive and robust** doctor appointment booking platform designed to **mitigate long waiting times** and **optimize** the scheduling process for medical consultations. The platform ensures a **seamless** user experience by enabling patients to book appointments effortlessly while equipping doctors with efficient schedule management tools. Cureit is powered by **Supabase** for authentication, database management, and real-time synchronization.
+Cureit  is an **intuitive and robust** doctor appointment booking platform designed to **mitigate long waiting times** and **optimize** the scheduling process for medical consultations. The platform ensures a **seamless** user experience by enabling patients to book appointments effortlessly while equipping doctors with efficient schedule management tools. Cureit is powered by **Supabase** for authentication, database management, and real-time synchronization.
 
 📽 **Demo Video** - [Demo Video Link](https://drive.google.com/file/d/1k3WiRaZEbQIiUDKqEWMddZDIjULpND-e/view?usp=sharing)
 
