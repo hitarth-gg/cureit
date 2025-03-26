@@ -201,7 +201,12 @@ router.post("/updateStatus/:appointmentId", async (req, res) => {
     .from("profiles")
     .select("name")
     .eq("id", data?.doctor_id);
-  console.log(data2);
+  const { data: data3, error: error3 } = await supabase
+    .from("doctors")
+    .select("reception_id")
+    .eq("id", data?.doctor_id);
+  console.log(data2, " ", data3);
+
   if (error) {
     return res.status(400).json({ error: error.message });
   }
@@ -212,7 +217,10 @@ router.post("/updateStatus/:appointmentId", async (req, res) => {
   if (doctorId) {
     const io = getIo();
     console.log("doctor queue changed");
-    io.emit("doctorQueueChanged", { doctorId });
+    io.emit("doctorQueueChanged", {
+      doctorId: doctorId,
+      receptionIdFromSocket: data3[0]?.reception_id,
+    });
   }
 
   return res.json(data);
