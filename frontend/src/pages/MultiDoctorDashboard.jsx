@@ -76,8 +76,10 @@ const MultiDoctorDashboard = () => {
     fetchCompleteReceptionDoctorQueue(receptionId);
 
     socket.on("doctorQueueChanged", (data) => {
-      const { doctorId } = data;
-      fetchDoctorQueue(doctorId);
+      const { doctorId, receptionIdFromSocket } = data;
+      if (receptionIdFromSocket == receptionId) {
+        fetchDoctorQueue(doctorId);
+      }
     });
 
     return () => {
