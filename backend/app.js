@@ -2,10 +2,12 @@ const express = require("express");
 const dotenv = require("dotenv");
 const fs = require("fs");
 // const https = require("https");
+const http = require("http");
 
 dotenv.config();
 require("./services/cronJob.js");
 const { redis, setCache, getCache } = require("./config/redisClient.js");
+const { initSocket } = require("./config/socket"); // import your socket module
 
 const userRoutes = require("./routes/userRoutes");
 const doctorRoutes = require("./routes/doctorRoutes");
@@ -17,17 +19,23 @@ const receptionProfileRoutes = require("./routes/receptionProfileRoutes.js");
 const feedbackRoutes = require("./routes/feedbackRoutes");
 // connectDB();
 const profileRoutes = require("./routes/profileRoutes");
+const multiDoctorDashboardRoutes = require("./routes/multiDoctorDashboardRoutes");
 
 const cors = require("cors");
 
 // connectDB();
 
 const app = express();
+const server = http.createServer(app);
+
+initSocket(server);
+
 app.use(cors());
 
 app.use(express.json());
 
 // Routes
+app.get("/", (req, res) => res.send("Hello World"));
 
 app.use("/api/users", userRoutes);
 app.use("/api/doctors", doctorRoutes);
@@ -38,6 +46,7 @@ app.use("/api/uploadProfiles", profileRoutes);
 app.use("/api/doctorProfileRoutes", doctorProfileRoutes);
 app.use("/api/receptionProfileRoutes", receptionProfileRoutes);
 app.use("/api/feedback", feedbackRoutes);
+app.use("/api/multiDoctorDashboardRoutes", multiDoctorDashboardRoutes);
 // const options = {
 //   key: fs.readFileSync("certs/key.pem"),
 //   cert: fs.readFileSync("certs/cert.pem"),
@@ -53,7 +62,7 @@ app.get("/keepalive", (req, res) => {
 })();
 
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, "0.0.0.0", () =>
+server.listen(PORT, "0.0.0.0", () =>
   console.log(`Server running on port ${PORT}`)
 );
 

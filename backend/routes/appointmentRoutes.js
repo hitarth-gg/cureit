@@ -4,6 +4,7 @@ const router = express.Router();
 // const Appointment = require("../models/appointment");
 const supabase = require("../config/supabaseClient");
 const sendEmail = require("../services/emailService");
+const { getIo } = require("../config/socket.js");
 
 const getQueuePosition = async (doctorId, timestamp, date) => {
   const { data, error } = await supabase
@@ -11,6 +12,7 @@ const getQueuePosition = async (doctorId, timestamp, date) => {
     .select("id")
     .eq("doctor_id", doctorId)
     .eq("appointment_date", date)
+    .eq("status", "scheduled")
     .lt("created_at", timestamp);
   if (error) {
     console.log("Error fetching queue position:", error);
@@ -173,14 +175,46 @@ router.get("/doctor/:doctorId", async (req, res) => {
   return res.json(data);
 });
 router.post("/updateStatus/:appointmentId", async (req, res) => {
+  console.log("update status request recieved");
   const { appointmentId } = req.params;
   const { status } = req.query;
-  console.log(req);
-  const {data , error} = await supabase.from('appointments').update({status: status, updated_at: new Date().toISOString()}).eq('id', appointmentId).select('*').single();
+  // console.log(req);
+  const { data, error } = await supabase
+    .from("appointments")
+    .update({ status: status, updated_at: new Date().toISOString() })
+    .eq("id", appointmentId)
+    .select("*")
+    .single();
   if (error) {
     return res.status(400).json({ error: error.message });
   }
   console.log("Appointment status updated successfully");
+  console.log(data);
+  // const { data2, err } = await supabase
+  //   .from("appointments")
+  //   .select("doctor_id")
+  //   .eq("id", appointmentId)
+  //   .single();
+
+  // console.log(data2?.dpctor, " ", err)
+  const { data: data2, error: error2 } = await supabase
+    .from("profiles")
+    .select("name")
+    .eq("id", data?.doctor_id);
+  console.log(data2);
+  if (error) {
+    return res.status(400).json({ error: error.message });
+  }
+  const doctorId = `${data?.doctor_id}+${data2[0]?.name}`;
+
+  console.log(doctorId);
+  console.log("reaching end");
+  if (doctorId) {
+    const io = getIo();
+    console.log("doctor queue changed");
+    io.emit("doctorQueueChanged", { doctorId });
+  }
+
   return res.json(data);
 });
 //fetching upcoming appointments by patient Id
@@ -198,27 +232,35 @@ router.get("/upcomingAppointments/:patientId", async (req, res) => {
     return res.status(400).json({ error: error.message });
   }
   const updatedAppointments = await Promise.all(
-  appointments.map(async (appointment) => {
-    const queuePosition = await getQueuePosition(appointment.doctor_id, appointment.created_at, appointment.appointment_date);
-    if(queuePosition !== -1){
-      console.log("appointment: ", appointment);
-      console.log("Queue position:", queuePosition);
-      return {...appointment, queuePosition: queuePosition};
-    }
-  }))
-  return  res.json(updatedAppointments);
-  
-})
+    appointments.map(async (appointment) => {
+      const queuePosition = await getQueuePosition(
+        appointment.doctor_id,
+        appointment.created_at,
+        appointment.appointment_date
+      );
+      if (queuePosition !== -1) {
+        console.log("appointment: ", appointment);
+        console.log("Queue position:", queuePosition);
+        return { ...appointment, queuePosition: queuePosition };
+      }
+    })
+  );
+  return res.json(updatedAppointments);
+});
 //fetching completed appointments by patient Id
-router.get("/completedAppointments/:patientId" , async (req , res)=> {
-  const {patientId} = req.params;
-  const {data: appointments, error} = await supabase.from('appointments').select('*').eq('patient_id', patientId).in("status" , ["completed","missed"])
+router.get("/completedAppointments/:patientId", async (req, res) => {
+  const { patientId } = req.params;
+  const { data: appointments, error } = await supabase
+    .from("appointments")
+    .select("*")
+    .eq("patient_id", patientId)
+    .in("status", ["completed", "missed"]);
   if (error) {
     return res.status(400).json({ error: error.message });
   }
   console.log(appointments);
   return res.json(appointments);
-})
+});
 //fetching upcoming appointments by doctor Id
 router.get("/doctorUpcomingAppointments/:doctorId", async (req, res) => {
   const { doctorId } = req.params;
@@ -234,16 +276,21 @@ router.get("/doctorUpcomingAppointments/:doctorId", async (req, res) => {
     return res.status(400).json({ error: error.message });
   }
   const updatedAppointments = await Promise.all(
-  appointments.map(async (appointment) => {
-    const queuePosition = await getQueuePosition(appointment.doctor_id, appointment.created_at, appointment.appointment_date);
-    if(queuePosition !== -1){
-      console.log("appointment: ", appointment);
-      console.log("Queue position:", queuePosition);
-      return {...appointment, queuePosition: queuePosition};
-    }
-  }))
+    appointments.map(async (appointment) => {
+      const queuePosition = await getQueuePosition(
+        appointment.doctor_id,
+        appointment.created_at,
+        appointment.appointment_date
+      );
+      if (queuePosition !== -1) {
+        console.log("appointment: ", appointment);
+        console.log("Queue position:", queuePosition);
+        return { ...appointment, queuePosition: queuePosition };
+      }
+    })
+  );
   return res.json(updatedAppointments);
-})
+});
 //fetching completed appointments by doctor Id
 router.get("/doctorCompletedAppointments/:doctorId", async (req, res) => {
   const { doctorId } = req.params;
@@ -257,7 +304,7 @@ router.get("/doctorCompletedAppointments/:doctorId", async (req, res) => {
   }
   console.log(appointments);
   return res.json(appointments);
-})
+});
 //deleteAppointment
 router.delete("/delete/:appointmentId", async (req, res) => {
   const { appointmentId } = req.params;
@@ -268,7 +315,7 @@ router.delete("/delete/:appointmentId", async (req, res) => {
   if (error) {
     return res.status(400).json({ error: error.message });
   }
-  console.log("Appointment deleted successfully");
+
   return res.json(data);
 });
 module.exports = router;
