@@ -73,10 +73,12 @@ const MultiDoctorDashboard = () => {
 
   useEffect(() => {
     const socket = io(SOCKET_SERVER_URL);
+    socket.emit("joinReception", receptionId);
     fetchCompleteReceptionDoctorQueue(receptionId);
 
     socket.on("doctorQueueChanged", (data) => {
       const { doctorId, receptionIdFromSocket } = data;
+      console.log(receptionIdFromSocket);
       if (receptionIdFromSocket == receptionId) {
         fetchDoctorQueue(doctorId);
       }

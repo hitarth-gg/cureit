@@ -214,10 +214,11 @@ router.post("/updateStatus/:appointmentId", async (req, res) => {
 
   console.log(doctorId);
   console.log("reaching end");
+  const receptionId = data3[0]?.reception_id;
   if (doctorId) {
     const io = getIo();
     console.log("doctor queue changed");
-    io.emit("doctorQueueChanged", {
+    io.to(receptionId).emit("doctorQueueChanged", {
       doctorId: doctorId,
       receptionIdFromSocket: data3[0]?.reception_id,
     });

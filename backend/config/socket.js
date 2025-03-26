@@ -13,7 +13,10 @@ function initSocket(server) {
   console.log("findng connection...");
   io.on("connection", (socket) => {
     console.log("Client connected:", socket.id);
-
+    socket.on("joinReception", (receptionId) => {
+      socket.join(receptionId);
+      console.log(`Socket ${socket.id} joined room ${receptionId}`);
+    });
     socket.on("disconnect", () => {
       console.log("Client disconnected:", socket.id);
     });
