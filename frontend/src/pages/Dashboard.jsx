@@ -1,7 +1,7 @@
 import DoctorDashboard from "../components/DoctorDashboard/DoctorDashboard";
 import PatientDashboard from "../components/PatientDashboard/PatientDashboard";
 import ReceptionDashboard from "../components/ReceptionDashboard/ReceptionDashboard";
-
+import MultiDoctorDashboard from "./MultiDoctorDashboard";
 import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
 import useUserRoleById from "../hooks/useUserRoleById";
@@ -75,6 +75,7 @@ function Dashboard() {
         ) : role === "RECEPTION" ? (
           <ReceptionDashboard />
         ) : (
+          // <MultiDoctorDashboard />
           <DoctorDashboard />
         ))}
     </div>
