@@ -1,5 +1,7 @@
 import DoctorDashboard from "../components/DoctorDashboard/DoctorDashboard";
 import PatientDashboard from "../components/PatientDashboard/PatientDashboard";
+import ReceptionDashboard from "../components/ReceptionDashboard/ReceptionDashboard";
+
 import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
 import useUserRoleById from "../hooks/useUserRoleById";
@@ -66,9 +68,15 @@ function Dashboard() {
   }, [userId, dataRole]);
 
   return (
-    <div className="mt-12 mb-24 flex flex-col overflow-hidden p-4 font-noto md:px-12 md:py-8">
+    <div className="mb-24 mt-12 flex flex-col overflow-hidden p-4 font-noto md:px-12 md:py-8">
       {role &&
-        (role === "PATIENT" ? <PatientDashboard /> : <DoctorDashboard />)}
+        (role === "PATIENT" ? (
+          <PatientDashboard />
+        ) : role === "RECEPTION" ? (
+          <ReceptionDashboard />
+        ) : (
+          <DoctorDashboard />
+        ))}
     </div>
   );
 }

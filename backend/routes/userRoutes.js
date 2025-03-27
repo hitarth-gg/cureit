@@ -550,4 +550,77 @@ router.post("/updatePassword", verifyToken, async (req, res) => {
   }
 });
 
+router.post("/validateQR", async (req, res) => {
+  try {
+    const { qr_code, appointmentId } = req.body;
+    console.log("in validateQrbackend", req.body);
+
+    if (!qr_code || !appointmentId) {
+      return res
+        .status(400)
+        .json({ error: "QR code and appointmentId are required" });
+    }
+
+    // 1. Get the appointment record to retrieve the doctor_id
+    let { data: appointment, error: appointmentError } = await supabase
+      .from("appointments")
+      .select("doctor_id")
+      .eq("id", appointmentId)
+      .single();
+
+    if (appointmentError || !appointment) {
+      return res.status(400).json({ error: "Appointment not found" });
+    }
+
+    const doctorId = appointment.doctor_id;
+
+    // 2. Get the doctor record to retrieve the reception_id
+    let { data: doctor, error: doctorError } = await supabase
+      .from("doctors")
+      .select("reception_id")
+      .eq("id", doctorId)
+      .single();
+
+    if (doctorError || !doctor) {
+      return res.status(400).json({ error: "Doctor not found" });
+    }
+
+    const receptionId = doctor.reception_id;
+
+    // 3. Get the reception record to retrieve the stored qr code
+    let { data: reception, error: receptionError } = await supabase
+      .from("reception")
+      .select("qrcode")
+      .eq("id", receptionId)
+      .single();
+
+    if (receptionError || !reception) {
+      return res.status(400).json({ error: "Reception not found" });
+    }
+
+    // 4. Validate the QR code: check if the provided code matches the stored one
+    if (qr_code === reception.qrcode) {
+      // 5. Update the appointment's checkin column to true
+      let { data: updatedAppointment, error: updateError } = await supabase
+        .from("appointments")
+        .update({ checked_in_status: true })
+        .eq("id", appointmentId);
+
+      if (updateError) {
+        return res.status(500).json({
+          error: "Failed to update appointment",
+          details: updateError.message,
+        });
+      }
+
+      return res.status(200).json({ message: "Check-in successful" });
+    } else {
+      return res.status(400).json({ error: "Invalid QR code" });
+    }
+  } catch (err) {
+    console.error("Error in /validateQR:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 module.exports = router;
