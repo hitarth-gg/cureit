@@ -177,89 +177,164 @@ function AppointmentCard({ data, refetch }) {
             </DataList.Value>
           </DataList.Item>
           <DataList.Item>
-            <div className="flex items-center justify-start md:hidden">
+            <div className="flex items-center justify-start gap-4 md:hidden">
               <CancelDialog data={data} refetch={refetch} />
+              {!checked_in_status ? (
+                <div>
+                  {/* <h1>QR Code Check-In</h1> */}
+
+                  {!showScanner ? (
+                    <Button onClick={() => setShowScanner(true)}>
+                      <div className="text-xs">Scan QR Code</div>
+                    </Button>
+                  ) : (
+                    <div
+                      style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "rgba(0, 0, 0, 0.7)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        zIndex: 1000,
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: "relative", // So that the close button can be absolutely positioned within
+                          backgroundColor: "#fff",
+                          padding: "2rem",
+                          borderRadius: "8px",
+                          maxWidth: "90%",
+                          maxHeight: "90%",
+                          overflow: "auto",
+                          textAlign: "center",
+                        }}
+                      >
+                        {/* Close Button */}
+                        <button
+                          onClick={() => setShowScanner(false)}
+                          style={{
+                            position: "absolute",
+                            top: "16px",
+                            right: "16px",
+                            backgroundColor: "#fff",
+                            border: "2px solid red",
+                            borderRadius: "50%",
+                            width: "40px",
+                            height: "40px",
+                            fontSize: "20px",
+                            color: "red",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: 0,
+                          }}
+                          aria-label="Close"
+                        >
+                          X
+                        </button>
+
+                        <QRScanner
+                          appointmentId={appointmentId}
+                          onScanSuccess={(data) => {
+                            handleScanSuccess(data);
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Button disabled={true} onClick={() => setShowScanner(true)}>
+                  Checked In Successfully
+                </Button>
+              )}
             </div>
           </DataList.Item>
         </DataList.Root>
         <div>
-          {!checked_in_status ? (
-            <div style={{ textAlign: "center", marginTop: "2rem" }}>
-              {/* <h1>QR Code Check-In</h1> */}
+          <div className="ml-4 mt-5 hidden items-center justify-center gap-4 md:flex">
+            <CancelDialog data={data} refetch={refetch} />
+            {!checked_in_status ? (
+              <div>
+                {/* <h1>QR Code Check-In</h1> */}
 
-              {!showScanner ? (
-                <Button onClick={() => setShowScanner(true)}>
-                  Scan QR Code
-                </Button>
-              ) : (
-                <div
-                  style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: "rgba(0, 0, 0, 0.7)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    zIndex: 1000,
-                  }}
-                >
+                {!showScanner ? (
+                  <Button onClick={() => setShowScanner(true)}>
+                    <div className="text-xs text-nowrap">Scan QR Code</div>
+                  </Button>
+                ) : (
                   <div
                     style={{
-                      position: "relative", // So that the close button can be absolutely positioned within
-                      backgroundColor: "#fff",
-                      padding: "2rem",
-                      borderRadius: "8px",
-                      maxWidth: "90%",
-                      maxHeight: "90%",
-                      overflow: "auto",
-                      textAlign: "center",
+                      position: "fixed",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      backgroundColor: "rgba(0, 0, 0, 0.7)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      zIndex: 1000,
                     }}
                   >
-                    {/* Close Button */}
-                    <button
-                      onClick={() => setShowScanner(false)}
+                    <div
                       style={{
-                        position: "absolute",
-                        top: "16px",
-                        right: "16px",
+                        position: "relative", // So that the close button can be absolutely positioned within
                         backgroundColor: "#fff",
-                        border: "2px solid red",
-                        borderRadius: "50%",
-                        width: "40px",
-                        height: "40px",
-                        fontSize: "20px",
-                        color: "red",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        padding: 0,
+                        padding: "2rem",
+                        borderRadius: "8px",
+                        maxWidth: "90%",
+                        maxHeight: "90%",
+                        overflow: "auto",
+                        textAlign: "center",
                       }}
-                      aria-label="Close"
                     >
-                      X
-                    </button>
+                      {/* Close Button */}
+                      <button
+                        onClick={() => setShowScanner(false)}
+                        style={{
+                          position: "absolute",
+                          top: "16px",
+                          right: "16px",
+                          backgroundColor: "#fff",
+                          border: "2px solid red",
+                          borderRadius: "50%",
+                          width: "40px",
+                          height: "40px",
+                          fontSize: "20px",
+                          color: "red",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          padding: 0,
+                        }}
+                        aria-label="Close"
+                      >
+                        X
+                      </button>
 
-                    <QRScanner
-                      appointmentId={appointmentId}
-                      onScanSuccess={(data) => {
-                        handleScanSuccess(data);
-                      }}
-                    />
+                      <QRScanner
+                        appointmentId={appointmentId}
+                        onScanSuccess={(data) => {
+                          handleScanSuccess(data);
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <Button disabled={true} onClick={() => setShowScanner(true)}>
-              Checked In Successfully
-            </Button>
-          )}
-          <div className="ml-4 mt-5 hidden items-center justify-center md:flex">
-            <CancelDialog data={data} refetch={refetch} />
+                )}
+              </div>
+            ) : (
+              <Button disabled={true} onClick={() => setShowScanner(true)}>
+                Checked In Successfully
+              </Button>
+            )}
           </div>
         </div>
       </div>
