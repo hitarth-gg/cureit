@@ -389,11 +389,10 @@ function Home() {
                 variant=""
                 className="my-4"
                 onClick={() => {
-                  if(token){
-                    navigate("/bookappointment")
-                  }
-                  else{
-                    navigate("/login")
+                  if (token) {
+                    navigate("/bookappointment");
+                  } else {
+                    navigate("/login");
                   }
                 }}
               >
@@ -417,4 +416,4 @@ function Home() {
 }
 
 export default Home;
-// sbp_c059222e1659f5d235c3f3ad6ef20cdbd3819072
+// // sbp_c059222e1659f5d235c3f3ad6ef20cdbd3819072
