@@ -57,7 +57,8 @@ function BookAppointment() {
     isLoading: isLoadingDoctorType,
     data: dataDoctorType,
     error: errorDoctorType,
-  } = useGetDoctorType(formState === 2 ? formData.healthIssue : null); // Fetch doctor type based on health issue using ML model
+  } = useGetDoctorType(formState === 2 ? formData.healthIssue : null); 
+  const [mode , setMode] = useState("offline"); // Fetch doctor type based on health issue using ML model
   const {
     isLoading: isLoadingSlots,
     data: dataSlots,
@@ -65,7 +66,7 @@ function BookAppointment() {
     refetch: refetchSlots,
     isFetching: isFetchingSlots,
   } = useGetDoctorSlots(
-    formState === 2 ? { formData, patientId, dataDoctorType } : null,
+    formState === 2 ? { formData, patientId, dataDoctorType , mode } : null,
   ); // Fetch doctor slots based on selected doctor type
 
   // console.log(isLoadingDoctorType, isLoadingSlots);
@@ -151,6 +152,8 @@ function BookAppointment() {
               setFormData={setFormData}
               refetchSlots={refetchSlots}
               dataDoctorType={dataDoctorType}
+              setMode = {setMode}
+              mode = {mode}
             />
           )}
           {formState === 3 && (
@@ -158,6 +161,7 @@ function BookAppointment() {
               data={formData}
               bookingSuccessful={bookingSuccessful}
               setBookingSuccessful={setBookingSuccessful}
+              mode = {mode}
             />
           )}
 

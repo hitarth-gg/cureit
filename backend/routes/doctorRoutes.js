@@ -1,9 +1,6 @@
-// routes/doctorRoutes.js
 const express = require("express");
 const router = express.Router();
 const supabase = require("../config/supabaseClient");
-
-// Add a new doctor
 router.post("/", async (req, res) => {
   const {
     userId,
@@ -142,6 +139,28 @@ router.get("/availableSlots/:userId", async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 });
+router.get("/availableSlots2/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  console.log("userId: ", userId);
+  const { specialization, date, mode, sort } = req.query; // mode: 'online' or 'offline', sort: 'earliest' or 'most_available'
+  console.log(specialization, date, mode, sort);
+  const {data , error:DeletePendingAppointmentsError} = await supabase.from('appointments').delete().eq('patient_id' , userId).eq('book_status', 'pending');
+  if(DeletePendingAppointmentsError){
+    return res.status(400).json({error: DeletePendingAppointmentsError.message});
+  }
+   const weekday = (new Date(date).toLocaleString("en-US", { weekday: "long" })).charAt(0).toUpperCase() + (new Date(date).toLocaleString("en-US", { weekday: "long" })).slice(1);
+   console.log(weekday);
+  const {data:availableSlots , error:availableSlotsError} = await supabase.rpc("get_available_slots_by_earliest2", {
+    p_specialization: specialization,
+    p_date: date,
+    p_mode: mode,
+    p_weekday: weekday,});
+  if(availableSlotsError){
+    return res.status(400).json({error: availableSlotsError.message});
+  }
+  console.log(availableSlots);
+  return res.status(200).json(availableSlots);
+});
 
 router.get("/calcBefore/:doctorId", async (req, res) => {
   const { doctorId } = req.params;
@@ -182,18 +201,34 @@ router.get("/doctorDetailsById/:Id", async (req, res) => {
   }
 
   console.log("Fetching doctor with ID:", Id);
-
+  const {data: profiledata , error: profileerror} = await supabase.from("profiles").select("*").eq("id", Id).single();
+  if (profileerror) {
+    console.error("Supabase error:", profileerror);
+    return res.status(400).json({ error: profileerror.message });
+  }
+  console.log("profiledata:");
+  console.log(profiledata);
   const { data, error } = await supabase
-    .from("doctors")
+    .from("doctors2")
     .select("*")
     .eq("id", Id)
-    .single(); // Ensure the UUID is passed correctly
-
-  if (error) {
-    console.error("Supabase error:", error);
-    return res.status(400).json({ error: error.message });
+    .single(); 
+  if(error){
+    console.log(error);
+    return res.status(400).json({error: error.message});
   }
 
+  const {data: hospitalData , error: hospitalDataError} = await supabase .from("reception").select("*").eq("id" , data.reception_id).single();
+  
+  if (hospitalDataError) {
+    console.error("Supabase error:", hospitalDataError);
+    return res.status(400).json({ error: hospitalDataError.message });
+  }
+  console.log("hospitalData:");
+  console.log(hospitalData);
+  data.name=profiledata.name;
+  data.hospitalData = hospitalData;
+  console.log(data);
   res.json(data);
 });
 

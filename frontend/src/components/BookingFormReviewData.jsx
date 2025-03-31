@@ -85,7 +85,7 @@ function BookingFormReviewData({
               <DataList.Item>
                 <DataList.Label minWidth="88px">Name</DataList.Label>
                 <DataList.Value>
-                  <Code variant="ghost">{selectedDoctor?.name}</Code>
+                  <Code variant="ghost">{selectedDoctor?.doctor_name}</Code>
                 </DataList.Value>
               </DataList.Item>
               <DataList.Item align="center">
@@ -103,9 +103,15 @@ function BookingFormReviewData({
                 </DataList.Value>
               </DataList.Item>
               <DataList.Item>
+                <DataList.Label minWidth="88px">Mode</DataList.Label>
+                <DataList.Value>
+                  <Code variant="ghost">{selectedDoctor?.mode}</Code>
+                </DataList.Value>
+              </DataList.Item>
+              <DataList.Item>
                 <DataList.Label minWidth="88px">Available Time</DataList.Label>
                 <DataList.Value>
-                  <Code variant="ghost">{selectedDoctor?.available_from}</Code>
+                  <Code variant="ghost">{selectedDoctor?.selectedSlot?.start_time} - {selectedDoctor?.selectedSlot?.end_time}</Code>
                 </DataList.Value>
               </DataList.Item>
               <DataList.Item>

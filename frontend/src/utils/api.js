@@ -26,14 +26,14 @@ export async function getAddressFromCoords(lat, lng) {
   }
 }
 
-export async function getDoctorSlots(date, specialization, userId) {
+export async function getDoctorSlots(date, specialization, userId , mode) {
   // const userId = appointmentData.userId;
   // const specialization = appointmentData.specialization;
   // const date = appointmentData.date;
   // console.log("Get Doctor Slots: ", date, specialization, userId);
 
   const response = await fetch(
-    `${API_URL}/api/doctors/availableSlots/${userId}?specialization=${specialization}&date=${date}`,
+    `${API_URL}/api/doctors/availableSlots2/${userId}?specialization=${specialization}&date=${date}&mode=${mode}`,
     {
       method: "GET",
       headers: {
@@ -48,48 +48,6 @@ export async function getDoctorSlots(date, specialization, userId) {
   const data = await response.json();
   // console.log(data);
   return data;
-  // const testData = [
-  //   {
-  //     name: "Dr. Emily Carter",
-  //     hospital: "CityCare General Hospital",
-  //     specialization: "Dentist",
-  //     available_date: "28-09-2021",
-  //     available_time: "10:00 AM - 2:00 PM",
-  //     uid: "1",
-  //   },
-  //   {
-  //     name: "Dr. James Rodriguez",
-  //     hospital: "Sunrise Medical Center",
-  //     specialization: "Dentist",
-  //     available_date: "28-09-2021",
-  //     available_time: "9:00 AM - 1:00 PM",
-  //     uid: "2",
-  //   },
-  //   {
-  //     name: "Dr. Sophia Lee",
-  //     hospital: "Harmony Children's Hospital",
-  //     specialization: "Dentist",
-  //     available_date: "28-09-2021",
-  //     available_time: "11:00 AM - 3:00 PM",
-  //     uid: "3",
-  //   },
-  //   {
-  //     name: "Dr. Arjun Mehta",
-  //     hospital: "Lotus Specialty Clinic",
-  //     specialization: "Dentist",
-  //     available_date: "01-02-2025",
-  //     available_time: "1:00 PM - 5:00 PM",
-  //     uid: "4",
-  //   },
-  //   {
-  //     name: "Dr. Olivia Brown",
-  //     hospital: "Green Valley Healthcare",
-  //     specialization: "Dentist",
-  //     available_date: "01-02-2025",
-  //     available_time: "2:00 PM - 6:00 PM",
-  //     uid: "5",
-  //   },
-  // ];
 }
 export async function getProfileDetails(userId) {
   const response = await fetch(`${API_URL}/api/users/userById/${userId}`);
@@ -124,8 +82,7 @@ export async function deleteAppointment(appointmentId) {
   return response.json();
 }
 export async function getPatientAppointments(patientId) {
-  const today = new Date().toISOString().split("T")[0]; // Formats as YYYY-MM-DD
-
+  const today = new Date().toISOString().split("T")[0];
   try {
     const response = await fetch(
       `${API_URL}/api/appointments/upcomingAppointments/${patientId}?date=${today}`,
@@ -133,10 +90,7 @@ export async function getPatientAppointments(patientId) {
     if (!response.ok) {
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
-
     const data = await response.json();
-
-    // Fetch doctor details for each appointment
     const updatedData = await Promise.all(
       data.map(async (appointment) => {
         try {
@@ -152,23 +106,21 @@ export async function getPatientAppointments(patientId) {
           };
         } catch (error) {
           console.error("Failed to fetch doctor details:", error);
-          return { ...appointment, doctorDetails: null }; // Avoid breaking the loop
+          return { ...appointment, doctorDetails: null };
         }
       }),
     );
-    // console.log(updatedData);
-    // Return an array of appointments with doctor details
     const finalAppointments = updatedData.map((appointment) => ({
       appointmentId: appointment.id,
       doctor: appointment.doctorProfileDetails?.name || "Unknown",
       specialization: appointment.doctorDetails?.specialization || "Unknown",
-      hospital: appointment.doctorDetails?.hospital_name || "Unknown",
-      appointment_time: appointment.appointment_time?.appointment_time || "N/A",
+      hospital: appointment.doctorDetails?.hospitalData?.name || "Unknown",
+      appointment_time: appointment?.chosen_slot || "N/A",
       appointment_date: appointment.appointment_date,
       queuePosition: appointment.queuePosition || "N/A",
-      address: appointment.doctorDetails?.address || "N/A",
-      plus_code: appointment.doctorDetails?.plus_code || "N/A",
-      available_from: appointment.doctorDetails?.available_from || null,
+      address: appointment.doctorDetails?.hospitalData?.address || "N/A",
+      plus_code: appointment.doctorDetails?.hospitalData?.plus_code || "N/A",
+      // available_from: appointment.doctorDetails?.available_from || null,
       checked_in_status: appointment.checked_in_status || null,
     }));
 
@@ -555,7 +507,7 @@ export async function postBookAppointment(bookingData) {
     },
     body: JSON.stringify({
       patientId: patientId, //logged in user's id will come here
-      doctorId: formData.selectedDoctor.id,
+      doctorId: formData.selectedDoctor.doctor_id,
       appointment_date: formData.selectedDate.split("-").reverse().join("-"),
       book_status: "completed",
       personal_details: JSON.stringify({
@@ -565,6 +517,11 @@ export async function postBookAppointment(bookingData) {
         gender: formData.gender,
         health_issue: formData.healthIssue,
       }),
+      chosen_slot: JSON.stringify({
+        mode: formData.selectedDoctor.mode,
+        start_time: formData.selectedDoctor.selectedSlot.start_time,
+        end_time: formData.selectedDoctor.selectedSlot.end_time,
+      })
     }),
   });
   if (!response.ok) {
