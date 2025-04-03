@@ -258,6 +258,34 @@ Currently, the following doctor specializations are available in the database:
 - They can book, view and cancel appointments from their dashboard.
 - Patients can access their medical history and view prescriptions and doctor's remarks (if any).
 
+## Screenshots
+
+<img width="800" alt="Screenshot 2025-04-03 at 11 09 53 PM" src="https://github.com/user-attachments/assets/977fb1d5-a749-498c-8c28-6991e9d3e6ac" />
+
+- **Login**
+<img width="800" alt="Screenshot 2025-04-03 at 11 00 05 PM" src="https://github.com/user-attachments/assets/0dc51343-70b4-4f38-8c39-f1a02c31b637" />
+
+- **SignUp**
+<img width="800" alt="Screenshot 2025-04-03 at 10 59 44 PM" src="https://github.com/user-attachments/assets/9662c2c8-54ac-4b6e-ae83-2ec52966a286" />
+
+- **FAQ Chatbot**
+<img width="800" alt="Screenshot 2025-04-03 at 11 15 30 PM" src="https://github.com/user-attachments/assets/55b5414c-ddac-4cae-9e91-1788079b8284" />
+
+- **AI-Powered Doctor Specialization Suggestion**
+<img width="800" alt="Screenshot 2025-04-03 at 11 23 16 PM" src="https://github.com/user-attachments/assets/eb96cd51-8a83-4a70-a0e0-cb08e2d8e40e" />
+<img width="800" alt="Screenshot 2025-04-03 at 11 23 41 PM" src="https://github.com/user-attachments/assets/93c289db-d5d4-4d81-a6fe-4f6d31b28c99" />
+<img width="800" alt="Screenshot 2025-04-03 at 11 24 06 PM" src="https://github.com/user-attachments/assets/5d218f59-6d4b-4b50-bb3d-847721aa1dc0" />
+
+- **Patient Dashboard**
+<img width="800" alt="Screenshot 2025-04-03 at 11 24 35 PM" src="https://github.com/user-attachments/assets/f8d30389-61be-4765-949f-fef704e2c208" />
+
+
+
+
+
+
+
+
 
 
 ---
