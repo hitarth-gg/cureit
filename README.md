@@ -1,4 +1,3 @@
-# Cureit 🚀
 
 ## Introduction
 
@@ -260,32 +259,94 @@ Currently, the following doctor specializations are available in the database:
 
 ## Screenshots
 
-<img width="800" alt="Screenshot 2025-04-03 at 11 09 53 PM" src="https://github.com/user-attachments/assets/977fb1d5-a749-498c-8c28-6991e9d3e6ac" />
+<img width="800" alt="Screenshot 2025-04-03 at 11 09 53 PM" src="https://github.com/user-attachments/assets/977fb1d5-a749-498c-8c28-6991e9d3e6ac" /><br>
 
-- **Login**
-<img width="800" alt="Screenshot 2025-04-03 at 11 00 05 PM" src="https://github.com/user-attachments/assets/0dc51343-70b4-4f38-8c39-f1a02c31b637" />
-
+- **Login**<br>
+<img width="800" alt="Screenshot 2025-04-03 at 11 00 05 PM" src="https://github.com/user-attachments/assets/0dc51343-70b4-4f38-8c39-f1a02c31b637" /><br>
+<br><br>
 - **SignUp**
-<img width="800" alt="Screenshot 2025-04-03 at 10 59 44 PM" src="https://github.com/user-attachments/assets/9662c2c8-54ac-4b6e-ae83-2ec52966a286" />
+- <img width="800" alt="Screenshot 2025-04-03 at 11 00 05 PM" src="https://github.com/user-attachments/assets/1c5bb870-6a5d-4f8a-99d7-a25f2e4e7305" /><br>
+<br><br>
+**Forgot Password**
+- <img width="800" alt="Screenshot 2025-04-03 at 11 00 05 PM" src="https://github.com/user-attachments/assets/19ff4940-0f80-4a46-83f3-c152070e12fc" /><br>
+<br><br>
+**Verification Page**
+- <img width="800" alt="Screenshot 2025-04-03 at 11 00 05 PM" src="https://github.com/user-attachments/assets/a0c209a0-03cd-485a-bab0-43a373d6c886" /><br>
+<br><br>
+- **Patient Dashboard**
+    - Profile<br>
+<img width="800" alt="Screenshot 2025-04-03 at 11 24 35 PM" src="https://github.com/user-attachments/assets/5860d191-2b65-4e08-ba5b-53ecdee5511f" /><br>
+The profile tab provides users with a detailed view of their personal information, including fields such as `email`, `phone`, `address`, `age`, and `gender`.  
+Additionally, it displays any appointments scheduled for the current day, helping users stay updated on their schedule.  
+This section ensures easy access to essential details while keeping track of upcoming consultations.  
+    - Upcoming Booked Appointments<br>
+<img width="800" alt="Screenshot 2025-04-03 at 11 24 35 PM" src="https://github.com/user-attachments/assets/0dc1a1ee-cd04-40b7-8fa9-b9776baf9d80" /><br>
+The **Upcoming Appointments** section displays all scheduled appointments, providing users with essential details such as **`doctor’s name`, `specialization`, `hospital`, `address`, `expected time`, `appointment date`, and `queue position`.  
+In case of an emergency or change of plans, users have the option to **cancel their appointment** directly from this section. Additionally, a **QR code check-in system** is available, allowing users to seamlessly check in at the reception by scanning the **QR code displayed on the reception dashboard**.  
+    -Past Appointments(History)<br>
+<img width="800" alt="Screenshot 2025-04-03 at 11 24 35 PM" src="https://github.com/user-attachments/assets/6056aa1d-1f35-40eb-a80a-2d5a3525416f" /><br>
+The **Appointment History** section provides users with a record of their past appointments, displaying key details such as `doctor’s name`, `specialization`, `hospital`, `address`,` appointment time`, and `date`.  
+To enhance user experience, this section includes a **feedback feature**, allowing patients to share their experiences and provide insights for service improvement. Additionally, users can access **detailed information** about their past consultations for future reference.  
+
+<br><br>
+- **Doctor Dashboard**
+    - Profile<br>
+<img width="800" alt="Screenshot 2025-04-03 at 11 24 35 PM" src="https://github.com/user-attachments/assets/004a3c48-6b90-42c0-844e-80e1f625c077" /><br>
+The **Doctor Profile** section provides essential details about the doctor, including `email`, `phone`, `address`, `specialization`, `age`, and `gender`. This information ensures easy access for patients and staff, facilitating smooth communication and coordination.  Additionally, this section includes a **"Download Today's Appointments"** button, allowing doctors to efficiently access a list of scheduled appointments for the day. This feature helps in managing consultations effectively and staying organized.  
+    - Excel Sheet for Displaying Current Appointments<br>
+  <img width="800" alt="Screenshot 2025-04-03 at 11 24 35 PM" src="https://github.com/user-attachments/assets/e65a52a0-5bfe-43fb-b5ae-164fba94adb7" /><br>
+  Doctors can **download a backup** of all scheduled appointments for the day to handle patient queues during **power failures or system downtimes**. The downloaded file includes **patient details, appointment status, doctor, and specialization**, allowing reception staff to **manually manage check-ins** without system access. This ensures **uninterrupted workflow** and prevents delays in patient care. The backup can be **manually triggered or auto-scheduled** for reliability.
+    - Appointments Queue<br>
+<img width="800" alt="Screenshot 2025-04-03 at 11 24 35 PM" src="https://github.com/user-attachments/assets/6ad52e80-a71b-40d5-b100-f6a0e94305e0" /><br>
+The **Appointment Queue** section displays a list of patients waiting for their appointments, providing key details such as `patient name`, `age & gender`, `hospital`, `expected appointment time`, `appointment date`, and `queue position`.  Each patient entry includes action buttons for **"Skip"**, **"OTP Verification"**, and **"Details"**, enabling doctors to manage the queue efficiently. The OTP verification ensures secure patient identification, while the queue system helps streamline patient flow and reduce wait times.  
+
+    -Past Appointments(History)<br>
+<img width="800" alt="Screenshot 2025-04-03 at 11 24 35 PM" src="https://github.com/user-attachments/assets/27c115fa-e51d-482e-8394-2b34217eacdd" /><br>
+The **Appointment History** section provides a record of past patient consultations, displaying key details such as `patient name`, `age & gender`, `issue`, `hospital`, `appointment time`, and `appointment date`. Each entry allows doctors to review past interactions and track patient history for better follow-ups and continuity of care. A **"Details"** button is available for accessing more in-depth information about the appointment.  
+
+<br><br>
+- **Reception  Dashboard**
+    - Profile<br>
+<img width="800" alt="Screenshot 2025-04-03 at 11 24 35 PM" src="https://github.com/user-attachments/assets/ab7357be-fd57-42ea-9bec-daf1a8d5e02b" /><br>
+The **Reception Profile** section provides essential details about the hospital, including `hospital name`, `address`, and `email`, ensuring easy access to contact information.  A **QR Code** is displayed, which patients need to scan for check-in upon arrival. The `current code` shown beneath the QR code ensures secure and efficient authentication for patients, streamlining the check-in process and reducing manual efforts at the reception.  
+    - Real time Queue Monitoring<br>
+<img width="800" alt="Screenshot 2025-04-03 at 11 24 35 PM" src="https://github.com/user-attachments/assets/91748dd2-88fa-4db2-b10a-f5f7342e857d" /><br>
+The **Reception Dashboard** provides real-time insights into patient queues and doctor availability, using **WebSockets** for instant updates. It displays `total patients`, `active doctors`, `current time`, and the `last updated timestamp`, with a `refresh button` for manual updates. Each doctor has a queue status card showing their `name`, `profile icon`, `patient count`, and `queue status` (e.g., "No patients," "Active," or "Busy"). A `queue list` with patient names and positions appears if applicable, and doctors with no patients see a `"Clear" button` to reset their status. **WebSockets** enable automatic updates, ensuring patient check-ins via QR codes, doctor availability, and queue status changes reflect in real time, reducing delays and improving efficiency. 
+<br><br>
+
+- **Booking Process and AI-Powered Doctor Specialization Suggestion**
+<img width="800" alt="Screenshot 2025-04-03 at 11 24 35 PM" src="https://github.com/user-attachments/assets/2202309b-7c9e-4365-ac1f-a7cbc5a161c7" /><br>
+<img width="800" alt="Screenshot 2025-04-03 at 11 24 35 PM" src="https://github.com/user-attachments/assets/10d8c970-4dc2-44f6-bb70-b1e1ba08d0c5" /><br>
+<img width="800" alt="Screenshot 2025-04-03 at 11 24 35 PM" src="https://github.com/user-attachments/assets/037de507-062d-47e8-857c-f6d54e60ecaf" /><br>
+<img width="800" alt="Screenshot 2025-04-03 at 11 24 35 PM" src="https://github.com/user-attachments/assets/2dd0305f-3f23-44dd-a36c-250d2eb3b888" /><br>
+<img width="800" alt="Screenshot 2025-04-03 at 11 24 35 PM" src="https://github.com/user-attachments/assets/705dff6c-d116-4f8c-8401-80c74091e4e5" /><br>
+<br><br>
+
+- **Prescription Process**
+- Doctor Dashboard Appointments<br>
+![11)DoctorDashboard_Queue](https://github.com/user-attachments/assets/99697269-4a29-43b4-a9b8-9736519ccc39)<br>
+Doctor Views his current days schedule and confirms the presence of the patient by using OTP verification(only if the patient has not checked in) then the patient recieves the OTP 
+- Patient recieving OTP<br>
+![13)Docotr_dashboard_Otp_Verification](https://github.com/user-attachments/assets/a677846e-1f2f-45f1-a861-b861887c6f97)<br>
+- Doctor giving prescription<br>
+![14)Doctor_Dashbaord_Prescription](https://github.com/user-attachments/assets/4818cd10-f72f-415e-bee5-99f9c85dd46a)<br>
+Doctors provide prescriptions by filling out the following fields: **Doctor Remarks**, where they note the patient's condition, and **Medical Prescription**, where they list recommended medications. The prescription follows a structured format, ensuring clarity for both patients and pharmacists.  
+
+- **Patient Feedback Process** 
+- Patient Dashboard History<br>
+  -  ![15)Patient_Dashboard_History](https://github.com/user-attachments/assets/c9b2a32d-b35c-4dc0-9310-fd534fe610bd)<br>
+  Patients can **view their past appointments** along with details such as the **doctor's name, specialization, hospital, address, appointment date, and time**. They also have the option to **provide feedback** on their experience, helping improve healthcare services. Additionally, a **"Get Directions"** feature assists patients in locating the hospital easily.  
+
+
+- Patient Feedback Portal<br>
+  -  ![16)Patient_Feedback](https://github.com/user-attachments/assets/4fab670a-e89e-4230-863a-940f7f0e2493)<br>
+  Users can provide feedback on their past medical appointments by clicking the **Feedback** button in the **History** tab. A popup appears where they can enter their experience with the doctor and treatment. They can then submit the feedback by clicking **Send** or cancel it if needed. This feature helps improve healthcare services based on patient reviews.  
+
+-AI generated Tag of the feedback displayed over the doctor profile<br>
+  -  ![17)Doctor_Dashboard_feedback_summary](https://github.com/user-attachments/assets/6b7252e0-cf5b-4974-83fa-48eecb2389f3)<br>
+  User feedback is processed using an ML model to generate concise tags summarizing key aspects of the doctor’s service. These tags, such as "Helpful" or "Experienced," are displayed on the doctor’s profile when patients select a doctor and time slot. This helps patients make informed decisions based on past experiences of previous doctors.
+<br><br>
 
 - **FAQ Chatbot**
 <img width="800" alt="Screenshot 2025-04-03 at 11 15 30 PM" src="https://github.com/user-attachments/assets/55b5414c-ddac-4cae-9e91-1788079b8284" />
-
-- **AI-Powered Doctor Specialization Suggestion**
-<img width="800" alt="Screenshot 2025-04-03 at 11 23 16 PM" src="https://github.com/user-attachments/assets/eb96cd51-8a83-4a70-a0e0-cb08e2d8e40e" />
-<img width="800" alt="Screenshot 2025-04-03 at 11 23 41 PM" src="https://github.com/user-attachments/assets/93c289db-d5d4-4d81-a6fe-4f6d31b28c99" />
-<img width="800" alt="Screenshot 2025-04-03 at 11 24 06 PM" src="https://github.com/user-attachments/assets/5d218f59-6d4b-4b50-bb3d-847721aa1dc0" />
-
-- **Patient Dashboard**
-<img width="800" alt="Screenshot 2025-04-03 at 11 24 35 PM" src="https://github.com/user-attachments/assets/f8d30389-61be-4765-949f-fef704e2c208" />
-
-
-
-
-
-
-
-
-
-
 ---
