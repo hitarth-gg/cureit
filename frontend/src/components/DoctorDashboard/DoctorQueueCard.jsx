@@ -46,7 +46,7 @@ function DoctorQueueCard({ data, refetch }) {
       },
     );
   }
-  const appointmentTypes = ["orange", "blue"]; // green for today's appointment, blue for future appointment
+  const appointmentTypes = ["orange", "blue"];
   const appointmentType =
     appointment_date ===
     new Date().toLocaleDateString("en-IN").replace(/\//g, "-")
@@ -59,22 +59,19 @@ function DoctorQueueCard({ data, refetch }) {
     if (
       appointment_time === "N/A" ||
       queuePosition === "N/A" ||
-      isNaN(Number(queuePosition)) || // Ensures queuePosition is treated as a number
+      isNaN(Number(queuePosition)) || 
       appointment_date === "N/A"
     ) {
       setExpectedTime("N/A");
       return;
     }
 
-    // Extract start_time, end_time, and mode from chosen_slot
     const { start_time, end_time, mode } = appointment_time || {};
 
     if (!start_time || !end_time) {
       setExpectedTime("N/A");
       return;
     }
-
-    // Handle mode-based adjustments (if needed)
     let availableTime = `${appointment_date}T${start_time}`;
 
     const availableDate = new Date(availableTime);
@@ -84,18 +81,9 @@ function DoctorQueueCard({ data, refetch }) {
     // Add queue-based delay (15 mins per position)
     const queueDelayMinutes = (Number(queuePosition) - 1) * 15;
     const expectedTime = new Date(availableDate.getTime() + queueDelayMinutes * 60000);
-
-    // If the appointment is online, we may want to handle it differently
     if (mode === "online") {
-      // For "online" appointments, maybe you want to adjust or show different logic, 
-      // e.g., showing an online consultation start time or ignoring certain local adjustments.
-      // For now, we'll keep it simple and proceed similarly to "offline" appointments.
-      // You can add any specific logic for "online" mode here if needed.
     }
-
-    // Ensure we correctly display expected time based on the current date
     if (currentTime.toISOString().split("T")[0] < appointment_date) {
-      // Future appointment -> Use `availableTime + queue delay`
       setExpectedTime(
         expectedTime.toLocaleTimeString("en-IN", {
           hour: "2-digit",
@@ -103,9 +91,7 @@ function DoctorQueueCard({ data, refetch }) {
         })
       );
     } else if (currentTime.toISOString().split("T")[0] === appointment_date) {
-      // Same-day appointment
       if (currentTime > availableDate) {
-        // If current time is already past `start_time`, adjust from now
         const adjustedTime = new Date(currentTime.getTime() + queueDelayMinutes * 60000);
         setExpectedTime(
           adjustedTime.toLocaleTimeString("en-IN", {
@@ -114,7 +100,6 @@ function DoctorQueueCard({ data, refetch }) {
           })
         );
       } else {
-        // If still before `start_time`, adjust from `start_time`
         setExpectedTime(
           expectedTime.toLocaleTimeString("en-IN", {
             hour: "2-digit",

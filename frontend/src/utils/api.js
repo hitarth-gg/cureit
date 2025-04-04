@@ -171,7 +171,7 @@ export async function getPatientAppointmentHistory(patientId) {
       status: appointment.status,
       age: appointment.personal_details.age,
       gender: appointment.personal_details.gender,
-      hospital: appointment.doctorDetails.hospital_name,
+      hospital: appointment.doctorDetails.hospitalData.name,
       appointment_date: appointment.appointment_date,
       queuePosition: "N/A",
       currentMedication: "N/A",
@@ -181,8 +181,8 @@ export async function getPatientAppointmentHistory(patientId) {
       appointment_time: appointment.updated_at,
       doctor: appointment.doctorProfileDetails?.name || "Unknown",
       specialization: appointment.doctorDetails?.specialization || "Unknown",
-      address: appointment.doctorDetails?.address || "N/A",
-      plus_code: appointment.doctorDetails?.plus_code || "N/A",
+      address: appointment.doctorDetails?.hospitalData.address|| "N/A",
+      plus_code: appointment.doctorDetails?.hospitalData.plus_code || "N/A",
     }));
 
     return finalAppointments;
@@ -214,7 +214,7 @@ export async function getQueueForDoctor(doctorId , selectedDate , selectedSlot) 
           patientName: appointment.personal_details.name,
           age: appointment.personal_details.age,
           gender: appointment.personal_details.gender,
-          hospital: doctorProfileDetails.hospital_name,
+          hospital: doctorProfileDetails.hospitalData.name,
           appointment_time: appointment?.chosen_slot || "N/A",
           meetingLink: appointment.meeting_link || "N/A",
           // available_from: doctorProfileDetails?.available_from || "N/A",
@@ -252,7 +252,7 @@ export async function getHistoryForDoctor(doctorId) {
           patientName: appointment.personal_details.name,
           age: appointment.personal_details.age,
           gender: appointment.personal_details.gender,
-          hospital: doctorProfileDetails.hospital_name,
+          hospital: doctorProfileDetails.hospitalData.name,
           appointment_date: appointment.appointment_date,
           queuePosition: "N/A",
           currentMedication: "N/A",
