@@ -14,6 +14,7 @@ function DoctorHistoryCard({ data, refetch, setShowLoader }) {
     appointment_time,
     appointment_date,
     queuePosition,
+    chosenSlot,
   } = data;
   const appointmentTypes = ["orange", "blue"]; // green for today's appointment, blue for future appointment
   const appointmentType =
@@ -75,6 +76,14 @@ function DoctorHistoryCard({ data, refetch, setShowLoader }) {
             <DataList.Label minWidth="88px">Hospital</DataList.Label>
             <DataList.Value>
               <Code variant="ghost">{hospital}</Code>
+            </DataList.Value>
+          </DataList.Item>
+          <DataList.Item>
+            <DataList.Label minWidth="88px">Mode</DataList.Label>
+            <DataList.Value>
+              <Badge variant="ghost" color="green">
+                {chosenSlot.mode}
+              </Badge>
             </DataList.Value>
           </DataList.Item>
           <DataList.Item>

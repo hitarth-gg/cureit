@@ -5,20 +5,40 @@ const sendEmail = require("../services/emailService");
 const { getIo } = require("../config/socket.js");
 const { calendar, event } = require("../services/meetScheduler");
 const {oauth2client, loadTokens, refreshAccessToken} = require("../config/googleClient");
-const getQueuePosition = async (doctorId, timestamp, date) => {
+const getQueuePosition = async (appointmentId) => {
+  const { data: appointment, error: appointmentError } = await supabase
+    .from("appointments2")
+    .select("doctor_id, appointment_date, chosen_slot->>start_time, chosen_slot->>end_time, created_at")
+    .eq("id", appointmentId)
+    .single();
+
+  if (appointmentError || !appointment) {
+    console.error("Error fetching appointment details:", appointmentError);
+    return -1;
+  }
+
+  const { doctor_id, appointment_date, created_at } = appointment;
+  const start_time = appointment["chosen_slot->>start_time"];
+  const end_time = appointment["chosen_slot->>end_time"];
   const { data, error } = await supabase
     .from("appointments2")
     .select("id")
-    .eq("doctor_id", doctorId)
-    .eq("appointment_date", date)
+    .eq("doctor_id", doctor_id)
+    .eq("appointment_date", appointment_date)
+    .eq("chosen_slot->>start_time", start_time)
+    .eq("chosen_slot->>end_time", end_time)
     .eq("status", "scheduled")
-    .lt("created_at", timestamp);
+    .eq("book_status", "pending")
+    .lte("created_at", created_at);
+
   if (error) {
-    console.log("Error fetching queue position:", error);
+    console.error("Error fetching queue position:", error);
     return -1;
   }
-  return data.length + 1;
+
+  return data.length+1;
 };
+
 router.post("/book", async (req, res) => {
   const {
     patientId,
@@ -101,7 +121,7 @@ router.post("/book", async (req, res) => {
         appointment_date: appointment_date,
         personal_details: parsedPersonalDetails,
         chosen_slot: parsedChosenSlot,
-        // google_meet_link: googleMeetLink,
+        meeting_link: googleMeetLink,
       },
     ])
     .select("*")
@@ -171,173 +191,12 @@ router.post("/book", async (req, res) => {
   sendEmail(patientEmail, "Appointment Confirmed - CureIt", html);
   return res.status(201).json(data);
 });
-// router.post("/book", async (req, res) => {
-//   const {
-//     patientId,
-//     doctorId,
-//     appointment_date,
-//     chosen_slot,
-//     book_status,
-//     personal_details,
-//   } = req.body;
-//   const { data: removedData , error: removePendingError } = await supabase
-//   .from("appointments2")
-//   .delete()
-//   .eq("patient_id", patientId)
-//   .eq("book_status", "pending");
-//   if (removePendingError) {
-//     return res.status(400).json({ error: removePendingError });
-//   }
-//   let parsedPersonalDetails;
-//   try {
-//     parsedPersonalDetails =
-//       typeof personal_details === "string"
-//         ? JSON.parse(personal_details)
-//         : personal_details;
-//   } catch (parseError) {
-//     console.error("Error parsing personal_details:", parseError);
-//     return res.status(400).json({ error: "Invalid personal_details format" });
-//   }
-//   let parsedChosenSlot;
-//   try {
-//     parsedChosenSlot =
-//       typeof chosen_slot === "string"
-//         ? JSON.parse(chosen_slot)
-//         : chosen_slot;
-//   } catch (parseError) {
-//     console.error("Error parsing chosen_slot:", parseError);
-//     return res.status(400).json({ error: "Invalid chosen_slot format" });
-//   }
-//   const { data, error } = await supabase
-//     .from("appointments2")
-//     .insert([
-//       {
-//         patient_id: patientId,
-//         doctor_id: doctorId,
-//         book_status: book_status,
-//         appointment_date: appointment_date,
-//         personal_details: parsedPersonalDetails,
-//         chosen_slot: parsedChosenSlot,
-//       },
-//     ])
-//     .select("*")
-//     .single();
-//   if (error) {
-//     return res.status(400).json({ error: error.message });
-//   }
-//   console.log("Appointment booked successfully");
-//   //sedning booking confirmation email to patient
-//   const { data: patientData, error: patientError } = await supabase
-//     .from("profiles")
-//     .select("*")
-//     .eq("id", patientId)
-//     .single();
-//   if (patientError) {
-//     return res.status(400).json({ error: patientError.message });
-//   }
-//   const patientEmail = patientData.email;
-//   const patientName = patientData.name;
-//   const html = `
-// <!DOCTYPE html>
-// <html>
-// <head>
-//     <meta charset="UTF-8">
-//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//     <title>Appointment Confirmation</title>
-//     <style>
-//         body {
-//             font-family: Arial, sans-serif;
-//             background-color: #f4f4f4;
-//             margin: 0;
-//             padding: 0;
-//         }
-//         .container {
-//             max-width: 600px;
-//             margin: 40px auto;
-//             background-color: #ffffff;
-//             padding: 20px;
-//             border-radius: 10px;
-//             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-//             text-align: center;
-//         }
-//         .logo {
-//             width: 120px;
-//             margin-bottom: 20px;
-//         }
-//         .message {
-//             font-size: 16px;
-//             color: #333;
-//             margin-bottom: 20px;
-//         }
-//         .button {
-//             display: inline-block;
-//             background-color: #007BFF;
-//             color: #ffffff;
-//             padding: 12px 20px;
-//             font-size: 16px;
-//             font-weight: bold;
-//             text-decoration: none;
-//             border-radius: 5px;
-//             margin-top: 20px;
-//         }
-//         .footer {
-//             font-size: 14px;
-//             color: #777;
-//             margin-top: 20px;
-//             border-top: 1px solid #ddd;
-//             padding-top: 10px;
-//         }
-//     </style>
-// </head>
-// <body>
-//     <div class="container">
-//         <h2>Appointment Confirmed!</h2>
-//         <p class="message">Hello <strong>${patientName}</strong>,</p>
-//         <p class="message">Your appointment has been successfully booked with the doctor. Please check your dashboard for more details.</p>
-//         <div class="footer">
-//             <p>If you have any questions, feel free to <a href="mailto:cureitwell@gmail.com">contact us</a>.</p>
-//             <p>&copy; 2025 CureIt. All rights reserved.</p>
-//         </div>
-//     </div>
-// </body>
-// </html>
-// `;
-
-// sendEmail(patientEmail, "Appointment Confirmed - CureIt", html);
-
-// return res.status(201).json(data);
-// });
-// router.post("/bookOnlineAppointment", async (req, res) => {
-//   const {appointment_date , start_time , end_time} = req.body;
-//   event.start.dateTime= new Date(appointment_date + "T" + start_time + ":00+05:30").toISOString();
-//   event.end.dateTime= new Date(appointment_date + "T" + end_time + ":00+05:30").toISOString();
-//   event.attendees[0].email = "random@example.com";
-//   loadTokens();
-//   try {
-//     const result=await calendar.events.insert({
-//       calendarId: 'primary',
-//       auth: oauth2client,
-//       resource: event,
-//       conferenceDataVersion: 1,
-//     });
-
-//     return res.json({
-//       status: 200,
-//       message: 'Event created',
-//       data: result.data,
-//     });
-//   } catch (err) {
-//     console.log(err);
-//     return res.json({ error: err });
-//   }
-// }
-// );
 router.post("/updateStatus/:appointmentId", async (req, res) => {
   console.log("update status request recieved");
   const { appointmentId } = req.params;
   const { status } = req.query;
   console.log(req);
-  const { data, error } = await supabase.from('appointments').update({ status: status, updated_at: new Date().toISOString() }).eq('id', appointmentId).select('*').single();
+  const { data, error } = await supabase.from('appointments2').update({ status: status, updated_at: new Date().toISOString() }).eq('id', appointmentId).select('*').single();
   if (error) {
     return res.status(400).json({ error: error.message });
   }
@@ -379,7 +238,6 @@ router.post("/updateStatus/:appointmentId", async (req, res) => {
 
   return res.json(data);
 });
-//fetching upcoming appointments by patient Id
 router.get("/upcomingAppointments/:patientId", async (req, res) => {
   const { patientId } = req.params;
   const { date } = req.query;
@@ -395,56 +253,47 @@ router.get("/upcomingAppointments/:patientId", async (req, res) => {
   }
   const updatedAppointments = await Promise.all(
     appointments.map(async (appointment) => {
-      // const queuePosition = await getQueuePosition(appointment.doctor_id, appointment.created_at, appointment.appointment_date);
-      // if (queuePosition !== -1) {
-      //   console.log("appointment: ", appointment);
-      //   console.log("Queue position:", queuePosition);
-      //   return { ...appointment, queuePosition: queuePosition };
-      // }
-        // return { ...appointment, queuePosition: 1};
-    }))
+      const position = await getQueuePosition(appointment.id); 
+      return { ...appointment, queuePosition: position };
+    })
+  );
   return res.json(updatedAppointments);
 })
-//fetching completed appointments by patient Id
 router.get("/completedAppointments/:patientId", async (req, res) => {
   const { patientId } = req.params;
-  const { data: appointments, error } = await supabase.from('appointments').select('*').eq('patient_id', patientId).in("status", ["completed", "missed"])
+  const { data: appointments, error } = await supabase.from('appointments2').select('*').eq('patient_id', patientId).in("status", ["completed", "missed"])
   if (error) {
     return res.status(400).json({ error: error.message });
   }
   console.log(appointments);
   return res.json(appointments);
 });
-//fetching upcoming appointments by doctor Id
 router.get("/doctorUpcomingAppointments/:doctorId", async (req, res) => {
   const { doctorId } = req.params;
-  const { date } = req.query;
+  const { date, endTime , startTime} = req.query;
   const { data: appointments, error } = await supabase
-    .from("appointments")
+    .from("appointments2")
     .select("*")
     .eq("doctor_id", doctorId)
-    .gte("appointment_date", date)
+    .eq("appointment_date", date)
     .eq("book_status", "completed")
-    .eq("status", "scheduled");
+    .eq("status", "scheduled")
+    .eq("chosen_slot->>start_time", startTime)
+    .eq("chosen_slot->>end_time", endTime);
   if (error) {
     return res.status(400).json({ error: error.message });
   }
   const updatedAppointments = await Promise.all(
     appointments.map(async (appointment) => {
-      const queuePosition = await getQueuePosition(appointment.doctor_id, appointment.created_at, appointment.appointment_date);
-      if (queuePosition !== -1) {
-        console.log("appointment: ", appointment);
-        console.log("Queue position:", queuePosition);
-        return { ...appointment, queuePosition: queuePosition };
-      }
+      const position = await getQueuePosition(appointment.id); 
+      return { ...appointment, queuePosition: position };
     }))
   return res.json(updatedAppointments);
 });
-//fetching completed appointments by doctor Id
 router.get("/doctorCompletedAppointments/:doctorId", async (req, res) => {
   const { doctorId } = req.params;
   const { data: appointments, error } = await supabase
-    .from("appointments")
+    .from("appointments2")
     .select("*")
     .eq("doctor_id", doctorId)
     .eq("status", "completed");
@@ -454,17 +303,15 @@ router.get("/doctorCompletedAppointments/:doctorId", async (req, res) => {
   console.log(appointments);
   return res.json(appointments);
 });
-//deleteAppointment
 router.delete("/delete/:appointmentId", async (req, res) => {
   const { appointmentId } = req.params;
   const { data, error } = await supabase
-    .from("appointments")
+    .from("appointments2")
     .delete()
     .eq("id", appointmentId);
   if (error) {
     return res.status(400).json({ error: error.message });
   }
-
   return res.json(data);
 });
 module.exports = router;

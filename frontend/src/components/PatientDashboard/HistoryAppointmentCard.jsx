@@ -11,6 +11,7 @@ function HistoryAppointmentCard({ data, refetch, setShowLoader }) {
     specialization,
     hospital,
     appointment_time,
+    chosenSlot,
     appointment_date,
     plus_code,
     address,
@@ -83,6 +84,14 @@ function HistoryAppointmentCard({ data, refetch, setShowLoader }) {
                   Get Directions
                 </Button>
               </div>
+            </DataList.Value>
+          </DataList.Item>
+          <DataList.Item>
+            <DataList.Label minWidth="88px">Mode</DataList.Label>
+            <DataList.Value>
+              <Badge variant="ghost" color="green">
+                {chosenSlot.mode}
+              </Badge>
             </DataList.Value>
           </DataList.Item>
           <DataList.Item>

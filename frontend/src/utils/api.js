@@ -115,6 +115,7 @@ export async function getPatientAppointments(patientId) {
       doctor: appointment.doctorProfileDetails?.name || "Unknown",
       specialization: appointment.doctorDetails?.specialization || "Unknown",
       hospital: appointment.doctorDetails?.hospitalData?.name || "Unknown",
+      meetingLink: appointment.meeting_link || "N/A",
       appointment_time: appointment?.chosen_slot || "N/A",
       appointment_date: appointment.appointment_date,
       queuePosition: appointment.queuePosition || "N/A",
@@ -176,6 +177,7 @@ export async function getPatientAppointmentHistory(patientId) {
       currentMedication: "N/A",
       issue: "N/A",
       issueDetails: appointment.personal_details.health_issue,
+      chosenSlot: appointment.chosen_slot,
       appointment_time: appointment.updated_at,
       doctor: appointment.doctorProfileDetails?.name || "Unknown",
       specialization: appointment.doctorDetails?.specialization || "Unknown",
@@ -190,12 +192,14 @@ export async function getPatientAppointmentHistory(patientId) {
   }
 }
 
-export async function getQueueForDoctor(doctorId) {
+export async function getQueueForDoctor(doctorId , selectedDate , selectedSlot) {
+  console.log("seelctedDate" , selectedDate);
+  console.log("selectedSlot" , selectedSlot);
   const today = new Date().toISOString().split("T")[0]; // Formats as YYYY-MM-DD
 
   try {
     const response = await fetch(
-      `${API_URL}/api/appointments/doctorUpcomingAppointments/${doctorId}?date=${today}`,
+      `${API_URL}/api/appointments/doctorUpcomingAppointments/${doctorId}?date=${selectedDate}&endTime=${selectedSlot.end_time}&startTime=${selectedSlot.start_time}`,
     );
     if (!response.ok) {
       throw new Error(`Error: ${response.status} ${response.statusText}`);
@@ -211,13 +215,14 @@ export async function getQueueForDoctor(doctorId) {
           age: appointment.personal_details.age,
           gender: appointment.personal_details.gender,
           hospital: doctorProfileDetails.hospital_name,
-          available_from: doctorProfileDetails?.available_from || "N/A",
+          appointment_time: appointment?.chosen_slot || "N/A",
+          meetingLink: appointment.meeting_link || "N/A",
+          // available_from: doctorProfileDetails?.available_from || "N/A",
           appointment_date: appointment.appointment_date,
           queuePosition: appointment.queuePosition,
           currentMedication: "N/A",
           issue: "N/A",
           issueDetails: appointment.personal_details.health_issue,
-          appointment_time: "N/A",
         };
       }),
     );
@@ -226,54 +231,6 @@ export async function getQueueForDoctor(doctorId) {
     console.error("Failed to fetch queue for doctor:", error);
     throw new Error("Failed to fetch queue for doctor.");
   }
-  // const testData = [
-  //   {
-  //     patiendId: 1,
-  //     patientName: "John Doe",
-  //     age: 25,
-  //     gender: "Male",
-  //     issue: "Toothache",
-  //     issueDetails:
-  //       "I have a severe toothache since last night. My gums are swollen and I can't eat anything. My gums feel puffy and tender, especially around certain teeth. They look red and swollen, and sometimes they even bleed a little when I brush or floss. It feels sore, and chewing can be uncomfortable.",
-  //     currentMedication: "Crocin 500mg, Budamate 200mg",
-  //     appointment_date: "28-09-2025",
-  //     appointment_time: "10:00 AM - 2:00 PM",
-  //     hospital: "CityCare General Hospital",
-  //     uid: "132",
-  //     queuePosition: 123,
-  //   },
-  //   {
-  //     patiendId: 2,
-  //     patientName: "Jane Doe",
-  //     age: 25,
-  //     gender: "Male",
-  //     issue: "Toothache",
-  //     issueDetails:
-  //       "I have a severe toothache since last night. My gums are swollen and I can't eat anything. My gums feel puffy and tender, especially around certain teeth. They look red and swollen, and sometimes they even bleed a little when I brush or floss. It feels sore, and chewing can be uncomfortable.",
-  //     currentMedication: "Crocin 500mg, Budamate 200mg",
-  //     appointment_date: "28-09-2025",
-  //     appointment_time: "9:00 AM - 1:00 PM",
-  //     hospital: "CityCare General Hospital",
-  //     uid: "2",
-  //     queuePosition: 3,
-  //   },
-  //   {
-  //     patiendId: 1,
-  //     patientName: "John Doe",
-  //     age: 25,
-  //     gender: "Male",
-  //     issue: "Toothache",
-  //     issueDetails:
-  //       "I have a severe toothache since last night. My gums are swollen and I can't eat anything. My gums feel puffy and tender, especially around certain teeth. They look red and swollen, and sometimes they even bleed a little when I brush or floss. It feels sore, and chewing can be uncomfortable.",
-  //     currentMedication: "Crocin 500mg, Budamate 200mg",
-  //     appointment_date: "28-09-2025",
-  //     appointment_time: "11:00 AM - 3:00 PM",
-  //     hospital: "CityCare General Hospital",
-  //     uid: "3",
-  //     queuePosition: 141,
-  //   },
-  // ];
-  // return testData;
 }
 
 export async function getHistoryForDoctor(doctorId) {
@@ -299,9 +256,10 @@ export async function getHistoryForDoctor(doctorId) {
           appointment_date: appointment.appointment_date,
           queuePosition: "N/A",
           currentMedication: "N/A",
-          issue: "N/A",
+          issue: appointment.personal_details.health_issue,
           issueDetails: appointment.personal_details.health_issue,
           appointment_time: appointment.updated_at,
+          chosenSlot: appointment.chosen_slot,
         };
       }),
     );

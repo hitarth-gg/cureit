@@ -16,7 +16,6 @@ router.post('/generate', async (req, res) => {
   console.log('Prescription generated successfully');
   return res.status(201).json(data);
 });
-// Fetch prescriptions by appointment ID
 router.get('/:appointmentId', async (req, res) => {
   const { appointmentId } = req.params;
 

@@ -20,6 +20,7 @@ function DoctorQueueCard({ data, refetch }) {
     appointment_date,
     queuePosition,
     available_from,
+    meetingLink,
   } = data;
   const [otpVerified, setOtpVerified] = useState(false);
   const [updateAppointmentStatusSuccess, setUpdateAppointmentStatusSuccess] =
@@ -55,62 +56,76 @@ function DoctorQueueCard({ data, refetch }) {
   const [expectedTime, setExpectedTime] = useState("");
 
   useEffect(() => {
-    // // console.log("DoctorQueueCard data: ", data);
-
     if (
-      available_from === "N/A" ||
+      appointment_time === "N/A" ||
       queuePosition === "N/A" ||
-      isNaN(queuePosition) ||
+      isNaN(Number(queuePosition)) || // Ensures queuePosition is treated as a number
       appointment_date === "N/A"
     ) {
       setExpectedTime("N/A");
-    } else {
-      let availableTime = available_from;
-      if (availableTime && !availableTime.includes("T")) {
-        availableTime = `${appointment_date}T${availableTime}`;
-      }
-
-      const availableDate = new Date(availableTime);
-      const currentTime = new Date();
-      const availableTimeWithQueue = new Date(
-        availableDate.getTime() + (Number(queuePosition) - 1) * 15 * 60000,
-      );
-      const currentTimeWithQueue = new Date(
-        currentTime.getTime() + (Number(queuePosition) - 1) * 15 * 60000,
-      );
-      if (currentTime.toISOString().split("T")[0] < appointment_date) {
-        setExpectedTime(
-          availableTimeWithQueue.toLocaleTimeString("en-IN", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        );
-      } else if (currentTime.toISOString().split("T")[0] === appointment_date) {
-        if (currentTime > availableDate) {
-          setExpectedTime(
-            currentTimeWithQueue.toLocaleTimeString("en-IN", {
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-          );
-        } else {
-          setExpectedTime(
-            availableTimeWithQueue.toLocaleTimeString("en-IN", {
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-          );
-        }
-      } else {
-        setExpectedTime(
-          availableTimeWithQueue.toLocaleTimeString("en-IN", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        );
-      }
+      return;
     }
-  }, [available_from, queuePosition, appointment_date]);
+
+    // Extract start_time, end_time, and mode from chosen_slot
+    const { start_time, end_time, mode } = appointment_time || {};
+
+    if (!start_time || !end_time) {
+      setExpectedTime("N/A");
+      return;
+    }
+
+    // Handle mode-based adjustments (if needed)
+    let availableTime = `${appointment_date}T${start_time}`;
+
+    const availableDate = new Date(availableTime);
+    const currentTime = new Date();
+    const appointmentDay = new Date(appointment_date);
+
+    // Add queue-based delay (15 mins per position)
+    const queueDelayMinutes = (Number(queuePosition) - 1) * 15;
+    const expectedTime = new Date(availableDate.getTime() + queueDelayMinutes * 60000);
+
+    // If the appointment is online, we may want to handle it differently
+    if (mode === "online") {
+      // For "online" appointments, maybe you want to adjust or show different logic, 
+      // e.g., showing an online consultation start time or ignoring certain local adjustments.
+      // For now, we'll keep it simple and proceed similarly to "offline" appointments.
+      // You can add any specific logic for "online" mode here if needed.
+    }
+
+    // Ensure we correctly display expected time based on the current date
+    if (currentTime.toISOString().split("T")[0] < appointment_date) {
+      // Future appointment -> Use `availableTime + queue delay`
+      setExpectedTime(
+        expectedTime.toLocaleTimeString("en-IN", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      );
+    } else if (currentTime.toISOString().split("T")[0] === appointment_date) {
+      // Same-day appointment
+      if (currentTime > availableDate) {
+        // If current time is already past `start_time`, adjust from now
+        const adjustedTime = new Date(currentTime.getTime() + queueDelayMinutes * 60000);
+        setExpectedTime(
+          adjustedTime.toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        );
+      } else {
+        // If still before `start_time`, adjust from `start_time`
+        setExpectedTime(
+          expectedTime.toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        );
+      }
+    } else {
+      setExpectedTime("N/A");
+    }
+  }, [appointment_time, queuePosition, appointment_date]);
 
   return (
     <div>
@@ -140,16 +155,20 @@ function DoctorQueueCard({ data, refetch }) {
               </Code>
             </DataList.Value>
           </DataList.Item>
-          {/* <DataList.Item>
-            <DataList.Label minWidth="88px">Issue</DataList.Label>
-            <DataList.Value>
-              <Code variant="ghost">{issue}</Code>
-            </DataList.Value>
-          </DataList.Item> */}
           <DataList.Item>
             <DataList.Label minWidth="88px">Hospital</DataList.Label>
             <DataList.Value>
               <Code variant="ghost">{hospital}</Code>
+            </DataList.Value>
+          </DataList.Item>
+          <DataList.Item>
+            <DataList.Label minWidth="88px">
+              Mode
+            </DataList.Label>
+            <DataList.Value>
+            <Badge variant="ghost" color="green">
+                {appointment_time.mode}
+              </Badge>
             </DataList.Value>
           </DataList.Item>
           <DataList.Item>
@@ -180,6 +199,21 @@ function DoctorQueueCard({ data, refetch }) {
           </DataList.Item>
           <DataList.Item>
             <div className={`flex flex-row justify-start gap-2 md:hidden`}>
+            {appointment_time.mode === "online" ? (
+              <div className="flex gap-2">
+                <SkipAppointment skipAppointment={skipAppointment} />
+                <Button
+                  onClick={() => window.open(meetingLink, "_blank", "noopener,noreferrer")}
+                >
+                  <div className="text-xs">Join Meet</div>
+                </Button>
+                <SeeDetails
+                data={data}
+                refetch={refetch}
+                otpVerified={true}
+              />
+              </div>
+              ) : (
               <div className="flex gap-2">
                 {!otpVerified && (
                   <>
@@ -198,24 +232,47 @@ function DoctorQueueCard({ data, refetch }) {
                     otpVerified={otpVerified}
                   />
                 }
-              </div>
+              </div>)}
             </div>
           </DataList.Item>
         </DataList.Root>
 
         <div className="ml-4 hidden flex-col items-center justify-center gap-2 md:flex md:flex-row">
           {/* <CancelDialog data={data} refetch={refetch} /> */}
-          {!otpVerified && (
-            <>
-              <SkipAppointment skipAppointment={skipAppointment} />
-              <OtpModal
-                otpVerified={otpVerified}
-                setOtpVerified={setOtpVerified}
-                id={patientId}
+          {appointment_time.mode === "online" ? (
+              <div className="flex gap-2">
+                <SkipAppointment skipAppointment={skipAppointment} />
+                <Button
+                  onClick={() => window.open(meetingLink, "_blank", "noopener,noreferrer")}
+                >
+                  <div className="text-xs">Join Meet</div>
+                </Button>
+                <SeeDetails
+                data={data}
+                refetch={refetch}
+                otpVerified={true}
               />
-            </>
-          )}
-          <SeeDetails data={data} refetch={refetch} otpVerified={otpVerified} />
+              </div>
+              ) : (
+              <div className="flex gap-2">
+                {!otpVerified && (
+                  <>
+                    <SkipAppointment skipAppointment={skipAppointment} />
+                    <OtpModal
+                      otpVerified={otpVerified}
+                      setOtpVerified={setOtpVerified}
+                      id={patientId}
+                    />
+                  </>
+                )}
+                {
+                  <SeeDetails
+                    data={data}
+                    refetch={refetch}
+                    otpVerified={otpVerified}
+                  />
+                }
+              </div>)}
         </div>
       </div>
     </div>
