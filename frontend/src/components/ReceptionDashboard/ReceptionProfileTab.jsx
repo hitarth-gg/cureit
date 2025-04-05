@@ -242,7 +242,7 @@ function ReceptionProfileTab() {
           </div>
         </div>
       </div>
-      <div>Display QR CODE</div>
+      <div className="text-center">Display QR CODE</div>
       {/*
             Generate a new qr code every 1 hr
             store it in reception table 
@@ -252,14 +252,14 @@ function ReceptionProfileTab() {
 
         */}
 
-      <div style={{ textAlign: "center", marginTop: "2rem" }}>
+      <div className="flex justify-center" style={{ textAlign: "center", marginTop: "1.5rem" }}>
         {/* <input
         type="text"
         value={codeword}
         onChange={(e) => setCodeword(e.target.value)}
         placeholder=""
       /> */}
-        <div style={{ marginTop: "1rem" }}>
+        <div className="flex justify-center flex-col items-center" style={{ marginTop: "1rem" }}>
           {profile.qrcode ? (
             <>
               <QRCodeCanvas
