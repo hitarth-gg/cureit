@@ -16,10 +16,10 @@ const getQueuePosition = async (appointmentId) => {
     console.error("Error fetching appointment details:", appointmentError);
     return -1;
   }
-
-  const { doctor_id, appointment_date, created_at } = appointment;
-  const start_time = appointment["chosen_slot->>start_time"];
-  const end_time = appointment["chosen_slot->>end_time"];
+  console.log("appointment: ", appointment);
+  const { doctor_id, appointment_date, created_at, start_time , end_time} = appointment;
+  console.log("start_time: ", start_time);
+  console.log("end_time: ", end_time);
   const { data, error } = await supabase
     .from("appointments2")
     .select("id")
@@ -28,9 +28,9 @@ const getQueuePosition = async (appointmentId) => {
     .eq("chosen_slot->>start_time", start_time)
     .eq("chosen_slot->>end_time", end_time)
     .eq("status", "scheduled")
-    .eq("book_status", "pending")
-    .lte("created_at", created_at);
-
+    .eq("book_status", "completed")
+    .lt("created_at", created_at);
+   
   if (error) {
     console.error("Error fetching queue position:", error);
     return -1;
