@@ -17,6 +17,8 @@ const testReportsRoutes = require("./routes/testReportsRoutes");
 const doctorProfileRoutes = require("./routes/doctorProfileRoutes");
 const receptionProfileRoutes = require("./routes/receptionProfileRoutes.js");
 const feedbackRoutes = require("./routes/feedbackRoutes");
+const healthWorkerRoutes = require("./routes/healthWorkerRoutes.js");
+
 // connectDB();
 const profileRoutes = require("./routes/profileRoutes");
 const multiDoctorDashboardRoutes = require("./routes/multiDoctorDashboardRoutes");
@@ -48,6 +50,8 @@ app.use("/api/doctorProfileRoutes", doctorProfileRoutes);
 app.use("/api/receptionProfileRoutes", receptionProfileRoutes);
 app.use("/api/feedback", feedbackRoutes);
 app.use("/api/multiDoctorDashboardRoutes", multiDoctorDashboardRoutes);
+app.use("/api/healthWorkerRoutes", healthWorkerRoutes);
+
 // const options = {
 //   key: fs.readFileSync("certs/key.pem"),
 //   cert: fs.readFileSync("certs/cert.pem"),

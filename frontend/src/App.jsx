@@ -21,6 +21,7 @@ import ProtectedRoutes from "./utils/ProtectedRoutes";
 import SingleFeaturePageChatbot from "./pages/SingleFeaturePageChatbot";
 import SingleFeaturePageMedSpecRec from "./pages/SingleFeaturePageMedSpecRec";
 import SingleFeaturePageFeedback from "./pages/SingleFeaturePageFeedback";
+import HealthCamps from "./pages/HealthCamps"; // Import the new page
 
 const router = createBrowserRouter(
   [
@@ -113,6 +114,11 @@ const router = createBrowserRouter(
         {
           path: "/featureAIFeedback",
           element: <SingleFeaturePageFeedback />,
+          errorElement: <ErrorPage />,
+        },
+        {
+          path: "/health-camps",
+          element: <HealthCamps />,
           errorElement: <ErrorPage />,
         },
       ],
