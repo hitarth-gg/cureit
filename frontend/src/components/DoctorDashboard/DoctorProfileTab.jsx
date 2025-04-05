@@ -186,10 +186,10 @@ function DoctorProfileTab() {
             <span className="font-semibold">Age & Gender:</span> {profile?.age}{" "}
             {profile.gender}
           </div>
-          <div className="mt-12 flex w-full justify-center gap-x-4">
+          <div className="mt-4 flex w-full gap-x-4">
             <Button
               color="iris"
-              size="3"
+              size="2"
               variant="soft"
               className="download-btn my-4"
               onClick={() => mutation.mutate()}

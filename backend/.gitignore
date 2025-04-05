@@ -25,3 +25,4 @@ build/
 # System files
 Thumbs.db
 tokens.json
+token.json
