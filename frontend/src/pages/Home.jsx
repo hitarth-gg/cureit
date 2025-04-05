@@ -404,7 +404,13 @@ function Home() {
               size="3"
               variant="soft"
               className="my-4"
-              onClick={() => navigate("/health-camps")}
+              onClick={() => {
+                if (token) {
+                  navigate("/health-camps");
+                } else {
+                  navigate("/login");
+                }
+              }}
             >
               Free Health Camps
             </Button>
