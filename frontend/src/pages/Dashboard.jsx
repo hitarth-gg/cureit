@@ -8,6 +8,7 @@ import useUserRoleById from "../hooks/useUserRoleById";
 import { useGetCurrentUser } from "../hooks/useGetCurrentUser";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import HealthWorkerDashboard from "../components/HealthWorkerDashboard/HealthWorkerDashboard";
 
 function Dashboard() {
   const [role, setRole] = useState(null);
@@ -74,6 +75,8 @@ function Dashboard() {
           <PatientDashboard />
         ) : role === "RECEPTION" ? (
           <ReceptionDashboard />
+        ) : role === "HEALTH WORKER" ? (
+          <HealthWorkerDashboard />
         ) : (
           // <MultiDoctorDashboard />
           <DoctorDashboard />
