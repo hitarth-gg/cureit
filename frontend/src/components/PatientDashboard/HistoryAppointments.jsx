@@ -26,7 +26,7 @@ function HistoryAppointments() {
       setShowLoader(true);
     } else setShowLoader(false);
   }, [isLoading, isFetching]);
-
+  
   return (
     <div>
       <div className="">

@@ -68,7 +68,7 @@ const MultiDoctorDashboard = () => {
         `${api}/api/multiDoctorDashboardRoutes/allNextAppointments/${receptionId}`,
       );
       const doctorData = response.data;
-
+      console.log(doctorData);
       // Create a new object with update timestamps for each doctor
       const updatedDoctorQueues = {};
       const currentTime = new Date();
