@@ -5,7 +5,7 @@ import useGetQueueForDoctor from "../../hooks/useGetQueueForDoctor";
 import DoctorQueueCard from "./DoctorQueueCard";
 import { useAuthContext } from "../../utils/ContextProvider";
 import { Calendar, ChevronLeft, ChevronRight, Clock, MapPin, Users } from "lucide-react";
-
+import useGetDoctorAvailability from "../../hooks/useGetDoctorAvailability";
 function DoctorQueue() {
   const { currentUser } = useAuthContext();
   const [doctorId, setDoctorId] = useState(null);
@@ -13,134 +13,40 @@ function DoctorQueue() {
   const [availableOnlineSlots, setAvailableOnlineSlots] = useState([]);
   const [availableOfflineSlots, setAvailableOfflineSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(null);
-  const [appointmentType, setAppointmentType] = useState("all"); // all, online, offline
-// Sample data for testing the DoctorQueueCard component
 
-// Sample 1: Today's in-person appointment
-const todayAppointment = [{
-  patientName: "Sarah Johnson",
-  patientId: "P12345678",
-  age: "42",
-  gender: "Female",
-  hospital: "City General Hospital",
-  issue: "Chronic migraine",
-  issueDetails: "Patient has been experiencing frequent migraines for the past 3 months, with increased severity in the last 2 weeks.",
-  appointment_time: {
-    start_time: "14:30:00",
-    end_time: "15:00:00",
-    mode: "offline"
-  },
-  appointment_date: new Date().toLocaleDateString("en-IN").replace(/\//g, "-"), // Today's date in DD-MM-YYYY format
-  queuePosition: "3",
-  available_from: "14:00:00",
-  meetingLink: "",
-  appointmentId: "A98765432"
-},
-{
-  patientName: "Raj Patel",
-  patientId: "P87654321",
-  age: "28",
-  gender: "Male",
-  hospital: "MedLife Clinic",
-  issue: "Follow-up after surgery",
-  issueDetails: "Post-operative follow-up after appendectomy performed 2 weeks ago. Patient reports good recovery with minimal pain.",
-  appointment_time: {
-    start_time: "10:15:00",
-    end_time: "10:45:00",
-    mode: "online"
-  },
-  appointment_date: (() => {
-    // Tomorrow's date in DD-MM-YYYY format
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    return tomorrow.toLocaleDateString("en-IN").replace(/\//g, "-");
-  })(),
-  queuePosition: "1",
-  available_from: "10:00:00",
-  meetingLink: "https://meet.example.com/dr-appointment/b7c9d2e3",
-  appointmentId: "A12345678"
-}]
-
-// Sample 2: Future online appointment
-
-// Usage with the DoctorQueueCard component:
-// <DoctorQueueCard data={todayAppointment} refetch={() => console.log("Refetching data...")} />
-// <DoctorQueueCard data={futureAppointment} refetch={() => console.log("Refetching data...")} />
+  const [availabilityData, setAvailabilityData] = useState({});
   useEffect(() => {
     if (currentUser != null) {
       setDoctorId(currentUser.id);
     }
   }, [currentUser]);
-
-  const slotsData = {
-    Friday: {
-      online: [
-        { end_time: "09:30", start_time: "08:00", max_appointments: 3 },
-        { end_time: "19:30", start_time: "20:00", max_appointments: 3 },
-        { end_time: "23:30", start_time: "23:50", max_appointments: 3 },
-      ],
-      offline: [
-        { end_time: "18:00", start_time: "15:00", max_appointments: 5 },
-      ],
-    },
-    Monday: {
-      online: [
-        { end_time: "12:00", start_time: "09:00", max_appointments: 5 },
-        { end_time: "16:00", start_time: "14:00", max_appointments: 3 },
-      ],
-      offline: [
-        { end_time: "12:00", start_time: "10:00", max_appointments: 4 },
-      ],
-    },
-    Sunday: {
-      offline: [
-        { end_time: "13:00", start_time: "10:00", max_appointments: 4 },
-      ],
-    },
-    Tuesday: {
-      online: [
-        { end_time: "10:00", start_time: "08:00", max_appointments: 4 },
-      ],
-      offline: [
-        { end_time: "15:00", start_time: "13:00", max_appointments: 3 },
-      ],
-    },
-    Saturday: {
-      online: [
-        { end_time: "09:00", start_time: "07:00", max_appointments: 4 },
-      ],
-    },
-    Thursday: {
-      online: [
-        { end_time: "12:30", start_time: "10:00", max_appointments: 4 },
-      ],
-    },
-    Wednesday: {
-      online: [
-        { end_time: "11:30", start_time: "09:30", max_appointments: 6 },
-      ],
-      offline: [
-        { end_time: "17:00", start_time: "14:00", max_appointments: 5 },
-      ],
-    },
-  };
+  const { data: availability, error: availabilityError } = useGetDoctorAvailability(doctorId);
+  useEffect(() => {
+    if (availability) {
+      setAvailabilityData(availability);
+    }
+    if (availabilityError) {
+      toast.error("Error fetching doctor availability data");
+    }
+  }, [availability, availabilityError]);
+  
 
   useEffect(() => {
     if (selectedDate) {
       const dayName = new Intl.DateTimeFormat("en-US", {
         weekday: "long",
       }).format(selectedDate);
-      if (slotsData[dayName]) {
-        setAvailableOnlineSlots(slotsData[dayName]["online"] || []);
-        setAvailableOfflineSlots(slotsData[dayName]["offline"] || []);
+  
+      if (availabilityData[dayName]) {
+        setAvailableOnlineSlots(availabilityData[dayName]["online"] || []);
+        setAvailableOfflineSlots(availabilityData[dayName]["offline"] || []);
       } else {
         setAvailableOnlineSlots([]);
         setAvailableOfflineSlots([]);
       }
-      // Reset selected slot when date changes
       setSelectedSlot(null);
     }
-  }, [selectedDate]);
+  }, [selectedDate, availabilityData]); 
 
   const { isLoading, data, error, refetch, isFetching } = useGetQueueForDoctor(doctorId, selectedDate, selectedSlot);
 
@@ -159,7 +65,6 @@ const todayAppointment = [{
   const handlePrevDay = () => {
     const prevDay = new Date(selectedDate);
     prevDay.setDate(prevDay.getDate() - 1);
-    // Don't allow selecting days before today
     if (prevDay >= new Date(new Date().setHours(0, 0, 0, 0))) {
       setSelectedDate(prevDay);
     }
@@ -177,18 +82,12 @@ const todayAppointment = [{
       date.getFullYear() === today.getFullYear();
   };
 
-  const filteredData = data?.filter(appointment => {
-    if (appointmentType === "all") return true;
-    return appointment.type === appointmentType;
-  });
+  
 
   return (
-    <div className=" min-h-screen rounded-lg ">
-      <div className=" mx-auto">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Doctor's Queue</h2>
-        
-        <div className="bg-white rounded-xl shadow-sm border-2 border-gray-200 overflow-hidden">
-          {/* Date selector and filter controls */}
+    <div className="min-h-screen rounded-lg">
+      <div className="mx-auto">
+        <div className="bg-white rounded-xl  border-2 border-gray-200 overflow-hidden">
           <div className="p-6 border-b border-gray-200">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex items-center space-x-4">
@@ -223,30 +122,6 @@ const todayAppointment = [{
                 >
                   <ChevronRight className="h-5 w-5 text-gray-600" />
                 </button>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-600 mr-2">Filter:</span>
-                <div className="flex bg-gray-100 rounded-lg p-1">
-                  <button 
-                    className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${appointmentType === 'all' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-600 hover:text-gray-800'}`}
-                    onClick={() => setAppointmentType('all')}
-                  >
-                    All
-                  </button>
-                  <button 
-                    className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${appointmentType === 'online' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-600 hover:text-gray-800'}`}
-                    onClick={() => setAppointmentType('online')}
-                  >
-                    Online
-                  </button>
-                  <button 
-                    className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${appointmentType === 'offline' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-600 hover:text-gray-800'}`}
-                    onClick={() => setAppointmentType('offline')}
-                  >
-                    In-Person
-                  </button>
-                </div>
               </div>
             </div>
           </div>
@@ -350,9 +225,8 @@ const todayAppointment = [{
               </div>
             ) : (
               <div className="space-y-4">
-                {/* replace todayAppointment w/ filteredData */}
-                {todayAppointment && todayAppointment.length > 0 ? (
-                  todayAppointment.map((queue, ix) => (
+                {data && data.length > 0 ? (
+                  data.map((queue, ix) => (
                     <DoctorQueueCard key={ix} data={queue} refetch={refetch} />
                   ))
                 ) : (

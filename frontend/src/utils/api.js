@@ -67,6 +67,10 @@ export async function getDoctorDetails(doctorId) {
   const data = await response.json();
   return data;
 }
+export async function getDoctorAvailability(doctorId) {
+  const doctorDetails = await getDoctorDetails(doctorId);
+   return doctorDetails.availability;
+}
 export async function deleteAppointment(appointmentId) {
   const response = await fetch(
     `${API_URL}/api/appointments/delete/${appointmentId}`,

@@ -313,7 +313,7 @@ function DoctorHistoryCard({ data, refetch, setShowLoader }) {
                 </div>
               </div>
 
-              {prescriptionData && (
+              {prescriptionData && prescriptionData.length > 0 && (
                 <div className="flex items-start gap-2">
                   <FileText size={18} className="mt-0.5 text-gray-500" />
                   <div>
