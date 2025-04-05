@@ -644,7 +644,6 @@ function AppointmentCard({ data, refetch }) {
                 <Button
                   color="blue"
                   onClick={() => setShowScanner(true)}
-                  disabled={!isToday}
                 >
                   <QrCode size={16} className="mr-1" />
                   <span>Check In</span>
