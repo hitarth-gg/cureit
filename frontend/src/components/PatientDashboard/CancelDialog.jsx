@@ -19,12 +19,12 @@ function CancelDialog({ data, refetch }) {
     hospital,
     appointment_time,
     appointment_date,
+    expectedTime,
     queuePosition,
   } = data;
   const appointmentTypes = ["green", "blue"]; // green for today's appointment, blue for future appointment
   const appointmentType =
-    appointment_date ===
-    new Date().toISOString().split("T")[0]
+    appointment_date === new Date().toISOString().split("T")[0]
       ? appointmentTypes[0]
       : appointmentTypes[1];
 
@@ -43,7 +43,9 @@ function CancelDialog({ data, refetch }) {
         </Dialog.Trigger>
 
         <Dialog.Content maxWidth="450px">
-            <div className="font- mb-2 font-medium">Cancel the following appointment?</div>
+          <div className="font- mb-2 font-medium">
+            Cancel the following appointment?
+          </div>
           <div className="flex justify-between gap-y-1 rounded-md border-2 px-4 py-2 font-noto">
             <DataList.Root
               orientation={"horizontal"}
@@ -75,11 +77,11 @@ function CancelDialog({ data, refetch }) {
               </DataList.Item>
               <DataList.Item>
                 <DataList.Label minWidth="88px">
-                  Appointment Time
+                  Appointment Expected Time
                 </DataList.Label>
                 <DataList.Value>
                   <Badge variant="ghost" color={appointmentType}>
-                    {appointment_time}
+                    {expectedTime}
                   </Badge>
                 </DataList.Value>
               </DataList.Item>
@@ -109,10 +111,7 @@ function CancelDialog({ data, refetch }) {
               <Button>No, Go Back</Button>
             </Dialog.Close>
             <Dialog.Close>
-              <Button
-                color="red"
-                onClick={handleCancel}
-              >
+              <Button color="red" onClick={handleCancel}>
                 Yes, Cancel
               </Button>
             </Dialog.Close>
