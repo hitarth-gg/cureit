@@ -759,7 +759,7 @@ export async function updateUserProfilePicture(userId, accessToken, formData) {
 
 export async function chatBot(message) {
   const response = await fetch(
-    ` https://hackofiesta-k905.onrender.com/faq/?query="${message}"`,
+    `https://hackofiesta-34dx.onrender.com/faq/?query="${message}"`,
   );
 
   if (!response.ok) {
