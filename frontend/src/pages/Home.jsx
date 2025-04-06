@@ -399,10 +399,12 @@ function Home() {
                 Book Appointment
               </Button>
             )}
+          </div>
+          <div className="my-4">
             <Button
-              color="green"
+              color="violet"
               size="3"
-              variant="soft"
+              variant="outline"
               className="my-4"
               onClick={() => {
                 if (token) {
