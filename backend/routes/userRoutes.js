@@ -563,7 +563,7 @@ router.post("/validateQR", async (req, res) => {
 
     // 1. Get the appointment record to retrieve the doctor_id
     let { data: appointment, error: appointmentError } = await supabase
-      .from("appointments")
+      .from("appointments2")
       .select("doctor_id")
       .eq("id", appointmentId)
       .single();
@@ -576,7 +576,7 @@ router.post("/validateQR", async (req, res) => {
 
     // 2. Get the doctor record to retrieve the reception_id
     let { data: doctor, error: doctorError } = await supabase
-      .from("doctors")
+      .from("doctors2")
       .select("reception_id")
       .eq("id", doctorId)
       .single();
@@ -602,7 +602,7 @@ router.post("/validateQR", async (req, res) => {
     if (qr_code === reception.qrcode) {
       // 5. Update the appointment's checkin column to true
       let { data: updatedAppointment, error: updateError } = await supabase
-        .from("appointments")
+        .from("appointments2")
         .update({ checked_in_status: true })
         .eq("id", appointmentId);
 
