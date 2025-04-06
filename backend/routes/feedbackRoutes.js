@@ -27,7 +27,7 @@ router.post("/add/:id", async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
   const { data: currentTags, error: currentTagsError } = await supabase
-    .from("doctors")
+    .from("doctors2")
     .select("tags")
     .eq("id", doctorId)
     .single();
@@ -38,7 +38,7 @@ router.post("/add/:id", async (req, res) => {
   let tagMap = currentTags?.tags || {};
   tagMap[tag] = (tagMap[tag] || 0) + 1;
   const { data: updateDoctor, error: updatDoctorError } = await supabase
-    .from("doctors")
+    .from("doctors2")
     .update({ tags: tagMap })
     .eq("id", doctorId)
     .select("*")

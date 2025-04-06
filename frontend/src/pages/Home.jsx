@@ -389,17 +389,31 @@ function Home() {
                 variant=""
                 className="my-4"
                 onClick={() => {
-                  if(token){
-                    navigate("/bookappointment")
-                  }
-                  else{
-                    navigate("/login")
+                  if (token) {
+                    navigate("/bookappointment");
+                  } else {
+                    navigate("/login");
                   }
                 }}
               >
                 Book Appointment
               </Button>
             )}
+            <Button
+              color="green"
+              size="3"
+              variant="soft"
+              className="my-4"
+              onClick={() => {
+                if (token) {
+                  navigate("/health-camps");
+                } else {
+                  navigate("/login");
+                }
+              }}
+            >
+              Free Health Camps
+            </Button>
           </div>
         </div>
         <div className="relative">
@@ -417,4 +431,143 @@ function Home() {
 }
 
 export default Home;
-// sbp_c059222e1659f5d235c3f3ad6ef20cdbd3819072
+
+// import React, { useEffect, useState } from "react";
+// import { Typewriter } from "react-simple-typewriter";
+// import CureitLogoWhite from "../assets/CureitLogoWhite.png";
+// import docotorsImage from "../assets/doctors.png";
+// import { useCureitContext, useAuthContext } from "../utils/ContextProvider";
+// import { Button } from "@radix-ui/themes";
+// import Features from "../components/Features";
+// import { useNavigate } from "react-router-dom";
+// import { supabase } from "../utils/supabaseClient";
+// import ChatBot from "../components/ChatBot/ChatBot";
+
+// function Home() {
+//   const { theme, profile } = useCureitContext();
+
+//   const navigate = useNavigate();
+//   const token = localStorage.getItem("sb-vakmfwtcbdeaigysjgch-auth-token");
+//   const userData = token;
+//   const [userInfo, setUserInfo] = useState({
+//     id: "",
+//     name: "",
+//     email: "",
+//     phone: "",
+//     role: " ",
+//     confirmed_at: "",
+//     last_sign_in_at: "",
+//     phone: "",
+//   });
+
+//   return (
+//     <div className="flex flex-col overflow-hidden font-noto">
+//       <div className="flex h-[100svh] animate-fade-up flex-col items-center justify-center py-32 md:justify-around lg:flex-row">
+//         <div className="absolute top-0 -z-10">
+//           {/* Background SVG code */}
+//           <svg
+//             width="2560"
+//             height="1920"
+//             viewBox="0 0 2560 1920"
+//             fill="none"
+//             xmlns="http://www.w3.org/2000/svg"
+//             style={{
+//               opacity: 0.5,
+//               "--color-background-image-base": "var(--color-background)",
+//               "--color-background-image-accent-1": "var(--indigo-a7)",
+//               "--color-background-image-accent-2": "var(--violet-6)",
+//               "--color-background-image-accent-3": "var(--purple-9)",
+//               "--color-background-image-accent-4": "var(--blue-5)",
+//               "--color-background-image-accent-5": "var(--slate-1)",
+//               "--color-background-image-accent-6": "var(--crimson-a5)",
+//               "--color-background-image-accent-7": "var(--indigo-5)",
+//             }}
+//           >
+//             {/* SVG path elements remain unchanged */}
+//           </svg>
+//         </div>
+
+//         <div className="flex flex-col items-center justify-center p-8">
+//           <img
+//             src={CureitLogoWhite}
+//             alt="Cureit Logo"
+//             className="h-20 md:h-28 lg:h-32"
+//           />
+//           <div className="my-4 h-[1px] w-full bg-gradient-to-r from-transparent via-[#79797949] to-transparent"></div>
+//           <p className="h-7 w-96 text-center font-medium tracking-wider">
+//             <Typewriter
+//               loop={true}
+//               deleteSpeed={20}
+//               typeSpeed={50}
+//               delaySpeed={2000}
+//               words={["Welcome to CureIt.", "Appointment Booking made easy!"]}
+//               cursor={true}
+//             />
+//           </p>
+//           <div className="mt-12 flex w-full justify-center gap-x-4">
+//             {token ? (
+//               <Button
+//                 color="iris"
+//                 size="3"
+//                 variant="soft"
+//                 className="my-4"
+//                 onClick={() => navigate("/user/dashboard")}
+//               >
+//                 Dashboard
+//               </Button>
+//             ) : (
+//               <Button
+//                 color="iris"
+//                 size="3"
+//                 variant="soft"
+//                 className="my-4"
+//                 onClick={() => navigate("/signup")}
+//               >
+//                 Sign Up
+//               </Button>
+//             )}
+//             {profile?.role !== "doctor" && (
+//               <Button
+//                 color="iris"
+//                 size="3"
+//                 variant=""
+//                 className="my-4"
+//                 onClick={() => {
+//                   if (token) {
+//                     navigate("/bookappointment");
+//                   } else {
+//                     navigate("/login");
+//                   }
+//                 }}
+//               >
+//                 Book Appointment
+//               </Button>
+//             )}
+
+//             {/* Free Health Checkup Camp Button */}
+//             <Button
+//               color="green"
+//               size="3"
+//               variant="soft"
+//               className="my-4"
+//               onClick={() => navigate("/health-camps")}
+//             >
+//               Free Health Camps
+//             </Button>
+//           </div>
+//         </div>
+
+//         <div className="relative">
+//           <img
+//             src={docotorsImage}
+//             alt="doctors"
+//             className="h-64 object-cover md:h-72 lg:h-96"
+//           />
+//         </div>
+//       </div>
+//       <Features />
+//     </div>
+//   );
+// }
+
+// export default Home;

@@ -1,10 +1,11 @@
 import { Box, Separator, Tabs } from "@radix-ui/themes";
-import ReceptionProfileTab from "./ReceptionProfileTab";
+import HealthWorkerProfileTab from "./HealthWorkerProfileTab";
+import PatientHealthStatusForm from "./PatientHealthCheckupform";
+import HealthCampRegistrationForm from "./HealthCampRegistration";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import MultiDoctorDashboard from "../../pages/MultiDoctorDashboard";
 
-function ReceptionDashboard() {
+function HealthWorkerDashboard() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [tab, setTab] = useState(searchParams.get("tab") || "profile");
 
@@ -28,22 +29,29 @@ function ReceptionDashboard() {
             Profile
           </Tabs.Trigger>
           <Tabs.Trigger
-            value="Queues"
-            onClick={() => setSearchParams({ tab: "Queues" })}
+            value="Health Checkup Form"
+            onClick={() => setSearchParams({ tab: "Health Checkup Form" })}
           >
-            Queues
+            Health Checkup Form
+          </Tabs.Trigger>
+          <Tabs.Trigger
+            value="Health Camp Registration"
+            onClick={() => setSearchParams({ tab: "Health Camp Registration" })}
+          >
+            Health Camp Registration
           </Tabs.Trigger>
         </Tabs.List>
-
         <Box pt="3">
           <Tabs.Content value="profile">
-            <ReceptionProfileTab />
+            <HealthWorkerProfileTab />
           </Tabs.Content>
-        </Box>
-        {/* </Tabs.Root> */}
-        <Box pt="3">
-          <Tabs.Content value="Queues">
-            <MultiDoctorDashboard />
+
+          <Tabs.Content value="Health Checkup Form">
+            <PatientHealthStatusForm />
+          </Tabs.Content>
+
+          <Tabs.Content value="Health Camp Registration">
+            <HealthCampRegistrationForm />
           </Tabs.Content>
         </Box>
       </Tabs.Root>
@@ -51,4 +59,4 @@ function ReceptionDashboard() {
   );
 }
 
-export default ReceptionDashboard;
+export default HealthWorkerDashboard;

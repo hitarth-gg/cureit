@@ -34,26 +34,39 @@ async function generateNewQRCode(userId) {
 }
 
 function ReceptionProfileTab() {
-  const [profile, setProfile] = useState({
-    name: "",
-    email: "",
-    address: "",
-    profileImage: "",
-    qrcode: "",
-    uid: 234,
-  });
-  const API_URL = import.meta.env.VITE_API_BASE_URL;
-
-  const profileImagePlaceholder =
-    "https://static.vecteezy.com/system/resources/thumbnails/003/337/584/small/default-avatar-photo-placeholder-profile-icon-vector.jpg";
-  const [userId, setUserId] = useState(null);
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
   const tokenString = localStorage.getItem(
     "sb-vakmfwtcbdeaigysjgch-auth-token",
   );
 
   const token = JSON?.parse(tokenString);
+  const [userId, setUserId] = useState(token?.user?.id || null);
+  const accessToken = token?.access_token;
+
+  const {
+    isLoading: isLoadingDetails,
+    data: dataDetails,
+    error: errorDetails,
+    refetch: refetchDetails,
+    isFetching: isFetchingDetails,
+  } = useGetReceptionProfileDetails(userId, accessToken);
+  const [profile, setProfile] = useState({
+    name: dataDetails?.profile?.name || "",
+    email: dataDetails?.profile?.email || "",
+    address: dataDetails?.profile?.address || "",
+    profileImage: dataDetails?.profile?.avatar_url || "",
+    qrcode: dataDetails?.profile?.qrcode || "",
+    uid: 234,
+  });
+  console.log(dataDetails);
+  console.log(profile);
+  const API_URL = import.meta.env.VITE_API_BASE_URL;
+
+  const profileImagePlaceholder =
+    "https://static.vecteezy.com/system/resources/thumbnails/003/337/584/small/default-avatar-photo-placeholder-profile-icon-vector.jpg";
+  // const [userId, setUserId] = useState(null);
+
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     // // console.log("ggggg", token);
     if (!token) {
@@ -62,20 +75,11 @@ function ReceptionProfileTab() {
     }
   }, [token]);
 
-  const accessToken = token?.access_token;
-
   // const MyComponent = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const {
-    isLoading: isLoadingDetails,
-    data: dataDetails,
-    error: errorDetails,
-    refetch: refetchDetails,
-    isFetching: isFetchingDetails,
-  } = useGetReceptionProfileDetails(userId, accessToken);
 
   useEffect(() => {
     const checkUserSession = async () => {
@@ -91,17 +95,17 @@ function ReceptionProfileTab() {
     checkUserSession();
   }, []);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const {
-        data: { user },
-        error,
-      } = await supabase.auth.getUser();
-      if (user) setUserId(user.id);
-      if (error) console.error("Error fetching user:", error);
-    };
-    fetchUser();
-  }, []);
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     const {
+  //       data: { user },
+  //       error,
+  //     } = await supabase.auth.getUser();
+  //     if (user) setUserId(user.id);
+  //     if (error) console.error("Error fetching user:", error);
+  //   };
+  //   fetchUser();
+  // }, []);
 
   const fetchUserProfile = async () => {
     try {
@@ -137,9 +141,11 @@ function ReceptionProfileTab() {
     // Function that fetches the QR code and sets a timeout to run itself again in 10 minutes
     const refreshQRCode = async () => {
       var code = await generateNewQRCode(userId);
-      setProfile({
+      setProfile((prevProfile) => ({
+        ...prevProfile,
         qrcode: code,
-      });
+      }));
+
       // 10 minutes = 600,000 milliseconds
       timeoutId = setTimeout(refreshQRCode, 10 * 60 * 1000);
     };
@@ -236,7 +242,7 @@ function ReceptionProfileTab() {
           </div>
         </div>
       </div>
-      <div>Display QR CODE</div>
+      <div className="text-center">Display QR CODE</div>
       {/*
             Generate a new qr code every 1 hr
             store it in reception table 
@@ -246,14 +252,14 @@ function ReceptionProfileTab() {
 
         */}
 
-      <div style={{ textAlign: "center", marginTop: "2rem" }}>
+      <div className="flex justify-center" style={{ textAlign: "center", marginTop: "1.5rem" }}>
         {/* <input
         type="text"
         value={codeword}
         onChange={(e) => setCodeword(e.target.value)}
         placeholder=""
       /> */}
-        <div style={{ marginTop: "1rem" }}>
+        <div className="flex justify-center flex-col items-center" style={{ marginTop: "1rem" }}>
           {profile.qrcode ? (
             <>
               <QRCodeCanvas
