@@ -167,8 +167,8 @@ The **Doctor Dashboard** provides an intelligent scheduling system for healthcar
 ## Implementation Flowchart
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/b55d10b5-1a72-4a66-be3d-71d0c39c8ca1">
-  <source media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/84ac78b0-85fc-415d-8e49-dcb1994ca2b8">
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/42d76943-46f7-47bc-bb10-7958df1f7175">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/9364de23-d649-4b74-b229-ca5f18c62d70">
   <img src="https://github.com/user-attachments/assets/b55d10b5-1a72-4a66-be3d-71d0c39c8ca1" alt="My Image">
 </picture>
 
