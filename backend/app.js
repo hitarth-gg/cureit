@@ -3,8 +3,8 @@ const dotenv = require("dotenv");
 const fs = require("fs");
 // const https = require("https");
 const http = require("http");
-
 dotenv.config();
+const {oauth2client , refreshAccessToken} = require("./config/googleClient");
 require("./services/cronJob.js");
 const { redis, setCache, getCache } = require("./config/redisClient.js");
 const { initSocket } = require("./config/socket"); // import your socket module
@@ -23,12 +23,13 @@ const healthWorkerRoutes = require("./routes/healthWorkerRoutes.js");
 const profileRoutes = require("./routes/profileRoutes");
 const multiDoctorDashboardRoutes = require("./routes/multiDoctorDashboardRoutes");
 // const {getAuthUrl , getAuthToken} = require("./config/googleClient");
-const {oauth2client} = require("./config/googleClient");  
+// const {oauth2client} = require("./config/googleClient");  
 const cors = require("cors");
 // const fs = require("fs");
 // connectDB();
 
 const app = express();
+
 const server = http.createServer(app);
 
 initSocket(server);
@@ -36,7 +37,20 @@ initSocket(server);
 app.use(cors());
 
 app.use(express.json());
-
+app.use(async (req, res, next) => {
+  try {
+      const tokenExpiryTime = oauth2client.credentials.expiry_date;
+      const currentTime = Date.now();
+      if (!tokenExpiryTime || tokenExpiryTime < currentTime) {
+          console.log('Access token expired, refreshing...');
+          await refreshAccessToken();
+      }
+      next();
+  } catch (error) {
+      console.error('Error checking or refreshing token:', error);
+      return res.status(500).json({ error: 'Authentication error' });
+  }
+});
 // Routes
 app.get("/", (req, res) => res.send("Hello World"));
 
@@ -79,10 +93,9 @@ app.get("/auth/redirect", async (req,res) => {
   }
   const tokens = await oauth2client.getToken(code);
   oauth2client.setCredentials(tokens);
-  //here we need to save the token for future use
-  const TOKEN_PATH = 'token.json';
-  fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokens));
-  console.log("Token saved to", TOKEN_PATH);
+  // const TOKEN_PATH = 'token.json';
+  // fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokens));
+  // console.log("Token saved to", TOKEN_PATH);
   res.send("Google authentication successful!");
   }
   catch(e)
