@@ -3,8 +3,6 @@
 
 **Cureit** is a **smart and accessible** doctor appointment platform that **bridges healthcare gaps** for **underserved communities** by reducing wait times and streamlining scheduling. It helps patients **connect with doctors effortlessly** while enabling **efficient queue management** in hospitals and clinics. Powered by **Supabase**, Cureit ensures **secure authentication, real-time syncing, and seamless healthcare access**.
 
-<!-- 📽 **Demo Video** - [Demo Video Link](https://drive.google.com/file/d/1k3WiRaZEbQIiUDKqEWMddZDIjULpND-e/view?usp=sharing) -->
-
 🌐 **Deployed Project Link** -  [https://aryamagarwal.github.io/cureit](https://aryamagarwal.github.io/cureit)
 
 **CureIt FeedBack Form** - [https://forms.gle/7jNscB3c7jUewsaX7](https://forms.gle/7jNscB3c7jUewsaX7)
@@ -22,10 +20,12 @@
   - [Reminder System](#8-reminder-system)
   - [Online Prescriptions](#9-online-prescriptions)
   - [Feedback System](#10-feedback-system)
-- [Tech Stack](#Technology-Stack)
-- [Implementation Flowchart](#Implementation-Flowchart)
-- [Continuous Improvement](#Continuous-Improvement)
-- [Conclusion](#Conclusion)
+  - [Reception Dashboard](#11-reception-dashboard)
+  - [Health Worker Dashboard](#12-health-worker-dashboard)
+- [Tech Stack](#technology-stack)
+- [Implementation Flowchart](#implementation-flowchart)
+- [Continuous Improvement](#continuous-improvement)
+- [Conclusion](#conclusion)
 - [Application Testing Guide](#application-testing-guide)
 
 
@@ -150,6 +150,19 @@ The **Doctor Dashboard** provides an intelligent scheduling system for healthcar
 - Uses precomputed embeddings for efficient similarity matching and tagging.
 - Dynamically generates relevant expertise tags for doctor profiles based on **semantic similarity (Faiss)** and **keyword-based classification**.
 - Enhances **user experience and service optimization**.
+  
+### 11. Reception Dashboard
+
+ - Displays a unique QR code that patients can scan using their mobile devices to quickly check in upon arrival at the health facility.
+ - Continuously monitors and displays the queue status, showcasing the next four patients scheduled for consultation with each doctor.
+ - Facilitates streamlined coordination between patients and healthcare providers by keeping reception staff informed of current and upcoming appointments.
+
+### 12. Health Worker Dashboard
+
+  - Enables health workers and NGOs to perform preliminary health checkups and log citizen complaints, which can be escalated to relevant authorities or healthcare professionals for timely action.
+  - Provides tools to organize and manage free health camps, allowing workers to schedule events, assign roles, and track participation.
+  - Allows doctors to volunteer for health camps and coordinate directly with health workers for event planning and patient support.
+
 
 ---
 
@@ -246,6 +259,17 @@ Currently, the following doctor specializations are available in the database:
 - Patients can edit their profile details, including name, age, and contact information.
 - They can book, view and cancel appointments from their dashboard.
 - Patients can access their medical history and view prescriptions and doctor's remarks (if any).
+
+## Reception Dashboard Testing Guide
+| Reception Email            | Password     |
+|----------------------------|--------------|
+|  reception1@example.com    |reception123  |
+
+## Health Worker Dashboard Testing Guide
+| Health Worker Email        | Password     |
+|----------------------------|--------------|
+|healthworker1@example.com   |  HEALTH123   |
+
 
 ## Screenshots
 
