@@ -22,6 +22,7 @@ import SingleFeaturePageChatbot from "./pages/SingleFeaturePageChatbot";
 import SingleFeaturePageMedSpecRec from "./pages/SingleFeaturePageMedSpecRec";
 import SingleFeaturePageFeedback from "./pages/SingleFeaturePageFeedback";
 import HealthCamps from "./pages/HealthCamps"; // Import the new page
+import LabResultSummary from "./components/PatientDashboard/LabResultSummary";
 
 const router = createBrowserRouter(
   [
@@ -121,6 +122,11 @@ const router = createBrowserRouter(
           element: <HealthCamps />,
           errorElement: <ErrorPage />,
         },
+        {
+          path: "/labresults",
+          element: <LabResultSummary />,
+          errorElement: <ErrorPage />,
+        }
       ],
     },
   ],

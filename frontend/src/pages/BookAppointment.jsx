@@ -4,7 +4,7 @@ import {
   EyeClosedIcon,
   EyeOpenIcon,
 } from "@radix-ui/react-icons";
-import { Button } from "@radix-ui/themes";
+import { Button, Spinner } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BookingProcessGuide from "../components/BookingProcessGuide";
@@ -34,11 +34,10 @@ function BookAppointment() {
   // patientId = user.currentUser.id;
   // }
   const [formData, setFormData] = useState({
-    fullName: "",
-    address: "",
-    healthIssue:
-      "",
-    age: "",
+    fullName: "dsadsa",
+    address: "dsadsa",
+    healthIssue: "dsadsa",
+    age: "23",
     gender: "",
     selectedDoctor: null,
     selectedDate: null,
@@ -57,8 +56,8 @@ function BookAppointment() {
     isLoading: isLoadingDoctorType,
     data: dataDoctorType,
     error: errorDoctorType,
-  } = useGetDoctorType(formState === 2 ? formData.healthIssue : null); 
-  const [mode , setMode] = useState("offline"); // Fetch doctor type based on health issue using ML model
+  } = useGetDoctorType(formState === 2 ? formData.healthIssue : null);
+  const [mode, setMode] = useState("offline"); // Fetch doctor type based on health issue using ML model
   const {
     isLoading: isLoadingSlots,
     data: dataSlots,
@@ -66,7 +65,7 @@ function BookAppointment() {
     refetch: refetchSlots,
     isFetching: isFetchingSlots,
   } = useGetDoctorSlots(
-    formState === 2 ? { formData, patientId, dataDoctorType , mode } : null,
+    formState === 2 ? { formData, patientId, dataDoctorType, mode } : null,
   ); // Fetch doctor slots based on selected doctor type
 
   // console.log(isLoadingDoctorType, isLoadingSlots);
@@ -96,7 +95,8 @@ function BookAppointment() {
         formData.fullName === "" ||
         formData.address === "" ||
         formData.healthIssue === "" ||
-        formData.age === ""
+        formData.age === "" ||
+        formData.gender === ""
       )
         return false;
       return true;
@@ -110,11 +110,19 @@ function BookAppointment() {
 
   // // console.log(formData);
   // const base =import.meta.env.VITE_API_BASE_URL;
-  const { mutate: bookAppointment } =
-    usePostBookAppointment(setBookingSuccessful);
+  const {
+    mutate: bookAppointment,
+    isPending: isLoadingBookAppointment,
+    isError,
+    isSuccess,
+  } = usePostBookAppointment(setBookingSuccessful);
+
   const onBookAppointment = () => {
-    bookAppointment.mutate({ formData, patientId });
+    bookAppointment({ formData, patientId });
   };
+  console.log("isLoadingBookAppointment", isLoadingBookAppointment);
+  
+
   // // console.log(isFetchingSlots);
   // console.log(isLoadingDoctorType, isLoadingSlots, isFetchingSlots);
   // console.log("isLoadingDoctorType", isLoadingDoctorType);
@@ -152,8 +160,8 @@ function BookAppointment() {
               setFormData={setFormData}
               refetchSlots={refetchSlots}
               dataDoctorType={dataDoctorType}
-              setMode = {setMode}
-              mode = {mode}
+              setMode={setMode}
+              mode={mode}
             />
           )}
           {formState === 3 && (
@@ -161,7 +169,7 @@ function BookAppointment() {
               data={formData}
               bookingSuccessful={bookingSuccessful}
               setBookingSuccessful={setBookingSuccessful}
-              mode = {mode}
+              mode={mode}
             />
           )}
 
@@ -189,18 +197,31 @@ function BookAppointment() {
                 Next <ArrowRightIcon width={15} height={15} />
               </Button>
             )}
-            {formState === 3 && !bookingSuccessful && (
-              <Button color="iris" size="2" onClick={() => onBookAppointment()}>
-                Book Appointment
-              </Button>
-            )}
+            {formState === 3 &&
+              !bookingSuccessful &&
+              (isLoadingBookAppointment ? (
+                <Button
+                  disabled
+                  color="iris"
+                  size="2"
+                  onClick={() => onBookAppointment()}
+                >
+                  Book Appointment <Spinner />
+                </Button>
+              ) : (
+                <Button
+                  color="iris"
+                  size="2"
+                  onClick={() => onBookAppointment()}
+                >
+                  Book Appointment
+                </Button>
+              ))}
             {formState === 3 && bookingSuccessful && (
               <Button
                 color="iris"
                 size="2"
-                onClick={() =>
-                  navigate("/user/dashboard?tab=appointments")
-                }
+                onClick={() => navigate("/user/dashboard?tab=appointments")}
               >
                 Check out your appointments
               </Button>
