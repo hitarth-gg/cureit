@@ -1,5 +1,5 @@
 import { CameraIcon, Pencil2Icon } from "@radix-ui/react-icons";
-import { Avatar, Button, Flex } from "@radix-ui/themes";
+import { Avatar, Button, Flex, Skeleton } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import EditProfile from "./EditProfile";
 import AppointmentCard from "./AppointmentCard";
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useGetUserDetails } from "../../hooks/useGetUserDetails";
 import useUpdateUserProfilePicture from "../../hooks/useUpdateUserProfilePicture";
 import { toast } from "sonner";
+import patientBanner from "../../assets/patientBanner.jpg";
 
 function ProfileTab() {
   const [userId, setUserId] = useState(null);
@@ -155,6 +156,35 @@ function ProfileTab() {
   return (
     <div className="flex flex-col gap-y-6">
       {(isLoading || isFetchingDetails) && <Loader />}
+      <div className="relative flex flex-col overflow-hidden rounded-md">
+        <img
+          src={patientBanner}
+          alt="Patient banner background"
+          className="h-48 w-full rounded-lg object-cover sm:h-56 md:h-64 lg:h-72"
+        />
+
+        <div className="absolute inset-0 flex flex-col justify-center px-4 font-inter text-white drop-shadow-lg sm:px-6 md:px-12">
+          {profile.name ? (
+            <>
+              <div className="text-lg font-semibold sm:text-xl">Welcome,</div>
+              <div className="text-2xl font-semibold sm:text-3xl md:text-4xl">
+                {profile.gender?.toLowerCase() === "male" ? "Mr." : "Ms."}{" "}
+                {profile.name?.charAt(0).toUpperCase() + profile.name?.slice(1)}
+              </div>
+              <div className="mt-1 text-base sm:text-lg">
+                You have {appointmentsToday?.length} appointments scheduled for
+                today.
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-col gap-y-2 text-lg font-semibold sm:text-xl">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-6 w-32" />
+              <Skeleton className="h-8 w-36" />
+            </div>
+          )}
+        </div>
+      </div>
       <div className="flex flex-col justify-start gap-x-4 rounded-md border px-8 py-4 text-xs sm:gap-x-12 md:flex-row md:text-sm">
         <div className="flex flex-col items-center justify-center p-4">
           <Flex gap="2" className="relative">

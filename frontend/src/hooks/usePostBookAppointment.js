@@ -3,7 +3,7 @@ import { postBookAppointment } from "../utils/api";
 import { toast } from "sonner";
 export default function usePostBookAppointment(setBookingStatus) {
     const queryClient = useQueryClient();
-    const mutate = useMutation({
+    const mutation = useMutation({
         mutationFn: postBookAppointment,
         onSuccess: (data) => {
             // console.log("Appointment booked successfully");
@@ -19,5 +19,5 @@ export default function usePostBookAppointment(setBookingStatus) {
         }
     }
     )
-    return { mutate };
+    return mutation;
 }

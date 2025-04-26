@@ -32,6 +32,23 @@ function Header() {
   const [tokenString, setTokenString] = useState(null);
 
   const [scrollPosition, setScrollPosition] = useState(0);
+  const roleMenuItems = {
+    doctor: [
+      { label: "Dashboard", path: "/user/dashboard" },
+      { label: "Queue", path: "/user/dashboard?tab=queue" },
+      { label: "History", path: "/user/dashboard?tab=history" },
+    ],
+    patient: [
+      { label: "Dashboard", path: "/user/dashboard" },
+      { label: "Appointments", path: "/user/dashboard?tab=appointments" },
+      { label: "History", path: "/user/dashboard?tab=history" },
+    ],
+    reception: [
+      { label: "Dashboard", path: "/user/dashboard" },
+    ],
+    // Add more roles here if necessary
+  };
+
   const navigate = useNavigate();
   useEffect(() => {
     const handleScroll = () => {
@@ -160,11 +177,7 @@ function Header() {
                 <div className="flex items-center justify-center gap-x-2 font-noto text-sm font-medium">
                   <Avatar
                     color="blue"
-                    size={{
-                      initial: "1",
-                      sm: "1",
-                      md: "1",
-                    }}
+                    size={{ initial: "1", sm: "1", md: "1" }}
                     radius="full"
                     src={profile?.avatar_url || ""}
                     fallback={displayName[0][0]}
@@ -177,40 +190,15 @@ function Header() {
               </Button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content className="bg-black">
-              <DropdownMenu.Item
-                shortcut=""
-                onClick={() => navigate("/user/dashboard")}
-              >
-                Dashboard
-              </DropdownMenu.Item>
+              {roleMenuItems[profile?.role?.toLowerCase()]?.map((item) => (
+                <DropdownMenu.Item
+                  key={item.label}
+                  onClick={() => navigate(item.path)}
+                >
+                  {item.label}
+                </DropdownMenu.Item>
+              ))}
               <DropdownMenu.Separator />
-              <DropdownMenu.Item
-                shortcut=""
-                onClick={() => navigate("/user/dashboard?tab=profile")}
-              >
-                Profile
-              </DropdownMenu.Item>
-              <DropdownMenu.Item
-                shortcut=""
-                onClick={() =>
-                  navigate(
-                    `/user/dashboard?tab=${
-                      profile?.role === "doctor" ? "queue" : "appointments"
-                    }`,
-                    {},
-                  )
-                }
-              >
-                {profile?.role === "doctor" ? "Queue" : "Appointments"}
-              </DropdownMenu.Item>
-              <DropdownMenu.Item
-                shortcut=""
-                onClick={() => navigate(`/user/dashboard?tab=history`)}
-              >
-                History
-              </DropdownMenu.Item>
-              <DropdownMenu.Separator />
-
               <DropdownMenu.Item color="red" onClick={handleLogout}>
                 <div className="flex w-full items-center justify-between gap-x-3">
                   Sign Out <ExitIcon />

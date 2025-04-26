@@ -1,4 +1,4 @@
-import { Avatar, Badge, Code, Flex } from "@radix-ui/themes";
+import { Avatar, Badge, Code, Flex, Skeleton } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import useGetDoctorProfileDetails from "../../hooks/useGetDoctorProfileDetails";
 import Loader from "../Loader";
@@ -9,6 +9,7 @@ import { data } from "autoprefixer";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@radix-ui/themes";
+import doctorBanner from "../../assets/doctorBanner.jpg";
 
 function DoctorProfileTab() {
   const [profile, setProfile] = useState({
@@ -152,6 +153,29 @@ function DoctorProfileTab() {
   return (
     <div className="flex flex-col gap-y-6">
       {isFetchingDetails && <Loader />}
+      <div className="relative flex flex-col overflow-hidden rounded-md">
+        <img
+          src={doctorBanner}
+          alt="Patient banner background"
+          // className="h-48 w-full rounded-lg object-cover sm:h-56 md:h-64 lg:h-72"
+          className="h-48 w-full rounded-lg object-cover object-right sm:h-56 md:h-64 lg:h-72"
+        />
+        <div className="absolute inset-0 flex flex-col justify-center px-4 font-inter text-white drop-shadow-lg sm:px-6 md:px-12">
+          {profile?.name ? (
+            <>
+              <div className="text-lg font-semibold sm:text-xl">Welcome,</div>
+              <div className="text-2xl font-semibold sm:text-3xl md:text-4xl">
+                {profile.name?.charAt(0).toUpperCase() + profile.name?.slice(1)}
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-col gap-y-2 text-lg font-semibold sm:text-xl">
+              <Skeleton className="h-6 w-32" />
+              <Skeleton className="h-8 w-36" />
+            </div>
+          )}
+        </div>
+      </div>
       <div className="flex flex-col justify-start gap-x-4 rounded-md border px-8 py-4 text-xs sm:gap-x-12 md:flex-row md:text-sm">
         <div className="flex flex-col items-center justify-center p-4">
           <Flex gap="2">

@@ -1,11 +1,11 @@
 
 ## Introduction
 
-Cureit is an **intuitive and robust** doctor appointment booking platform designed to **mitigate long waiting times** and **optimize** the scheduling process for medical consultations. The platform ensures a **seamless** user experience by enabling patients to book appointments effortlessly while equipping doctors with efficient schedule management tools. Cureit is powered by **Supabase** for authentication, database management, and real-time synchronization.
-
-📽 **Demo Video** - [Demo Video Link](https://drive.google.com/file/d/1k3WiRaZEbQIiUDKqEWMddZDIjULpND-e/view?usp=sharing)
+**Cureit** is a **smart and accessible** doctor appointment platform that **bridges healthcare gaps** for **underserved communities** by reducing wait times and streamlining scheduling. It helps patients **connect with doctors effortlessly** while enabling **efficient queue management** in hospitals and clinics. Powered by **Supabase**, Cureit ensures **secure authentication, real-time syncing, and seamless healthcare access**.
 
 🌐 **Deployed Project Link** -  [https://aryamagarwal.github.io/cureit](https://aryamagarwal.github.io/cureit)
+
+**CureIt FeedBack Form** - [https://forms.gle/7jNscB3c7jUewsaX7](https://forms.gle/7jNscB3c7jUewsaX7)
 
 ## Index
 - [Introduction](#introduction)
@@ -20,10 +20,12 @@ Cureit is an **intuitive and robust** doctor appointment booking platform design
   - [Reminder System](#8-reminder-system)
   - [Online Prescriptions](#9-online-prescriptions)
   - [Feedback System](#10-feedback-system)
-- [Tech Stack](#Technology-Stack)
-- [Implementation Flowchart](#Implementation-Flowchart)
-- [Continuous Improvement](#Continuous-Improvement)
-- [Conclusion](#Conclusion)
+  - [Reception Dashboard](#11-reception-dashboard)
+  - [Health Worker Dashboard](#12-health-worker-dashboard)
+- [Tech Stack](#technology-stack)
+- [Implementation Flowchart](#implementation-flowchart)
+- [Continuous Improvement](#continuous-improvement)
+- [Conclusion](#conclusion)
 - [Application Testing Guide](#application-testing-guide)
 
 
@@ -148,6 +150,19 @@ The **Doctor Dashboard** provides an intelligent scheduling system for healthcar
 - Uses precomputed embeddings for efficient similarity matching and tagging.
 - Dynamically generates relevant expertise tags for doctor profiles based on **semantic similarity (Faiss)** and **keyword-based classification**.
 - Enhances **user experience and service optimization**.
+  
+### 11. Reception Dashboard
+
+ - Displays a unique QR code that patients can scan using their mobile devices to quickly check in upon arrival at the health facility.
+ - Continuously monitors and displays the queue status, showcasing the next four patients scheduled for consultation with each doctor.
+ - Facilitates streamlined coordination between patients and healthcare providers by keeping reception staff informed of current and upcoming appointments.
+
+### 12. Health Worker Dashboard
+
+  - Enables health workers and NGOs to perform preliminary health checkups and log citizen complaints, which can be escalated to relevant authorities or healthcare professionals for timely action.
+  - Provides tools to organize and manage free health camps, allowing workers to schedule events, assign roles, and track participation.
+  - Allows doctors to volunteer for health camps and coordinate directly with health workers for event planning and patient support.
+
 
 ---
 
@@ -167,46 +182,34 @@ The **Doctor Dashboard** provides an intelligent scheduling system for healthcar
 ## Implementation Flowchart
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/b55d10b5-1a72-4a66-be3d-71d0c39c8ca1">
-  <source media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/84ac78b0-85fc-415d-8e49-dcb1994ca2b8">
-  <img src="https://github.com/user-attachments/assets/b55d10b5-1a72-4a66-be3d-71d0c39c8ca1" alt="My Image">
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/b6b6d89e-f7a1-4d7f-aa79-5382561ca713">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/7c92b78d-f08c-4266-beb2-d9f782400d08">
+  <img src="https://github.com/user-attachments/assets/b6b6d89e-f7a1-4d7f-aa79-5382561ca713" alt="My Image">
 </picture>
 
 ---
 ## Continuous Improvement
 
-### 1) Reception Dashboard
-- Patients check in by scanning a dynamic QR code.
-- QR code updates periodically for security.
-
-### 2) Managing Doctor Absences
+### 1) Managing Doctor Absences
 - Each doctor has 5 buffer slots for emergencies.
 - Patients can:
   - Choose another available doctor.
   - Reschedule their appointment.
 
-### 3) Online Video Consultation
-- Enable virtual appointments for remote consultations.
-- Simple and user-friendly booking.
-
-### 4) MBBS Intern Contributions
+### 2) MBBS Intern Contributions
 - Interns assist with minor cases via online consultations.
 - Provides hands-on experience under supervision.
 
-### 5) Secure Payment System
+### 3) Secure Payment System
 - Integrate payment gateway for smooth transactions and overall application robustness.
-
-### 6) Real-Time Monitoring Dashboard
-- Displays ongoing consultations at reception.
-- Shows doctor and patient queue details.
-- Helps manage waiting times efficiently.
 
 These upgrades enhance efficiency, patient experience, and overall system effectiveness.
 
 ---
 ## Conclusion
 
-Cureit **transforms the doctor appointment booking experience** by delivering a **high-performance, AI-integrated, and real-time platform** for **patients and doctors** alike. By leveraging **Supabase for real-time updates, authentication, and secure data management**, the platform ensures **uncompromised reliability and ease of use**. Features like **ML-based doctor recommendations, dynamic queue management, Redis caching for performance scaling, and digital prescriptions** position Cureit as a **cutting-edge solution enhancing healthcare accessibility and efficiency**.
+Cureit **revolutionizes doctor appointment booking** with a **high-performance, AI-powered, and real-time platform** designed for both **patients and doctors**. Utilizing **Supabase for real-time updates, authentication, and secure data management**, Cureit ensures **seamless reliability and ease of use**. With **ML-driven doctor recommendations, intelligent queue management, Redis caching for scalability, and digital prescriptions**, Cureit stands as a **cutting-edge solution improving healthcare accessibility and efficiency**.  
+
 
 ---
 
@@ -256,6 +259,17 @@ Currently, the following doctor specializations are available in the database:
 - Patients can edit their profile details, including name, age, and contact information.
 - They can book, view and cancel appointments from their dashboard.
 - Patients can access their medical history and view prescriptions and doctor's remarks (if any).
+
+## Reception Dashboard Testing Guide
+| Reception Email            | Password     |
+|----------------------------|--------------|
+|  reception1@example.com    |reception123  |
+
+## Health Worker Dashboard Testing Guide
+| Health Worker Email        | Password     |
+|----------------------------|--------------|
+|healthworker1@example.com   |  HEALTH123   |
+
 
 ## Screenshots
 
