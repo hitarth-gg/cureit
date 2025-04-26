@@ -251,7 +251,7 @@ export default function AIConsultation() {
       const res = await fetch(`${api}/api/AiConsultation/consult`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, language: "en-US" }),
+        body: JSON.stringify({ prompt }),
       });
 
       if (!res.ok) {
