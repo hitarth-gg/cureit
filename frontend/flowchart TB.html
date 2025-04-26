@@ -1,0 +1,100 @@
+flowchart TB
+    %% Main Components with Bold Headings, Icons, and Dividers
+    Frontend["<b>🖥️ Frontend Application</b><hr style='margin:5px 0'>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' width='15' height='15' style='display:block;' /></div> React</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://vitejs.dev/logo.svg' width='15' height='15' style='display:block;' /></div> Vite</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/768px-Tailwind_CSS_Logo.svg.png?20230715030042' width='15' height='15' style='display:block;' /></div> Tailwind CSS</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://tanstack.com/favicon.ico' width='15' height='15' style='display:block;' /></div> TanStack React Query</div>"]
+
+    Backend["<b>⚙️ Backend Services</b><hr style='margin:5px 0'>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg' width='15' height='15' style='display:block;' /></div> Node.js</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg' width='15' height='15' style='display:block;' /></div> Express.js</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://fastapi.tiangolo.com/img/favicon.png' width='15' height='15' style='display:block;' /></div> FastAPI</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://supabase.com/favicon/favicon-32x32.png' width='15' height='15' style='display:block;' /></div> Supabase Integration</div>"]
+    
+    Auth["<b>🔒 Authentication Module</b><hr style='margin:5px 0'>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://supabase.com/favicon/favicon-32x32.png' width='15' height='15' style='display:block;' /></div> Supabase Auth</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://www.svgrepo.com/show/14478/email.svg' width='15' height='15' style='display:block;' /></div> Email Verification</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://www.svgrepo.com/show/375223/user-role.svg' width='15' height='15' style='display:block;' /></div> RBAC Management</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://www.svgrepo.com/download/116676/key.svg' width='15' height='15' style='display:block;' /></div> Session Handling</div>"]
+    
+    DB["<b>💾 Database Layer</b><hr style='margin:5px 0'>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' width='15' height='15' style='display:block;' /></div> PostgreSQL (Supabase)</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://www.svgrepo.com/show/499816/database.svg' width='15' height='15' style='display:block;' /></div> Real-time Database</div>"]
+    
+    Cache["<b>⚡ Caching System</b><hr style='margin:5px 0'>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg' width='15' height='15' style='display:block;' /></div> Redis</div>"]
+    
+    ML["<b>🧠 ML Services</b><hr style='margin:5px 0'>
+    <div style='display: flex; align-items: center;'> Symptom Analysis</div>
+    <div style='display: flex; align-items: center;'> Doctor Specialization</div>
+    <div style='display: flex; align-items: center;'> Sentiment Analysis</div>
+    <div style='display: flex; align-items: center;'> TF-IDF Vectorization</div>
+    <div style='display: flex; align-items: center;'> Random Forest Classifier</div>"]
+    
+    AI["<b>🤖 AI Services</b><hr style='margin:5px 0'>
+    <div style='display: flex; align-items: center;'> RAG-based Chatbot</div>
+    <div style='display: flex; align-items: center;'> Faiss Vector Search</div>
+    <div style='display: flex; align-items: center;'> Sentence Transformers</div>
+    <div style='display: flex; align-items: center;'> DistilBERT</div>"]
+    
+    Google["<b>🌐 Google Services</b><hr style='margin:5px 0'>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://maps.google.com/favicon.ico' width='15' height='15' style='display:block;' /></div> Google Maps</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Calendar_icon_%282020%29.svg/768px-Google_Calendar_icon_%282020%29.svg.png' width='15' height='15' style='display:block;' /></div> Google Calendar</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Google_Meet_icon_%282020%29.svg/768px-Google_Meet_icon_%282020%29.svg.png' width='15' height='15' style='display:block;' /></div> Google Meet</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Gmail_icon_%282020%29.svg/768px-Gmail_icon_%282020%29.svg.png' width='15' height='15' style='display:block;' /></div> Gmail</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://cloud.google.com/favicon.ico' width='15' height='15' style='display:block;' /></div> Google Cloud</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Google_Gemini_logo.svg/516px-Google_Gemini_logo.svg.png' width='15' height='15' style='display:block;' /></div> Google Gemini</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://ssl.gstatic.com/docs/doclist/images/mediatype/icon_1_spreadsheet_x16.png' width='15' height='15' style='display:block;' /></div> Google Sheets</div>"]
+    
+    User["<b>👤 User Module</b><hr style='margin:5px 0'>
+    <div style='display: flex; align-items: center;'> Sign Up</div>
+    <div style='display: flex; align-items: center;'> Login</div>
+    <div style='display: flex; align-items: center;'>Profile Management</div>
+    <div style='display: flex; align-items: center;'> Appointment Booking</div>"]
+    
+    Doctor["<b>👨‍⚕️ Doctor Module</b><hr style='margin:5px 0'>
+    <div style='display: flex; align-items: center;'> Profile Management</div>
+    <div style='display: flex; align-items: center;'> Queue Management</div>
+    <div style='display: flex; align-items: center;'> Patient History</div>
+    <div style='display: flex; align-items: center;'> Prescription Management</div>"]
+
+    Appointment["<b>📅 Appointment System</b><hr style='margin:5px 0'>
+    <div style='display: flex; align-items: center;'> Slot Generation</div>
+    <div style='display: flex; align-items: center;'> Booking Management</div>
+    <div style='display: flex; align-items: center;'> Queue Updates</div>
+    <div style='display: flex; align-items: center;'> OTP Verification</div>"]
+
+    Notification["<b>🔔 Notification System</b><hr style='margin:5px 0'>
+    <div style='display: flex; align-items: center;'> Email Notifications</div>
+    <div style='display: flex; align-items: center;'> SMS Reminders</div>
+    <div style='display: flex; align-items: center;'> Queue Updates</div>"]
+    
+    Feedback["<b>📊 Feedback System</b><hr style='margin:5px 0'>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://www.svgrepo.com/show/361153/feedback.svg' width='15' height='15' style='display:block;' /></div> Patient Feedback</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://cdn-icons-png.flaticon.com/512/9850/9850903.png' width='15' height='15' style='display:block;' /></div> Sentiment Analysis</div>
+    <div style='display: flex; align-items: center;'><div style='width:15px; height:15px; margin-right:4px;'><img src='https://www.svgrepo.com/show/28799/tag.svg' width='15' height='15' style='display:block;' /></div> Tag Generation</div>"]
+    
+    %% Main flow connections
+    User --> Frontend
+    Doctor --> Frontend
+    Frontend --> Backend
+    Backend --> Auth
+    Backend --> DB
+    Backend --> Cache
+    Backend --> ML
+    Backend --> AI
+    Backend --> Google
+    
+    %% System interconnections
+    Backend --> Appointment
+    Backend --> Notification
+    Backend --> Feedback
+    
+    %% Cross-module connections
+    Notification --> User
+    Notification --> Doctor
+    User --> Appointment
+    Doctor --> Appointment
+    AI --> ML
+    ML --> Google
