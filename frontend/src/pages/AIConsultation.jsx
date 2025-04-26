@@ -254,6 +254,15 @@ export default function AIConsultation() {
         body: JSON.stringify({ prompt, language: "en-US" }),
       });
 
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || `Server returned ${res.status}`);
+      }
+      const contentType = res.headers.get("Content-Type") || "";
+      if (!contentType.startsWith("audio/")) {
+        throw new Error("Expected audio but got " + contentType);
+      }
+
       // Clean up previous audio URL if it exists
       if (audioUrl) {
         URL.revokeObjectURL(audioUrl);
