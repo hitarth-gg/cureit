@@ -271,7 +271,7 @@ function ProfileTab() {
           Appointments scheduled for today
         </div>
         {appointmentsToday?.map((appointment, ix) => (
-          <AppointmentCard key={ix} data={appointment} />
+          <AppointmentCard key={ix} data={appointment} index={ix} />
         ))}
         {appointmentsToday?.length === 0 && (
           <div className="text-sm text-gray-400">No appointments today</div>

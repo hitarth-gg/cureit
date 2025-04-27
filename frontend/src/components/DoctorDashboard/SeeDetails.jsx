@@ -4,6 +4,7 @@ import {
   Dialog,
   Flex,
   Separator,
+  Spinner,
   Text,
   TextField,
   Tooltip,
@@ -76,9 +77,11 @@ function SeeDetails({ data, refetch, otpVerified }) {
     // Refetch the data
     toast.success("Details saved successfully");
   }
+  const [saving, setSaving] = useState(false);
   const appointmentId = data.appointmentId;
   async function saveAndMarkAsDone() {
     try {
+      setSaving(true);
       setSavePrescriptionSuccess(false);
       setUpdateAppointmentStatusSuccess(false);
       await Promise.all([
@@ -97,6 +100,8 @@ function SeeDetails({ data, refetch, otpVerified }) {
     } catch (error) {
       // console.log("Error saving details", error);
       toast.error("Error saving details");
+    } finally {
+      setSaving(false);
     }
   }
   const debouncedSetDoctorRemarks = useCallback(
@@ -319,7 +324,14 @@ function SeeDetails({ data, refetch, otpVerified }) {
             </Flex>
             <div className="flex w-full gap-x-4 py-4">
               {/* <Button>Save</Button> */}
-              <Button onClick={saveAndMarkAsDone}>Save & Mark as Done</Button>
+              <Button
+                disabled={saving}
+                color="iris"
+                onClick={saveAndMarkAsDone}
+              >
+                Save & Mark as Done
+                {saving && <Spinner />}
+              </Button>
             </div>
           </div>
         </div>

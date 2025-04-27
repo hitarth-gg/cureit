@@ -384,7 +384,7 @@ import {
   QrCode,
 } from "lucide-react";
 
-function AppointmentCard({ data, refetch }) {
+function AppointmentCard({ data, refetch, index }) {
   const {
     appointmentId,
     doctor,
@@ -498,6 +498,7 @@ function AppointmentCard({ data, refetch }) {
         {/* Header with status */}
         <div className="flex items-center justify-between border-b bg-gray-50 p-3">
           <div className="flex items-center">
+            {(index+1) > 0 && <div className="text-lg font-medium mr-2 text-gray-500">{index+1}.</div>}
             <UserRound className="mr-2 text-indigo-600" size={18} />
             <span className="text-lg font-medium">{doctor}</span>
             <Badge

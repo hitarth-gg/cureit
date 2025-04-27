@@ -24,7 +24,7 @@ function UpcomingAppointments() {
       {(isLoading || isFetching) && <Loader />}
       <div className="flex flex-col gap-4">
         {data?.map((appointment, ix) => (
-          <AppointmentCard key={ix} data={appointment} refetch={refetch} />
+          <AppointmentCard key={ix} data={appointment} index={ix} refetch={refetch} />
         ))}
         {data?.length === 0 && (
           <div className="text-center">No upcoming appointments!</div>
