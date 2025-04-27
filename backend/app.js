@@ -38,6 +38,8 @@ initSocket(server);
 app.use(cors());
 
 app.use(express.json());
+app.use("/api/AiConsultation", AiConsultation);
+
 app.use(async (req, res, next) => {
   try {
     const tokenExpiryTime = oauth2client.credentials.expiry_date;
@@ -66,7 +68,6 @@ app.use("/api/receptionProfileRoutes", receptionProfileRoutes);
 app.use("/api/feedback", feedbackRoutes);
 app.use("/api/multiDoctorDashboardRoutes", multiDoctorDashboardRoutes);
 app.use("/api/healthWorkerRoutes", healthWorkerRoutes);
-app.use("/api/AiConsultation", AiConsultation);
 
 // const options = {
 //   key: fs.readFileSync("certs/key.pem"),
