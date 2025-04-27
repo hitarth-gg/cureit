@@ -8,6 +8,7 @@ export default function AIConsultation() {
   const [isListening, setIsListening] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [activeTab, setActiveTab] = useState("voice");
+  const [replyText, setReplyText] = useState("");
   const audioRef = useRef(null);
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
@@ -254,23 +255,19 @@ export default function AIConsultation() {
         body: JSON.stringify({ prompt }),
       });
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || `Server returned ${res.status}`);
-      }
-      const contentType = res.headers.get("Content-Type") || "";
-      if (!contentType.startsWith("audio/")) {
-        throw new Error("Expected audio but got " + contentType);
-      }
-
       // Clean up previous audio URL if it exists
-      if (audioUrl) {
-        URL.revokeObjectURL(audioUrl);
-      }
 
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
+      const { replyText, audioBase64 } = await res.json();
+      setReplyText(replyText);
+
+      // build a real audio URL from Base64
+      const url = `data:audio/mpeg;base64,${audioBase64}`;
+      if (audioUrl) URL.revokeObjectURL(audioUrl);
       setAudioUrl(url);
+
+      //   const blob = await res.blob();
+      //   const url = URL.createObjectURL(blob);
+      //   setAudioUrl(url);
     } catch (error) {
       console.error("Error fetching response:", error);
     } finally {
@@ -339,7 +336,7 @@ export default function AIConsultation() {
   }, []);
 
   return (
-    <div className="flex h-screen w-full flex-col bg-gradient-to-b from-gray-900 via-purple-900 to-gray-900 text-white">
+    <div className="mt-12 flex h-screen w-full flex-col bg-gradient-to-b from-gray-900 via-purple-900 to-gray-900 text-white">
       {/* Header */}
       <header className="flex items-center justify-between border-b border-purple-700/30 px-8 py-6">
         <div className="flex items-center gap-3">
