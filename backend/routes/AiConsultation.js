@@ -5,14 +5,28 @@ const { TextToSpeechClient } = require("@google-cloud/text-to-speech");
 
 const creds = JSON.parse(process.env.TTS_SA_KEY_JSON);
 const ttsClient = new TextToSpeechClient({ credentials: creds });
-
 router.post("/consult", async (req, res) => {
-  console.log("hit /consult");
-
   const { prompt, voiceId = "JBFqnCBsd6RMkjVDRZzb" } = req.body;
   if (!prompt) {
     return res.status(400).json({ error: "Missing prompt" });
   }
+
+  const now = new Date();
+  const hour = now.getHours();
+  let greeting;
+  if (hour < 12) greeting = "Good morning";
+  else if (hour < 18) greeting = "Good afternoon";
+  else greeting = "Good evening";
+
+  const systemPrompt = `
+You are Dr. AI, a board-certified physician. When responding:
+- Begin with a time-appropriate greeting: "${greeting},"
+- Provide concise (20–30 words), evidence-based medical advice in a calm, reassuring tone.
+- If the user’s query is not medical, reply: "Sorry that is not in my domain."
+Patient says: "${prompt}"
+`.trim();
+
+  console.log("hit /consult");
 
   try {
     // 1. Call Gemini AI
@@ -25,7 +39,7 @@ router.post("/consult", async (req, res) => {
           {
             parts: [
               {
-                text: `${prompt} You are a physician providing concise, evidence-based advice. Generate a short, 20–30 word reply; be minimal. If outside your domain, reply "Sorry that is not in my domain."`,
+                text: `${systemPrompt}`,
               },
             ],
           },
@@ -79,12 +93,12 @@ router.post("/consult", async (req, res) => {
       input: { ssml },
       voice: {
         languageCode: "en-US",
-        name: "en-US-Wavenet-D", // one of Google’s top-quality voices
+        name: "en-US-Neural2-J", // one of Google’s top-quality voices
         ssmlGender: "MALE",
       },
       audioConfig: {
         audioEncoding: "MP3",
-        speakingRate: 1.5, // slows the speech slightly
+        speakingRate: 1, // slows the speech slightly
         pitch: 0.8, // leave pitch neutral
         volumeGainDb: 1.5, // you can boost it slightly if needed
       },
