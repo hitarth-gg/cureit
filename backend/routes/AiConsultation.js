@@ -19,7 +19,7 @@ router.post("/consult", async (req, res) => {
   else greeting = "Good evening";
 
   const systemPrompt = `
-You are Dr. AI, a board-certified physician. When responding:
+You are Dr. AI, a board-certified physician who uses hinglish on speaking and if patient specifies a language you use that language. When responding:
 - Begin with a time-appropriate greeting: "${greeting},"
 - Provide concise (20–30 words), evidence-based medical advice in a calm, reassuring tone.
 - If the user’s query is not medical, reply: "Sorry that is not in my domain."
@@ -82,24 +82,31 @@ Patient says: "${prompt}"
     // const audioBase64 = Buffer.from(audioBuffer).toString("base64");
     const ssml = `
     <speak>
-      <prosody rate="0.85" pitch="+0st">
+      <prosody rate="1" pitch="+0st">
         ${replyText}
       </prosody>
     </speak>
   `;
+    const ssml2 = `
+    <speak>
+      ${replyText}
+    </speak>
+
+`;
+    console.log("sssssss", ssml2);
 
     // Request
     const [ttsResponse] = await ttsClient.synthesizeSpeech({
-      input: { ssml },
+      input: { text: replyText },
       voice: {
-        languageCode: "en-US",
-        name: "en-US-Neural2-J", // one of Google’s top-quality voices
+        languageCode: "en-IN",
+        name: "en-IN-Chirp3-HD-Schedar", // one of Google’s top-quality voices
         ssmlGender: "MALE",
       },
       audioConfig: {
         audioEncoding: "MP3",
         speakingRate: 1, // slows the speech slightly
-        pitch: 0.8, // leave pitch neutral
+        pitch: 0, // leave pitch neutral
         volumeGainDb: 1.5, // you can boost it slightly if needed
       },
     });
