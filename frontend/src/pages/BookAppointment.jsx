@@ -34,9 +34,9 @@ function BookAppointment() {
   // patientId = user.currentUser.id;
   // }
   const [formData, setFormData] = useState({
-    fullName: "dsadsa",
-    address: "dsadsa",
-    healthIssue: "dsadsa",
+    fullName: "Ramesh Bhai",
+    address: "Alambagh, Lucknow, U.P.",
+    healthIssue: "Itchy Skin",
     age: "23",
     gender: "",
     selectedDoctor: null,

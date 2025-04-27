@@ -7,6 +7,8 @@ import {
   SunIcon,
 } from "@radix-ui/react-icons";
 import CureitLogo from "../assets/CureitLogo";
+import CureitLogoWhite from "../assets/CureitLogoWhite.png";
+
 import { useCureitContext } from "../utils/ContextProvider";
 import {
   Avatar,
@@ -135,7 +137,8 @@ function Header() {
         className="my-auto w-16 cursor-pointer"
         onClick={() => navigate("/")}
       >
-        <CureitLogo fillColor={"#000000"} />
+        <img src={CureitLogoWhite} alt="Cureit Logo" className="w-full" />
+        {/* <CureitLogo fillColor={"#000000"} /> */}
       </div>
 
       <div className="mx-3 my-auto flex items-center justify-center gap-x-5">

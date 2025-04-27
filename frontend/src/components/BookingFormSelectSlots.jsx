@@ -35,6 +35,7 @@ function BookingFormSelectSlots({
           className="w-44 rounded-md border border-gray-300 p-2 text-sm md:text-base"
           type="date"
           min={new Date().toISOString().split("T")[0]}
+          max={new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]} // 14 days from now
           value={
             formData.selectedDate
               ? formData.selectedDate.split("-").reverse().join("-")
@@ -95,7 +96,7 @@ function BookingFormSelectSlots({
       <div className="flex flex-col gap-y-4">
         {doctors?.map((doctor, ix) => (
           <DoctorSlotCard
-            key={`${doctor.id}-${mode}`}
+            key={`${doctor.id}`}
             data={doctor}
             formData={formData}
             setFormData={setFormData}
