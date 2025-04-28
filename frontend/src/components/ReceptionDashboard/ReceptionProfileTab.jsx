@@ -176,9 +176,9 @@ function ReceptionProfileTab() {
   }, [isQRDialogOpen]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 rounded-md">
       {/* Header - Increased size */}
-      <div className="bg-gradient-to-r from-indigo-700 to-sky-600 p-6 text-white shadow-lg">
+      <div className="bg-gradient-to-r from-indigo-700 to-sky-600 p-6 text-white shadow-lg rounded-md">
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <CheckCircle size={28} />

@@ -34,7 +34,7 @@ import {
   linkPlugin,
 } from "@mdxeditor/editor";
 import "react-sliding-pane/dist/react-sliding-pane.css";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import SlidingPanel from "react-sliding-side-panel";
 import "react-sliding-side-panel/lib/index.css";
 import { Cross1Icon } from "@radix-ui/react-icons";
@@ -57,6 +57,7 @@ function SeeDetails({ data, refetch, otpVerified }) {
     appointment_time,
     appointment_date,
     queuePosition,
+    checked_in_status,
   } = data;
   const [isPaneOpen, setIsPaneOpen] = useState(false);
 
@@ -72,6 +73,31 @@ function SeeDetails({ data, refetch, otpVerified }) {
   const { mutate: saveAppointmentStatus } = usePostAppointmentStatus(
     setUpdateAppointmentStatusSuccess,
   );
+  // on component load, register start time, and elapsed time. end time will be the save time
+  const [startTime, setStartTime] = useState(Date.now());
+  const [endTime, setEndTime] = useState(Date.now());
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const formatElapsedTime = (ms) => {
+    const totalSeconds = Math.floor(ms / 1000);
+    const hours = Math.floor(totalSeconds / 3600)
+      .toString()
+      .padStart(2, "0");
+    const minutes = Math.floor((totalSeconds % 3600) / 60)
+      .toString()
+      .padStart(2, "0");
+    const seconds = (totalSeconds % 60).toString().padStart(2, "0");
+
+    return `${hours}:${minutes}:${seconds}`;
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setElapsedTime(Date.now() - startTime);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [startTime]);
+
   async function saveDetails() {
     // Save the doctorRemarks and doctorPrescription to the database
     // Refetch the data
@@ -82,6 +108,7 @@ function SeeDetails({ data, refetch, otpVerified }) {
   async function saveAndMarkAsDone() {
     try {
       setSaving(true);
+      setEndTime(Date.now());
       setSavePrescriptionSuccess(false);
       setUpdateAppointmentStatusSuccess(false);
       await Promise.all([
@@ -117,24 +144,28 @@ function SeeDetails({ data, refetch, otpVerified }) {
     [],
   );
   // console.log(doctorRemarks, doctorPrescription);
+  console.log(checked_in_status);
 
   return (
     <div className="">
       <Tooltip
-        className={otpVerified ? "hidden" : ""}
+        className={otpVerified || checked_in_status ? "hidden" : ""}
         disableHoverableContent={true}
-        content="Verify OTP to see details"
+        content="Patient has not checked in yet"
         side="top"
       >
         <div className="w-full">
           <Button
             className="w-max"
-            disabled={!otpVerified}
-            color="iris"
-            onClick={() => setIsPaneOpen(true)}
+            disabled={!otpVerified && !checked_in_status}
+            color="green"
+            onClick={() => {
+              setIsPaneOpen(true);
+              setStartTime(Date.now());
+            }}
             size={{ initial: "1", md: "2" }}
           >
-            Details
+            Start
           </Button>
         </div>
       </Tooltip>
@@ -143,7 +174,7 @@ function SeeDetails({ data, refetch, otpVerified }) {
         className="prose max-w-none font-inter text-sm"
         overlayClassName="some-custom-overlay-class"
         isOpen={isPaneOpen}
-        size={90}
+        size={100}
         type="right"
       >
         <div className="h-screen overflow-scroll bg-white">
@@ -162,9 +193,27 @@ function SeeDetails({ data, refetch, otpVerified }) {
             data-lenis-prevent="true"
             className="overflow-scroll bg-white p-8"
           >
-            <Text as="div" size="5" weight="bold">
-              Patient Details:
-            </Text>
+            <div className="flex w-full justify-between">
+              <Text as="div" size="5" weight="bold">
+                Patient Details:
+              </Text>
+              <div className="flex flex-col">
+                <Text as="div" size="2" mb="1" weight="bold">
+                  Start Time:
+                  <Code>
+                    {new Date(startTime).toLocaleTimeString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })}
+                  </Code>
+                </Text>
+                <Text as="div" size="2" mb="1" weight="bold">
+                  Elapsed Time:
+                  <Code>{formatElapsedTime(elapsedTime)}</Code>
+                </Text>
+              </div>
+            </div>
             <div className="my-8 w-full border"></div>
 
             <Flex direction="column" gap="2">
