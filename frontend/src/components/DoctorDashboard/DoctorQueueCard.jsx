@@ -372,7 +372,7 @@ function DoctorQueueCard({ data, refetch, index }) {
     const currentTime = new Date();
 
     // Add queue-based delay (15 mins per position)
-    const queueDelayMinutes = (Number(queuePosition) - 1) * 15;
+    const queueDelayMinutes = (Number(queuePosition) - 1) * 4;
     const expectedTime = new Date(
       availableDate.getTime() + queueDelayMinutes * 60000,
     );

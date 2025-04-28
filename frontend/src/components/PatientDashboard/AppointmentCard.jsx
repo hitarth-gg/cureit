@@ -429,7 +429,7 @@ function AppointmentCard({ data, refetch, index }) {
     let availableTime = `${appointment_date}T${start_time}`;
     const availableDate = new Date(availableTime);
     const currentTime = new Date();
-    const queueDelayMinutes = (Number(queuePosition) - 1) * 15;
+    const queueDelayMinutes = (Number(queuePosition) - 1) * 4;
     const expectedTime = new Date(
       availableDate.getTime() + queueDelayMinutes * 60000,
     );
