@@ -26,7 +26,7 @@ export async function getAddressFromCoords(lat, lng) {
   }
 }
 
-export async function getDoctorSlots(date, specialization, userId , mode) {
+export async function getDoctorSlots(date, specialization, userId, mode) {
   // const userId = appointmentData.userId;
   // const specialization = appointmentData.specialization;
   // const date = appointmentData.date;
@@ -69,7 +69,7 @@ export async function getDoctorDetails(doctorId) {
 }
 export async function getDoctorAvailability(doctorId) {
   const doctorDetails = await getDoctorDetails(doctorId);
-   return doctorDetails.availability;
+  return doctorDetails.availability;
 }
 export async function deleteAppointment(appointmentId) {
   const response = await fetch(
@@ -185,7 +185,7 @@ export async function getPatientAppointmentHistory(patientId) {
       appointment_time: appointment.updated_at,
       doctor: appointment.doctorProfileDetails?.name || "Unknown",
       specialization: appointment.doctorDetails?.specialization || "Unknown",
-      address: appointment.doctorDetails?.hospitalData.address|| "N/A",
+      address: appointment.doctorDetails?.hospitalData.address || "N/A",
       plus_code: appointment.doctorDetails?.hospitalData.plus_code || "N/A",
     }));
 
@@ -196,9 +196,9 @@ export async function getPatientAppointmentHistory(patientId) {
   }
 }
 
-export async function getQueueForDoctor(doctorId , selectedDate , selectedSlot) {
-  console.log("seelctedDate" , selectedDate);
-  console.log("selectedSlot" , selectedSlot);
+export async function getQueueForDoctor(doctorId, selectedDate, selectedSlot) {
+  console.log("seelctedDate", selectedDate);
+  console.log("selectedSlot", selectedSlot);
   const today = new Date().toISOString().split("T")[0]; // Formats as YYYY-MM-DD
 
   try {
@@ -483,7 +483,7 @@ export async function postBookAppointment(bookingData) {
         mode: formData.selectedDoctor.mode,
         start_time: formData.selectedDoctor.selectedSlot.start_time,
         end_time: formData.selectedDoctor.selectedSlot.end_time,
-      })
+      }),
     }),
   });
   if (!response.ok) {
@@ -497,7 +497,7 @@ export async function getDoctorType(healthIssue) {
   // console.log(healthIssue);
   try {
     const response = await fetch(
-      `https://hackofiesta-qckb.onrender.com/predict/`,
+      `https://hackofiesta-369j.onrender.com/predict/`,
       {
         method: "POST",
         headers: {
@@ -678,7 +678,7 @@ export async function updateUserProfilePicture(userId, accessToken, formData) {
 
 export async function chatBot(message) {
   const response = await fetch(
-    `https://hackofiesta-34dx.onrender.com/faq/?query="${message}"`,
+    `https://hackofiesta-5fik.onrender.com/faq/?query="${message}"`,
   );
 
   if (!response.ok) {
