@@ -72,7 +72,7 @@ const getQueuePositionPostCheckin = async (appointmentId) => {
     .eq("chosen_slot->>end_time", end_time)
     .eq("status", "scheduled")
     .eq("book_status", "completed")
-    .eq("checked_in_status" , true)
+    .eq("checked_in_status", true)
     .lt("created_at", created_at);
 
   if (error) {
@@ -306,12 +306,15 @@ router.get("/upcomingAppointments/:patientId", async (req, res) => {
   const updatedAppointments = await Promise.all(
     appointments.map(async (appointment) => {
       const position = await getQueuePosition(appointment.id);
-      if(appointment.checked_in_status)
-      {
+      if (appointment.checked_in_status) {
         console.log("checked in appointment: ", appointment);
         const pos2 = await getQueuePositionPostCheckin(appointment.id);
         console.log("checked in appointment position: ", pos2);
-        return { ...appointment, queuePosition: position , queuePositionPostCheckin: pos2};
+        return {
+          ...appointment,
+          queuePosition: position,
+          queuePositionPostCheckin: pos2,
+        };
       }
       return { ...appointment, queuePosition: position };
     })
@@ -349,12 +352,15 @@ router.get("/doctorUpcomingAppointments/:doctorId", async (req, res) => {
   const updatedAppointments = await Promise.all(
     appointments.map(async (appointment) => {
       const position = await getQueuePosition(appointment.id);
-      if(appointment.checked_in_status)
-      {
+      if (appointment.checked_in_status) {
         // console.log("checked in appointment: ", appointment);
         const pos2 = await getQueuePositionPostCheckin(appointment.id);
         // console.log("checked in appointment position: ", pos2);
-        return { ...appointment, queuePosition: position , queuePositionPostCheckin: pos2};
+        return {
+          ...appointment,
+          queuePosition: position,
+          queuePositionPostCheckin: pos2,
+        };
       }
 
       return { ...appointment, queuePosition: position };

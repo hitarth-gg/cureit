@@ -2,6 +2,51 @@ const express = require("express");
 const router = express.Router();
 const supabase = require("../config/supabaseClient");
 const { getIo } = require("../config/socket.js");
+function getISTDateString() {
+  const now = new Date();
+  const istOffset = 5.5 * 60 * 60 * 1000; // IST offset in milliseconds
+  const istTime = new Date(
+    now.getTime() + istOffset - now.getTimezoneOffset() * 60000
+  );
+  return istTime.toISOString().split("T")[0];
+}
+
+// const getQueuePosition = async (appointmentId) => {
+//   const { data: appointment, error: appointmentError } = await supabase
+//     .from("appointments2")
+//     .select(
+//       "doctor_id, appointment_date, chosen_slot->>start_time, chosen_slot->>end_time, created_at"
+//     )
+//     .eq("id", appointmentId)
+//     .single();
+
+//   if (appointmentError || !appointment) {
+//     console.error("Error fetching appointment details:", appointmentError);
+//     return -1;
+//   }
+//   console.log("appointment: ", appointment);
+//   const { doctor_id, appointment_date, created_at, start_time, end_time } =
+//     appointment;
+//   console.log("start_time: ", start_time);
+//   console.log("end_time: ", end_time);
+//   const { data, error } = await supabase
+//     .from("appointments2")
+//     .select("id")
+//     .eq("doctor_id", doctor_id)
+//     .eq("appointment_date", appointment_date)
+//     .eq("chosen_slot->>start_time", start_time)
+//     .eq("chosen_slot->>end_time", end_time)
+//     .eq("status", "scheduled")
+//     .eq("book_status", "completed")
+//     .lt("created_at", created_at);
+
+//   if (error) {
+//     console.error("Error fetching queue position:", error);
+//     return -1;
+//   }
+
+//   return data.length + 1;
+// };
 const getQueuePosition = async (appointmentId) => {
   const { data: appointment, error: appointmentError } = await supabase
     .from("appointments2")
@@ -38,12 +83,51 @@ const getQueuePosition = async (appointmentId) => {
 
   return data.length + 1;
 };
+const getQueuePositionPostCheckin = async (appointmentId) => {
+  const { data: appointment, error: appointmentError } = await supabase
+    .from("appointments2")
+    .select(
+      "doctor_id, appointment_date, chosen_slot->>start_time, chosen_slot->>end_time, created_at"
+    )
+    .eq("id", appointmentId)
+    .single();
+
+  if (appointmentError || !appointment) {
+    console.error("Error fetching appointment details:", appointmentError);
+    return -1;
+  }
+  console.log("appointment: ", appointment);
+  const { doctor_id, appointment_date, created_at, start_time, end_time } =
+    appointment;
+  console.log("start_time: ", start_time);
+  console.log("end_time: ", end_time);
+  const { data, error } = await supabase
+    .from("appointments2")
+    .select("id")
+    .eq("doctor_id", doctor_id)
+    .eq("appointment_date", appointment_date)
+    .eq("chosen_slot->>start_time", start_time)
+    .eq("chosen_slot->>end_time", end_time)
+    .eq("status", "scheduled")
+    .eq("book_status", "completed")
+    .eq("checked_in_status", true)
+    .lt("created_at", created_at);
+
+  if (error) {
+    console.error("Error fetching queue position:", error);
+    return -1;
+  }
+  return data.length + 1;
+};
 
 router.get("/nextAppointments/:doctorId", async (req, res) => {
   const { doctorId } = req.params;
-  const today = new Date();
-  //   console.log(today.getDate() - 1);
-  const date = today.toISOString().split("T")[0];
+  // const today = new Date();
+  // //   console.log(today.getDate() - 1);
+  // const date = today.toISOString().split("T")[0];
+
+  const date = getISTDateString();
+  console.log(date); // this will be IST-based date
 
   const { data: appointments, error } = await supabase
     .from("appointments2")
@@ -60,11 +144,13 @@ router.get("/nextAppointments/:doctorId", async (req, res) => {
   // Process each appointment to get the queue position and filter based on it.
   const updatedAppointments = await Promise.all(
     appointments.map(async (appointment) => {
-      const queuePosition = await getQueuePosition(appointment.id);
-      if (queuePosition !== -1 && queuePosition <= 4) {
-        // console.log("appointment: ", appointment);
-        // console.log("Queue position:", queuePosition);
-        return { ...appointment, queuePosition };
+      if (appointment.checked_in_status) {
+        const queuePosition = await getQueuePositionPostCheckin(appointment.id);
+        if (queuePosition !== -1 && queuePosition <= 4) {
+          // console.log("appointment: ", appointment);
+          // console.log("Queue position:", queuePosition);
+          return { ...appointment, queuePosition };
+        }
       }
       return null;
     })
@@ -89,8 +175,12 @@ router.get("/nextAppointments/:doctorId", async (req, res) => {
 router.get("/allNextAppointments/:receptionId", async (req, res) => {
   const { receptionId } = req.params;
   //   console.log(receptionId);
-  const today = new Date();
-  const date = today.toISOString().split("T")[0];
+  // const today = new Date();
+  // const date = today.toISOString().split("T")[0];
+
+  const date = getISTDateString();
+  console.log(date); // this will be IST-based date
+
   const { data: receptionData, error: receptionError } = await supabase
     .from("doctors2")
     .select("id")
@@ -156,9 +246,16 @@ router.get("/allNextAppointments/:receptionId", async (req, res) => {
       // Process each appointment to calculate the queue position.
       const updatedAppointments = await Promise.all(
         appointments.map(async (appointment) => {
-          const queuePosition = await getQueuePosition(appointment.id);
-          if (queuePosition !== -1 && queuePosition <= 4) {
-            return { ...appointment, queuePosition };
+          if (appointment.checked_in_status) {
+            // console.log("checked in appointment: ", appointment);
+            const queuePosition = await getQueuePositionPostCheckin(
+              appointment.id
+            );
+            // console.log("checked in appointment position: ", pos2);
+            // const queuePosition = await getQueuePosition(appointment.id);
+            if (queuePosition !== -1 && queuePosition <= 4) {
+              return { ...appointment, queuePosition };
+            }
           }
           return null;
         })
