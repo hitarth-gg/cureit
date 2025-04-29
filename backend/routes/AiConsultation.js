@@ -1,10 +1,33 @@
 const express = require("express");
 const fetch = require("node-fetch");
 const router = express.Router();
+const googleTTS = require("google-tts-api");
+
 const { TextToSpeechClient } = require("@google-cloud/text-to-speech");
 
 const creds = JSON.parse(process.env.TTS_SA_KEY_JSON);
 const ttsClient = new TextToSpeechClient({ credentials: creds });
+async function synthesizeHinglish(text) {
+  // this will split your text into ≤200-char chunks for you
+  const urls = googleTTS.getAllAudioUrls(text, {
+    lang: "hi", // Hindi voice (auto-passes English words)
+    slow: false, // normal speed
+    host: "https://translate.google.com",
+  });
+
+  // fetch each chunk and collect the buffers
+  const buffers = [];
+  for (const { url } of urls) {
+    const res = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
+    if (!res.ok) throw new Error(`TTS fetch failed: ${res.status}`);
+    buffers.push(await res.buffer());
+  }
+
+  // concatenate and return base64 exactly like before
+  const merged = Buffer.concat(buffers);
+  return merged.toString("base64");
+}
+
 router.post("/consult", async (req, res) => {
   const { prompt, voiceId = "JBFqnCBsd6RMkjVDRZzb" } = req.body;
   if (!prompt) {
@@ -81,38 +104,39 @@ Patient says: "${prompt}"
     // const audioBuffer = await ttsResp.arrayBuffer();
     // const audioBase64 = Buffer.from(audioBuffer).toString("base64");
     const ssml = `
-    <speak>
-      <prosody rate="1" pitch="+0st">
-        ${replyText}
-      </prosody>
-    </speak>
-  `;
+        <speak>
+          <prosody rate="2" pitch="+0st">
+            ${replyText}
+          </prosody>
+        </speak>
+      `;
     const ssml2 = `
-    <speak>
-      ${replyText}
-    </speak>
+        <speak>
+          ${replyText}
+        </speak>
 
-`;
+    `;
     console.log("sssssss", ssml2);
 
     // Request
-    const [ttsResponse] = await ttsClient.synthesizeSpeech({
-      input: { text: replyText },
-      voice: {
-        languageCode: "en-IN",
-        name: "en-IN-Chirp3-HD-Schedar", // one of Google’s top-quality voices
-        ssmlGender: "MALE",
-      },
-      audioConfig: {
-        audioEncoding: "MP3",
-        speakingRate: 1, // slows the speech slightly
-        pitch: 0, // leave pitch neutral
-        volumeGainDb: 1.5, // you can boost it slightly if needed
-      },
-    });
-
+    // const [ttsResponse] = await ttsClient.synthesizeSpeech({
+    //   input: { text: replyText },
+    //   voice: {
+    //     languageCode: "en-IN",
+    //     name: "en-IN-Chirp3-HD-Schedar", // one of Google’s top-quality voices
+    //     ssmlGender: "MALE",
+    //   },
+    //   audioConfig: {
+    //     audioEncoding: "MP3",
+    //     speakingRate: 1, // slows the speech slightly
+    //     pitch: 0, // leave pitch neutral
+    //     volumeGainDb: 1.5, // you can boost it slightly if needed
+    //   },
+    // });
     // The API returns a Buffer in `audioContent`
-    const audioBase64 = ttsResponse.audioContent.toString("base64");
+    // const audioBase64 = ttsResponse.audioContent.toString("base64");
+
+    const audioBase64 = await synthesizeHinglish(replyText);
 
     res.json({
       replyText,
