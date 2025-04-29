@@ -426,6 +426,8 @@ const QRScanner = forwardRef(({ appointmentId, onScanSuccess }, ref) => {
           doneRef.current = true; // Only mark as done on successful validation
           onScanSuccess(responseData);
           toast.success("Check In Successful");
+          // refresh the page
+          window.location.reload();
         })
         .catch((err) => {
           console.error("Error validating QR code:", err);
@@ -480,7 +482,7 @@ const QRScanner = forwardRef(({ appointmentId, onScanSuccess }, ref) => {
           enabled={enabled}
         />
       )}
-      <div className="scanner-controls">
+      <div className="scanner-controls flex flex-col justify-center items-center gap-y-2 mt-2">
         <Button
           onClick={switchCamera}
           disabled={isProcessing || doneRef.current}
