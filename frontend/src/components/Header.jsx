@@ -24,6 +24,7 @@ import Logout from "./logout";
 import { supabase } from "../utils/supabaseClient";
 import { useGetUserDetails } from "../hooks/useGetUserDetails";
 import { useQueryClient } from "@tanstack/react-query";
+import { Brain, Home } from "lucide-react";
 
 function Header() {
   const cureitContext = useCureitContext();
@@ -140,48 +141,64 @@ function Header() {
       </div>
 
       <div className="mx-3 my-auto flex items-center justify-center gap-x-5">
-        <Button
-          size={"1"}
-          color="iris"
-          variant="soft"
-          onClick={() => navigate("/AIConsultation")}
-        >
-          <div className="flex items-center justify-center gap-x-2 font-noto text-sm font-semibold">
-            AI Consultation
-          </div>
-        </Button>
-        <Separator orientation="vertical" />
-
-        <div className="flex w-fit gap-x-3">
-          <Tooltip content="Home" side="bottom">
+        <div className="flex gap-x-2">
+          {profile?.role === 'PATIENT' && <Tooltip content="AI Consultation" side="bottom">
             <Button
-              onClick={() => navigate("/")}
-              color="iris"
               size={"1"}
+              color="iris"
               variant="soft"
+              onClick={() => navigate("/AIConsultation")}
             >
-              <HomeIcon />
+              <div className="hidden items-center justify-center gap-x-2 font-noto text-sm font-semibold md:flex">
+                AI Consultation
+              </div>
+              <div className="flex items-center justify-center gap-x-2 font-noto text-sm font-semibold md:hidden">
+                <Brain size={15} />
+              </div>
             </Button>
-          </Tooltip>
-          <Separator orientation="vertical" />
-          {/* <Tooltip content="Notifications" side="bottom">
+          </Tooltip>}
+          {/* <Separator orientation="vertical" /> */}
+
+          <div className="flex w-fit items-center gap-x-3">
+            <Tooltip content="Home" side="bottom">
+              <Button
+                onClick={() => navigate("/")}
+                color="iris"
+                size={"1"}
+                variant="soft"
+              >
+                {/* <HomeIcon /> */}
+                <div className="hidden items-center justify-center gap-x-2 font-noto text-sm font-semibold md:flex">
+                  Home
+                </div>
+                <div className="flex items-center justify-center gap-x-2 font-noto text-sm font-semibold md:hidden">
+                  <Home size={15} />
+                </div>
+              </Button>
+            </Tooltip>
+            <Separator orientation="vertical" />
+            {/* <Tooltip content="Notifications" side="bottom">
             <Button color="iris" size={"1"} variant="ghost">
               <BellIcon />
             </Button>
           </Tooltip> */}
-          {/* <Separator orientation="vertical" /> */}
+            {/* <Separator orientation="vertical" /> */}
+          </div>
         </div>
         {!tokenString ? (
           <Button
             color="iris"
-            size={"2"}
-            variant="ghost"
+            size={"1"}
+            variant="soft"
             style={{
               fontWeight: "500",
             }}
             onClick={() => navigate("/login")}
           >
+            <div className="items-center justify-center gap-x-2 font-noto text-sm font-semibold flex">
+
             Login
+            </div>
           </Button>
         ) : (
           <DropdownMenu.Root modal={false}>
