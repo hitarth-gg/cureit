@@ -45,9 +45,7 @@ function Header() {
       { label: "Appointments", path: "/user/dashboard?tab=appointments" },
       { label: "History", path: "/user/dashboard?tab=history" },
     ],
-    reception: [
-      { label: "Dashboard", path: "/user/dashboard" },
-    ],
+    reception: [{ label: "Dashboard", path: "/user/dashboard" }],
     // Add more roles here if necessary
   };
 
@@ -142,13 +140,25 @@ function Header() {
       </div>
 
       <div className="mx-3 my-auto flex items-center justify-center gap-x-5">
+        <Button
+          size={"1"}
+          color="iris"
+          variant="soft"
+          onClick={() => navigate("/AIConsultation")}
+        >
+          <div className="flex items-center justify-center gap-x-2 font-noto text-sm font-semibold">
+            AI Consultation
+          </div>
+        </Button>
+        <Separator orientation="vertical" />
+
         <div className="flex w-fit gap-x-3">
           <Tooltip content="Home" side="bottom">
             <Button
               onClick={() => navigate("/")}
               color="iris"
               size={"1"}
-              variant="ghost"
+              variant="soft"
             >
               <HomeIcon />
             </Button>

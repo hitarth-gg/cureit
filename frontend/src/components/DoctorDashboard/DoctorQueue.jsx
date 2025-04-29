@@ -308,9 +308,10 @@ function DoctorQueue() {
                     </div>
                   </>
                 )}
-                {waitingPatients?.length > 0 && checkedInPatients?.length > 0 && (
-                  <div className="mx-4 mt-14 border-b-2 border-gray-200"></div>
-                )}
+                {waitingPatients?.length > 0 &&
+                  checkedInPatients?.length > 0 && (
+                    <div className="mx-4 mt-14 border-b-2 border-gray-200"></div>
+                  )}
 
                 {/* Waiting patients section */}
                 {waitingPatients.length > 0 ? (
@@ -340,19 +341,20 @@ function DoctorQueue() {
                 ) : (
                   data &&
                   data.length === 0 && (
-                    <div className="rounded-lg bg-gray-50 p-8 text-center">
-                      <div className="mb-3 flex justify-center">
-                        <Calendar className="h-12 w-12 text-gray-400" />
-                      </div>
-                      <h4 className="mb-1 text-lg font-medium text-gray-700">
-                        No appointments found
-                      </h4>
-                      <p className="text-gray-500">
-                        {selectedSlot
-                          ? "There are no appointments scheduled for this time slot."
-                          : "Please select a time slot to view appointments."}
-                      </p>
-                    </div>
+                    // <div className="rounded-lg bg-gray-50 p-8 text-center">
+                    //   <div className="mb-3 flex justify-center">
+                    //     <Calendar className="h-12 w-12 text-gray-400" />
+                    //   </div>
+                    //   <h4 className="mb-1 text-lg font-medium text-gray-700">
+                    //     No appointments found
+                    //   </h4>
+                    //   <p className="text-gray-500">
+                    //     {selectedSlot
+                    //       ? "There are no appointments scheduled for this time slot."
+                    //       : "Please select a time slot to view appointments."}
+                    //   </p>
+                    // </div>
+                    <div> </div>
                   )
                 )}
 

@@ -29,10 +29,9 @@ function DoctorQueueCard({ data, refetch, index }) {
     queuePosition,
     available_from,
     meetingLink,
-    checked_in_status
+    checked_in_status,
   } = data;
   console.log("data", data);
-  
 
   const [otpVerified, setOtpVerified] = useState(false);
   const [updateAppointmentStatusSuccess, setUpdateAppointmentStatusSuccess] =
@@ -50,9 +49,10 @@ function DoctorQueueCard({ data, refetch, index }) {
   const appointmentColor = isToday ? "orange" : "blue";
   const isOnline = appointment_time.mode === "online";
 
-  function skipAppointment() {
+  async function skipAppointment() {
+    // console.log("in skip appointment func");
     setUpdateAppointmentStatusSuccess(false);
-    saveAppointmentStatus(
+    saveAppointmentStatus.mutate(
       {
         appointmentId: data.appointmentId,
         status: "missed",
@@ -131,15 +131,26 @@ function DoctorQueueCard({ data, refetch, index }) {
   }, [appointment_time, queuePosition, appointment_date]);
 
   return (
-    <div className="mb-4 overflow-hidden rounded-lg border bg-white border-gray-200 transition-all duration-300 hover:shadow-lg">
+    <div className="mb-4 overflow-hidden rounded-lg border border-gray-200 bg-white transition-all duration-300 hover:shadow-lg">
       {/* Header with patient info */}
-      <div className={"p-4 " + (checked_in_status ? "bg-[#dffce9]" : "bg-blue-50") }>
+      <div
+        className={"p-4 " + (checked_in_status ? "bg-[#dffce9]" : "bg-blue-50")}
+      >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {(queuePosition) > 0 && <div className="mr-2 text-lg font-medium text-gray-500">
-              {queuePosition}.
-            </div>}
-            <div className={"flex h-12 w-12 items-center justify-center rounded-full " + (checked_in_status ? "bg-green-200 text-green-600" : "bg-blue-100 text-blue-600")}>
+            {queuePosition > 0 && (
+              <div className="mr-2 text-lg font-medium text-gray-500">
+                {queuePosition}.
+              </div>
+            )}
+            <div
+              className={
+                "flex h-12 w-12 items-center justify-center rounded-full " +
+                (checked_in_status
+                  ? "bg-green-200 text-green-600"
+                  : "bg-blue-100 text-blue-600")
+              }
+            >
               <User size={24} />
             </div>
             <div>
