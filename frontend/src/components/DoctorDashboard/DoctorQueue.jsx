@@ -227,7 +227,7 @@ function DoctorQueue() {
               <div className="space-y-4">
                 {data && data.length > 0 ? (
                   data.map((queue, ix) => (
-                    <DoctorQueueCard key={ix} data={queue} refetch={refetch} />
+                    <DoctorQueueCard key={ix} data={queue} refetch={refetch} index={ix} />
                   ))
                 ) : (
                   <div className="bg-gray-50 rounded-lg p-8 text-center">

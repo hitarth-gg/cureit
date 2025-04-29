@@ -300,7 +300,7 @@ import OtpModal from "./OtpModal";
 import SkipAppointment from "./SkipAppointment";
 import usePostAppointmentStatus from "../../hooks/usePostAppointmentStatus";
 
-function DoctorQueueCard({ data, refetch }) {
+function DoctorQueueCard({ data, refetch, index }) {
   const {
     patientName,
     patientId,
@@ -372,7 +372,7 @@ function DoctorQueueCard({ data, refetch }) {
     const currentTime = new Date();
 
     // Add queue-based delay (15 mins per position)
-    const queueDelayMinutes = (Number(queuePosition) - 1) * 15;
+    const queueDelayMinutes = (Number(queuePosition) - 1) * 4;
     const expectedTime = new Date(
       availableDate.getTime() + queueDelayMinutes * 60000,
     );
@@ -418,6 +418,9 @@ function DoctorQueueCard({ data, refetch }) {
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
+            {(index+1) > 0 && <div className="mr-2 text-lg font-medium text-gray-500">
+              {index + 1}.
+            </div>}
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600">
               <User size={24} />
             </div>

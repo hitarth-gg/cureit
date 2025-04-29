@@ -95,6 +95,7 @@ export async function getPatientAppointments(patientId) {
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
+    // console.log("Patient Appointments:", data);
     const updatedData = await Promise.all(
       data.map(async (appointment) => {
         try {
@@ -114,6 +115,7 @@ export async function getPatientAppointments(patientId) {
         }
       }),
     );
+    
     const finalAppointments = updatedData.map((appointment) => ({
       appointmentId: appointment.id,
       doctor: appointment.doctorProfileDetails?.name || "Unknown",
@@ -127,6 +129,8 @@ export async function getPatientAppointments(patientId) {
       plus_code: appointment.doctorDetails?.hospitalData?.plus_code || "N/A",
       // available_from: appointment.doctorDetails?.available_from || null,
       checked_in_status: appointment.checked_in_status || null,
+      queuePositionPostCheckin: appointment?.queuePositionPostCheckin || null,
+  
     }));
 
     return finalAppointments; // Return the array
@@ -227,6 +231,8 @@ export async function getQueueForDoctor(doctorId, selectedDate, selectedSlot) {
           currentMedication: "N/A",
           issue: "N/A",
           issueDetails: appointment.personal_details.health_issue,
+          checked_in_status: appointment.checked_in_status || null,
+          queuePositionPostCheckin: appointment?.queuePositionPostCheckin || null,
         };
       }),
     );

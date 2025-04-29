@@ -45,7 +45,42 @@ const getQueuePosition = async (appointmentId) => {
 
   return data.length + 1;
 };
+const getQueuePositionPostCheckin = async (appointmentId) => {
+  const { data: appointment, error: appointmentError } = await supabase
+    .from("appointments2")
+    .select(
+      "doctor_id, appointment_date, chosen_slot->>start_time, chosen_slot->>end_time, created_at"
+    )
+    .eq("id", appointmentId)
+    .single();
 
+  if (appointmentError || !appointment) {
+    console.error("Error fetching appointment details:", appointmentError);
+    return -1;
+  }
+  console.log("appointment: ", appointment);
+  const { doctor_id, appointment_date, created_at, start_time, end_time } =
+    appointment;
+  console.log("start_time: ", start_time);
+  console.log("end_time: ", end_time);
+  const { data, error } = await supabase
+    .from("appointments2")
+    .select("id")
+    .eq("doctor_id", doctor_id)
+    .eq("appointment_date", appointment_date)
+    .eq("chosen_slot->>start_time", start_time)
+    .eq("chosen_slot->>end_time", end_time)
+    .eq("status", "scheduled")
+    .eq("book_status", "completed")
+    .eq("checked_in_status" , true)
+    .lt("created_at", created_at);
+
+  if (error) {
+    console.error("Error fetching queue position:", error);
+    return -1;
+  }
+  return data.length + 1;
+};
 router.post("/book", async (req, res) => {
   const {
     patientId,
@@ -271,6 +306,13 @@ router.get("/upcomingAppointments/:patientId", async (req, res) => {
   const updatedAppointments = await Promise.all(
     appointments.map(async (appointment) => {
       const position = await getQueuePosition(appointment.id);
+      if(appointment.checked_in_status)
+      {
+        console.log("checked in appointment: ", appointment);
+        const pos2 = await getQueuePositionPostCheckin(appointment.id);
+        console.log("checked in appointment position: ", pos2);
+        return { ...appointment, queuePosition: position , queuePositionPostCheckin: pos2};
+      }
       return { ...appointment, queuePosition: position };
     })
   );
@@ -307,6 +349,14 @@ router.get("/doctorUpcomingAppointments/:doctorId", async (req, res) => {
   const updatedAppointments = await Promise.all(
     appointments.map(async (appointment) => {
       const position = await getQueuePosition(appointment.id);
+      if(appointment.checked_in_status)
+      {
+        // console.log("checked in appointment: ", appointment);
+        const pos2 = await getQueuePositionPostCheckin(appointment.id);
+        // console.log("checked in appointment position: ", pos2);
+        return { ...appointment, queuePosition: position , queuePositionPostCheckin: pos2};
+      }
+
       return { ...appointment, queuePosition: position };
     })
   );
